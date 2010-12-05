@@ -7,11 +7,6 @@ class CurlResponseTest extends TransloaditTestCase{
     $this->response = new CurlResponse();
   }
 
-  //private function _mock() {
-    //$methods = func_get_args();
-    //$this->response = $this->getMock('CurlResponse', $methods);
-  //}
-
   public function testAttributes() {
     $this->assertEquals(null, $this->response->data);
     $this->assertEquals(null, $this->response->curlErrorNumber);
@@ -31,6 +26,16 @@ class CurlResponseTest extends TransloaditTestCase{
     $this->response->parseJson();
 
     $this->assertEquals($data, $this->response->data);
+  }
+
+  public function testError() {
+    $error = $this->response->error();
+    $this->assertEquals(false, $error);
+
+    $number = $this->response->curlErrorNumber = 27;
+    $message = $this->response->curlErrorMessage = 'Something went wrong';
+    $error = $this->response->error();
+    $this->assertEquals(sprintf('curl: %d: %s', $number, $message), $error);
   }
 }
 ?>

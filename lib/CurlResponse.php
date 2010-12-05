@@ -16,5 +16,17 @@ class CurlResponse{
   public function parseJson() {
     $this->data = json_decode($this->data, true);
   }
+
+  public function error() {
+    if (!$this->curlErrorNumber) {
+      return false;
+    }
+
+    return sprintf(
+      'curl: %d: %s',
+      $this->curlErrorNumber,
+      $this->curlErrorMessage
+    );
+  }
 }
 ?>

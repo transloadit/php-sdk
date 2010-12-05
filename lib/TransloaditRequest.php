@@ -1,5 +1,6 @@
 <?php
 require_once(dirname(__FILE__).'/CurlRequest.php');
+require_once(dirname(__FILE__).'/TransloaditResponse.php');
 
 class TransloaditRequest extends CurlRequest{
   public $service = 'http://api2.transloadit.com';
@@ -42,7 +43,7 @@ class TransloaditRequest extends CurlRequest{
 
   public function execute() {
     $this->prepare();
-    $response = parent::execute();
+    $response = parent::execute(new TransloaditResponse());
     $response->parseJson();
     return $response;
   }

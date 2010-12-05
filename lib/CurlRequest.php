@@ -50,12 +50,14 @@ class CurlRequest{
     return $options;
   }
 
-  public function execute() {
+  public function execute($response = null) {
     $curl = curl_init();
 
     curl_setopt_array($curl, $this->getCurlOptions());
 
-    $response = new CurlResponse();
+    if (!$response) {
+      $response = new CurlResponse();
+    }
     $response->data = curl_exec($curl);
     $response->curlInfo = curl_getinfo($curl);
     $response->curlErrorNumber= curl_errno($curl);
