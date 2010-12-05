@@ -1,7 +1,7 @@
 <?php
-require_once(dirname(__FILE__).'/HttpResponse.php');
+require_once(dirname(__FILE__).'/CurlResponse.php');
 
-class HttpRequest{
+class CurlRequest{
   public $method = 'GET';
   public $url = null;
   public $headers = array();
@@ -55,7 +55,7 @@ class HttpRequest{
 
     curl_setopt_array($curl, $this->getCurlOptions());
 
-    $response = new HttpResponse();
+    $response = new CurlResponse();
     $response->data = curl_exec($curl);
     $response->curlInfo = curl_getinfo($curl);
     $response->curlErrorNumber= curl_errno($curl);

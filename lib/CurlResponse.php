@@ -1,5 +1,5 @@
 <?php
-class HttpResponse{
+class CurlResponse{
   public $data = null;
 
   public $curlInfo = null;

@@ -14,7 +14,7 @@ class TransloaditRequestTest extends TransloaditTestCase{
 
   public function testConstructor() {
     $parent = get_parent_class($this->request);
-    $this->assertEquals('HttpRequest', $parent);
+    $this->assertEquals('CurlRequest', $parent);
   }
 
   public function testAttributes() {

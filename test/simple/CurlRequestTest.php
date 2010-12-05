@@ -1,15 +1,15 @@
 <?php
 require_once(dirname(dirname(__FILE__)).'/TransloaditTestCase.php');
-require_once(TEST_LIB_DIR.'/HttpRequest.php');
+require_once(TEST_LIB_DIR.'/CurlRequest.php');
 
-class HttpRequestTest extends TransloaditTestCase{
+class CurlRequestTest extends TransloaditTestCase{
   public function setUp() {
-    $this->request = new HttpRequest();
+    $this->request = new CurlRequest();
   }
 
   private function _mock() {
     $methods = func_get_args();
-    $this->request = $this->getMock('HttpRequest', $methods);
+    $this->request = $this->getMock('CurlRequest', $methods);
   }
 
   public function testAttributes() {
@@ -20,7 +20,7 @@ class HttpRequestTest extends TransloaditTestCase{
   }
 
   public function testConstructor() {
-    $transloadit = new HttpRequest(array('foo' => 'bar'));
+    $transloadit = new CurlRequest(array('foo' => 'bar'));
     $this->assertEquals('bar', $transloadit->foo);
   }
 

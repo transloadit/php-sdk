@@ -1,7 +1,7 @@
 <?php
-require_once(dirname(__FILE__).'/HttpRequest.php');
+require_once(dirname(__FILE__).'/CurlRequest.php');
 
-class TransloaditRequest extends HttpRequest{
+class TransloaditRequest extends CurlRequest{
   public $service = 'http://api2.transloadit.com';
 
   public $key = null;
