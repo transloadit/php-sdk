@@ -1,3 +1,3 @@
-h1. Transloadit PHP SDK
+# Transloadit PHP SDK
 
 Work in progress ...
