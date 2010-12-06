@@ -1,6 +1,10 @@
 SHELL := /bin/bash
 
-test:
-	phpunit --colors --verbose test
+phpunit = phpunit --colors --verbose $(1)
 
-.PHONY: test
+test: test-simple
+test-all: test-simple test-system
+test-simple:
+	$(call phpunit,test/simple)
+test-system:
+	$(call phpunit,test/system)
