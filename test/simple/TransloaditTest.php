@@ -26,7 +26,7 @@ class TransloaditTest extends BaseTestCase{
     $boredInstance = $this->getMock('TransloaditResponse');
     $boredInstance->data = array('api2_host' => 'super.transloadit.com');
 
-    $OPTIONS = array('foo' => 'bar');
+    $options = array('foo' => 'bar');
 
     $transloadit
       ->expects($this->at(0))
@@ -40,15 +40,14 @@ class TransloaditTest extends BaseTestCase{
     $transloadit
       ->expects($this->at(1))
       ->method('request')
-      ->with($this->equalTo(array(
+      ->with($this->equalTo($options + array(
         'method' => 'POST',
         'path' => '/assemblies',
         'host' => $boredInstance->data['api2_host'],
-        'foo' => $OPTIONS['foo']
       )))
       ->will($this->returnValue($assembly));
 
-    $transloadit->createAssembly($OPTIONS);
+    $transloadit->createAssembly($options);
   }
 
   public function testRequest() {
