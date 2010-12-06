@@ -11,33 +11,28 @@ class Transloadit{
     }
   }
 
-  public function createAssembly($options) {
-    // Get ourselves a bored instance. This is better than relying on the
-    // default load balancing since it's aware of the current server load
-    // of each machine.
-    $instanceRequest = new TransloaditRequest(array(
+  public function request($options = array(), $execute = true) {
+    $options = $options + array(
       'key' => $this->key,
       'secret' => $this->secret,
+    );
+    $request = new TransloaditRequest($options);
+    return ($execute)
+      ? $request->execute()
+      : $request;
+  }
+
+  public function createAssembly($options) {
+    $boredInstance = $this->request(array(
       'method' => 'GET',
       'path' => '/instances/bored',
+    ), true);
+
+    return $this->request($options + array(
+      'method' => 'POST',
+      'path' => '/assemblies',
+      'host' => $boredInstance->data['api2_host'],
     ));
-    $instance = $instanceRequest->execute();
-
-    // Setup the options for our assembly request, then send it off
-    // and return the response.
-    $options = array_merge(
-      array(
-        'key' => $this->key,
-        'secret' => $this->secret,
-        'method' => 'POST',
-        'path' => '/assemblies',
-        'host' => $instance->data['api2_host'],
-      ),
-      $options
-    );
-
-    $assemblyRequest = new TransloaditRequest($options);
-    return $assemblyRequest->execute();
   }
 }
 ?>
