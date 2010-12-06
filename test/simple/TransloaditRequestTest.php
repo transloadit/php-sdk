@@ -40,7 +40,13 @@ class TransloaditRequestTest extends TransloaditTestCase{
   }
 
   public function testPrepare() {
-    $this->_mock('getParamsString', 'setField', 'signString', 'configureUrl');
+    $this->_mock(
+      'getParamsString',
+      'setField',
+      'signString',
+      'configureUrl',
+      'sortFields'
+    );
 
     $this->request->secret = 'dsakjsdsadjkl241132423';
     $PARAMS_STRING = '{super}';
@@ -71,7 +77,28 @@ class TransloaditRequestTest extends TransloaditTestCase{
       ->expects($this->at(4))
       ->method('configureUrl');
 
+    $this->request
+      ->expects($this->at(5))
+      ->method('sortFields');
+
     $this->request->prepare();
+  }
+
+  public function testSortFields() {
+    $this->request->fields = array(
+      'foo' => 'bar',
+      'signature' => 'secret',
+      'params' => '{sweet}',
+    );
+    $this->request->sortFields();
+    $this->assertEquals(
+      array(
+        'params',
+        'signature',
+        'foo'
+      ),
+      array_keys($this->request->fields)
+   );
   }
 
   public function testConfigureUrl() {

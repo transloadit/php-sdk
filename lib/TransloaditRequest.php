@@ -42,6 +42,7 @@ class TransloaditRequest extends CurlRequest{
     $this->setField('params', $params);
     $this->setField('signature', $signature);
     $this->configureUrl();
+    $this->sortFields();
   }
 
   public function configureUrl() {
@@ -54,6 +55,16 @@ class TransloaditRequest extends CurlRequest{
       $this->protocol,
       $this->host,
       $this->path
+    );
+  }
+
+  public function sortFields() {
+    $this->fields = array_merge(
+      array(
+        'params' => $this->fields['params'],
+        'signature' => $this->fields['signature'],
+      ),
+      $this->fields
     );
   }
 
