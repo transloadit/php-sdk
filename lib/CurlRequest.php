@@ -39,13 +39,23 @@ class CurlRequest{
   }
 
   public function getCurlOptions() {
+    $url = $this->url;
+
+    $hasBody = ($this->method === 'PUT' || $this->method === 'POST');
+    if (!$hasBody) {
+      $url .= '?'.http_build_query($this->fields);
+    }
+
     $options = array(
       CURLOPT_RETURNTRANSFER => true,
       CURLOPT_CUSTOMREQUEST => $this->method,
-      CURLOPT_URL => $this->url,
+      CURLOPT_URL => $url,
       CURLOPT_HTTPHEADER => $this->headers,
-      CURLOPT_POSTFIELDS => $this->fields,
     );
+
+    if ($hasBody) {
+      $options[CURLOPT_POSTFIELDS] = $this->fields;
+    }
 
     return $options;
   }

@@ -57,7 +57,7 @@ class CurlRequestTest extends TransloaditTestCase{
     $this->assertEquals(true, $options[CURLOPT_RETURNTRANSFER]);
 
     // test method
-    $this->request->method = 'something';
+    $this->request->method = 'PUT';
     $options = $this->request->getCurlOptions();
     $this->assertEquals($this->request->method, $options[CURLOPT_CUSTOMREQUEST]);
 
@@ -71,10 +71,24 @@ class CurlRequestTest extends TransloaditTestCase{
     $options = $this->request->getCurlOptions();
     $this->assertEquals($this->request->headers, $options[CURLOPT_HTTPHEADER]);
 
-    // test post fields
+    // test put fields
     $this->request->fields = array('hello' => 'world');
     $options = $this->request->getCurlOptions();
     $this->assertEquals($this->request->fields, $options[CURLOPT_POSTFIELDS]);
+
+    // test post fields
+    $this->request->method = 'POST';
+    $options = $this->request->getCurlOptions();
+    $this->assertEquals($this->request->fields, $options[CURLOPT_POSTFIELDS]);
+    $this->assertEquals($this->request->url, $options[CURLOPT_URL]);
+
+    // test get query
+    $this->request->method = 'GET';
+    $options = $this->request->getCurlOptions();
+    $this->assertEquals(
+      $this->request->url.'?'.http_build_query($this->request->fields),
+      $options[CURLOPT_URL]);
+    $this->assertArrayNotHasKey(CURLOPT_POSTFIELDS, $options);
   }
 
   public function testExecute() {
