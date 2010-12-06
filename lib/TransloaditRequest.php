@@ -33,6 +33,10 @@ class TransloaditRequest extends CurlRequest{
   }
 
   public function signString($string) {
+    if (empty($this->secret)) {
+      return null;
+    }
+
     return hash_hmac('sha1', $string, $this->secret);
   }
 
@@ -40,7 +44,9 @@ class TransloaditRequest extends CurlRequest{
     $params = $this->getParamsString();
     $signature = $this->signString($params);
     $this->setField('params', $params);
-    $this->setField('signature', $signature);
+    if ($signature) {
+      $this->setField('signature', $signature);
+    }
     $this->configureUrl();
     $this->sortFields();
   }
@@ -59,6 +65,16 @@ class TransloaditRequest extends CurlRequest{
   }
 
   public function sortFields() {
+    if (!array_key_exists('signature', $this->fields)) {
+      $this->fields = array_merge(
+        array(
+          'params' => $this->fields['params'],
+        ),
+        $this->fields
+      );
+      return;
+    }
+
     $this->fields = array_merge(
       array(
         'params' => $this->fields['params'],

@@ -40,6 +40,7 @@ class TransloaditRequestTest extends TransloaditTestCase{
   }
 
   public function testPrepare() {
+    // With secret
     $this->_mock(
       'getParamsString',
       'setField',
@@ -48,7 +49,6 @@ class TransloaditRequestTest extends TransloaditTestCase{
       'sortFields'
     );
 
-    $this->request->secret = 'dsakjsdsadjkl241132423';
     $PARAMS_STRING = '{super}';
     $SIGNATURE_STRING = 'dsasjhdsajda';
 
@@ -82,9 +82,46 @@ class TransloaditRequestTest extends TransloaditTestCase{
       ->method('sortFields');
 
     $this->request->prepare();
+
+    // Without signature
+    $this->_mock(
+      'getParamsString',
+      'setField',
+      'signString',
+      'configureUrl',
+      'sortFields'
+    );
+    $SIGNATURE_STRING = null;
+
+    $this->request
+      ->expects($this->at(0))
+      ->method('getParamsString')
+      ->will($this->returnValue($PARAMS_STRING));
+
+    $this->request
+      ->expects($this->at(1))
+      ->method('signString')
+      ->with($this->equalTo($PARAMS_STRING))
+      ->will($this->returnValue($SIGNATURE_STRING));
+
+    $this->request
+      ->expects($this->at(2))
+      ->method('setField')
+      ->with($this->equalTo('params'), $this->equalTo($PARAMS_STRING));
+
+    $this->request
+      ->expects($this->at(3))
+      ->method('configureUrl');
+
+    $this->request
+      ->expects($this->at(4))
+      ->method('sortFields');
+
+    $this->request->prepare();
   }
 
   public function testSortFields() {
+    // With signature
     $this->request->fields = array(
       'foo' => 'bar',
       'signature' => 'secret',
@@ -95,6 +132,20 @@ class TransloaditRequestTest extends TransloaditTestCase{
       array(
         'params',
         'signature',
+        'foo'
+      ),
+      array_keys($this->request->fields)
+   );
+
+    // Without signature
+    $this->request->fields = array(
+      'foo' => 'bar',
+      'params' => '{sweet}',
+    );
+    $this->request->sortFields();
+    $this->assertEquals(
+      array(
+        'params',
         'foo'
       ),
       array_keys($this->request->fields)
@@ -118,10 +169,13 @@ class TransloaditRequestTest extends TransloaditTestCase{
   }
 
   public function testSignString() {
+    // No secret, no signature
+    $this->assertEquals(null, $this->request->signString('foo'));
+
+    // Verify the test vector given in the documentation, see: http://transloadit.com/docs/authentication
     $this->request->secret = 'd805593620e689465d7da6b8caf2ac7384fdb7e9';
     $expectedSignature = 'fec703ccbe36b942c90d17f64b71268ed4f5f512';
 
-    // Verify the test vector given in the documentation, see: http://transloadit.com/docs/authentication
     $params = '{"auth":{"expires":"2010\/10\/19 09:01:20+00:00","key":"2b0c45611f6440dfb64611e872ec3211"},"steps":{"encode":{"robot":"\/video\/encode"}}}';
     $signature = $this->request->signString($params);
     $this->assertEquals($expectedSignature, $signature);
