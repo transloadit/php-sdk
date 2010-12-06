@@ -18,7 +18,9 @@ class TransloaditRequestTest extends TransloaditTestCase{
   }
 
   public function testAttributes() {
-    $this->assertEquals($this->request->service, 'http://api2.transloadit.com');
+    $this->assertEquals($this->request->protocol, 'http');
+    $this->assertEquals($this->request->host, 'api2.transloadit.com');
+    $this->assertEquals($this->request->path, null);
     $this->assertEquals($this->request->key, null);
     $this->assertEquals($this->request->secret, null);
     $this->assertEquals($this->request->params, array());
@@ -32,13 +34,13 @@ class TransloaditRequestTest extends TransloaditTestCase{
     $METHOD = 'CONNECT';
     $PATH = '/foo';
 
-    $this->request->init($METHOD, $PATH);
+    $this->request->setMethodAndPath($METHOD, $PATH);
     $this->assertEquals($METHOD, $this->request->method);
-    $this->assertEquals($this->request->service.$PATH, $this->request->url);
+    $this->assertEquals($PATH, $this->request->path);
   }
 
   public function testPrepare() {
-    $this->_mock('getParamsString', 'setField', 'signString');
+    $this->_mock('getParamsString', 'setField', 'signString', 'configureUrl');
 
     $this->request->secret = 'dsakjsdsadjkl241132423';
     $PARAMS_STRING = '{super}';
@@ -65,7 +67,27 @@ class TransloaditRequestTest extends TransloaditTestCase{
       ->method('setField')
       ->with($this->equalTo('signature'), $this->equalTo($SIGNATURE_STRING));
 
+    $this->request
+      ->expects($this->at(4))
+      ->method('configureUrl');
+
     $this->request->prepare();
+  }
+
+  public function testConfigureUrl() {
+    $PROTOCOL = $this->request->protocol = 'ftp';
+    $PATH = $this->request->path = '/foo';
+    $HOST = $this->request->host = 'bar.com';
+    $this->request->configureUrl();
+
+    $this->assertEquals(
+      sprintf('%s://%s%s', $PROTOCOL, $HOST, $PATH),
+      $this->request->url
+    );
+
+    $URL = $this->request->url = 'http://custom.org/manual';
+    $this->request->configureUrl();
+    $this->assertEquals($URL, $this->request->url);
   }
 
   public function testSignString() {

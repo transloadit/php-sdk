@@ -1,8 +1,9 @@
 <?php
 require_once(dirname(__FILE__).'/TransloaditRequestTestCase.php');
 
-class TransloaditRequestRootTest extends TransloaditRequestTestCase{
+class TransloaditRequestHttpsRootTest extends TransloaditRequestTestCase{
   public function testRoot() {
+    $this->request->protocol = 'https';
     $this->request->setMethodAndPath('GET', '/');
     $response = $this->request->execute();
 

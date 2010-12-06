@@ -3,7 +3,9 @@ require_once(dirname(__FILE__).'/CurlRequest.php');
 require_once(dirname(__FILE__).'/TransloaditResponse.php');
 
 class TransloaditRequest extends CurlRequest{
-  public $service = 'http://api2.transloadit.com';
+  public $protocol = 'http';
+  public $host = 'api2.transloadit.com';
+  public $path = null;
 
   public $key = null;
   public $secret = null;
@@ -16,9 +18,9 @@ class TransloaditRequest extends CurlRequest{
     'User-Agent: Transloadit PHP SDK 0.2',
   );
 
-  public function init($method, $path) {
+  public function setMethodAndPath($method, $path) {
     $this->method = $method;
-    $this->url = $this->service.$path;
+    $this->path = $path;
   }
 
   public function getParamsString() {
@@ -39,6 +41,20 @@ class TransloaditRequest extends CurlRequest{
     $signature = $this->signString($params);
     $this->setField('params', $params);
     $this->setField('signature', $signature);
+    $this->configureUrl();
+  }
+
+  public function configureUrl() {
+    if (!empty($this->url)) {
+      return;
+    }
+
+    $this->url = sprintf(
+      '%s://%s%s',
+      $this->protocol,
+      $this->host,
+      $this->path
+    );
   }
 
   public function execute() {

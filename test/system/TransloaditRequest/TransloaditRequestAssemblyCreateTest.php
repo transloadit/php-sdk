@@ -3,7 +3,7 @@ require_once(dirname(__FILE__).'/TransloaditRequestTestCase.php');
 
 class TransloaditRequestAssemblyCreateTest extends TransloaditRequestTestCase{
   public function testRoot() {
-    $this->request->init('POST', '/assemblies');
+    $this->request->setMethodAndPath('POST', '/assemblies');
     $this->request->addFile(TEST_FIXTURE_DIR.'/image-resize-robot.jpg');
     $this->request->params = array(
       'steps' => array(
