@@ -62,5 +62,67 @@ class TransloaditTest extends BaseTestCase{
     // Unfortunately we can't test the $execute parameter because PHP
     // is a little annoying. But that's ok for now.
   }
+
+  public function testResponse() {
+    $response = Transloadit::response();
+    $this->assertEquals(false, $response);
+
+
+    // Can't really test the $_GET['assembly_url'] case because of PHP for now.
+  }
+
+  public function testForm() {
+    $transloadit = $this->getMock('Transloadit', array('request'));
+    $assembly = $this->getMock('TransloaditResponse', array('prepare'));
+
+    $assembly->method = 'ROCK';
+    $assembly->url = 'http://api999.transloadit.com/assemblies';
+    $assembly->fields = array(
+      'foo' => 'bar"bar',
+      'hey' => 'you',
+    );
+    $options = array('foo' => 'bar');
+
+    $transloadit
+      ->expects($this->at(0))
+      ->method('request')
+      ->with($this->equalTo($options + array(
+        'method' => 'POST',
+        'path' => '/assemblies',
+      )), $this->equalTo(false))
+      ->will($this->returnValue($assembly));
+
+    $assembly
+      ->expects($this->at(0))
+      ->method('prepare');
+
+    $tags = explode("\n", $transloadit->form($options));
+
+    $this->assertTag(array(
+      'tag' => 'form',
+      'attributes' => array(
+        'action' => $assembly->url,
+        'method' => $assembly->method,
+        'enctype' => 'multipart/form-data',
+      )
+    ), array_shift($tags));
+
+    foreach ($assembly->fields as $field => $val) {
+      $matcher = array(
+        'tag' => 'input',
+        'attributes' => array(
+          'type' => 'hidden',
+          'name' => $field,
+          'value' => $val,
+        )
+      );
+      $tag = array_shift($tags);
+      $this->assertTag($matcher, $tag, sprintf(
+        'Tag %s does not match %s',
+        $tag,
+        json_encode($matcher)
+      ));
+    }
+  }
 }
 ?>

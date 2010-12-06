@@ -22,6 +22,44 @@ class Transloadit{
       : $request;
   }
 
+  public static function response() {
+    if (!empty($_GET['assembly_url'])) {
+      $request = new TransloaditRequest(array(
+        'url' => $_GET['assembly_url'],
+      ));
+      return $request->execute();
+    }
+    return false;
+  }
+
+  public function form($options) {
+    $out = array();
+
+    $assembly = $this->request($options + array(
+      'method' => 'POST',
+      'path' => '/assemblies',
+    ), false);
+    $assembly->prepare();
+
+    $out[] = sprintf(
+      '<form action="%s" method="%s" enctype="%s">',
+      $assembly->url,
+      $assembly->method,
+      'multipart/form-data'
+    );
+
+    foreach ($assembly->fields as $field => $val) {
+      $out[] = sprintf(
+        '<input type="%s" name="%s" value="%s">',
+        'hidden',
+        $field,
+        htmlentities($val)
+      );
+    }
+
+    return join("\n", $out);
+  }
+
   public function createAssembly($options) {
     $boredInstance = $this->request(array(
       'method' => 'GET',
