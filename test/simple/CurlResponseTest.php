@@ -1,8 +1,8 @@
 <?php
-require_once(dirname(dirname(__FILE__)).'/TransloaditTestCase.php');
+require_once(dirname(dirname(__FILE__)).'/BaseTestCase.php');
 require_once(TEST_LIB_DIR.'/CurlResponse.php');
 
-class CurlResponseTest extends TransloaditTestCase{
+class CurlResponseTest extends BaseTestCase{
   public function setUp() {
     $this->response = new CurlResponse();
   }

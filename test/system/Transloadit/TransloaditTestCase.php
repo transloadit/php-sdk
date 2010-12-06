@@ -1,8 +1,8 @@
 <?php
 require_once(dirname(dirname(dirname(__FILE__))).'/BaseTestCase.php');
-require_once(TEST_LIB_DIR.'/TransloaditRequest.php');
+require_once(TEST_LIB_DIR.'/Transloadit.php');
 
-abstract class TransloaditRequestTestCase extends BaseTestCase{
+abstract class TransloaditTestCase extends BaseTestCase{
   public function setUp() {
     if (!defined('TEST_ACCOUNT_KEY')) {
       $this->markTestSkipped(
@@ -12,7 +12,7 @@ abstract class TransloaditRequestTestCase extends BaseTestCase{
     }
 
     // @todo Load config from git excluded config file
-    $this->request = new TransloaditRequest(array(
+    $this->transloadit = new Transloadit(array(
       'key' => TEST_ACCOUNT_KEY,
       'secret' => TEST_ACCOUNT_SECRET,
     ));
