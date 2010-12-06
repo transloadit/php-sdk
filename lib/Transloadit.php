@@ -23,6 +23,12 @@ class Transloadit{
   }
 
   public static function response() {
+    if (!empty($_POST['transloadit'])) {
+      $response = new TransloaditResponse();
+      $response->data = json_decode($_POST['transloadit'], true);
+      return $response;
+    }
+
     if (!empty($_GET['assembly_url'])) {
       $request = new TransloaditRequest(array(
         'url' => $_GET['assembly_url'],

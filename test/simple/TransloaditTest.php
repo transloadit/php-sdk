@@ -67,6 +67,12 @@ class TransloaditTest extends BaseTestCase{
     $response = Transloadit::response();
     $this->assertEquals(false, $response);
 
+    $data = array('foo' => 'bar');
+    $_POST['transloadit'] = json_encode($data);
+    $response = Transloadit::response();
+    $this->assertEquals('TransloaditResponse', get_class($response));
+    $this->assertEquals($data, $response->data);
+
 
     // Can't really test the $_GET['assembly_url'] case because of PHP for now.
   }
