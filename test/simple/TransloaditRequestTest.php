@@ -43,10 +43,8 @@ class TransloaditRequestTest extends TransloaditTestCase{
     // With secret
     $this->_mock(
       'getParamsString',
-      'setField',
       'signString',
-      'configureUrl',
-      'sortFields'
+      'configureUrl'
     );
 
     $PARAMS_STRING = '{super}';
@@ -65,31 +63,17 @@ class TransloaditRequestTest extends TransloaditTestCase{
 
     $this->request
       ->expects($this->at(2))
-      ->method('setField')
-      ->with($this->equalTo('params'), $this->equalTo($PARAMS_STRING));
-
-    $this->request
-      ->expects($this->at(3))
-      ->method('setField')
-      ->with($this->equalTo('signature'), $this->equalTo($SIGNATURE_STRING));
-
-    $this->request
-      ->expects($this->at(4))
       ->method('configureUrl');
 
-    $this->request
-      ->expects($this->at(5))
-      ->method('sortFields');
-
     $this->request->prepare();
+    $this->assertEquals($PARAMS_STRING, $this->request->fields['params']);
+    $this->assertEquals($SIGNATURE_STRING, $this->request->fields['signature']);
 
     // Without signature
     $this->_mock(
       'getParamsString',
-      'setField',
       'signString',
-      'configureUrl',
-      'sortFields'
+      'configureUrl'
     );
     $SIGNATURE_STRING = null;
 
@@ -106,50 +90,11 @@ class TransloaditRequestTest extends TransloaditTestCase{
 
     $this->request
       ->expects($this->at(2))
-      ->method('setField')
-      ->with($this->equalTo('params'), $this->equalTo($PARAMS_STRING));
-
-    $this->request
-      ->expects($this->at(3))
       ->method('configureUrl');
 
-    $this->request
-      ->expects($this->at(4))
-      ->method('sortFields');
-
     $this->request->prepare();
-  }
-
-  public function testSortFields() {
-    // With signature
-    $this->request->fields = array(
-      'foo' => 'bar',
-      'signature' => 'secret',
-      'params' => '{sweet}',
-    );
-    $this->request->sortFields();
-    $this->assertEquals(
-      array(
-        'params',
-        'signature',
-        'foo'
-      ),
-      array_keys($this->request->fields)
-   );
-
-    // Without signature
-    $this->request->fields = array(
-      'foo' => 'bar',
-      'params' => '{sweet}',
-    );
-    $this->request->sortFields();
-    $this->assertEquals(
-      array(
-        'params',
-        'foo'
-      ),
-      array_keys($this->request->fields)
-   );
+    $this->assertEquals($PARAMS_STRING, $this->request->fields['params']);
+    $this->assertArrayNotHasKey('signature', $this->request->fields);
   }
 
   public function testConfigureUrl() {

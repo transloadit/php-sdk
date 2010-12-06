@@ -17,38 +17,12 @@ class CurlRequestTest extends TransloaditTestCase{
     $this->assertEquals(null, $this->request->url);
     $this->assertEquals(array(), $this->request->headers);
     $this->assertEquals(array(), $this->request->fields);
+    $this->assertEquals(array(), $this->request->files);
   }
 
   public function testConstructor() {
-    $transloadit = new CurlRequest(array('foo' => 'bar'));
-    $this->assertEquals('bar', $transloadit->foo);
-  }
-
-  public function testSetField() {
-    $this->request->setField('foo', 'bar');
-    $this->assertEquals('bar', $this->request->fields['foo']);
-  }
-
-  public function testSetFile() {
-    $this->_mock('setField');
-
-    $this->request
-      ->expects($this->once())
-      ->method('setField')
-      ->with($this->equalTo('foo'), $this->equalTo('@/my/file.dat'));
-    $this->request->setFile('foo', '/my/file.dat');
-  }
-
-  public function testAddFile() {
-    $this->request->addFile('/my/file1.dat');
-    $this->assertEquals('@/my/file1.dat', $this->request->fields['file_1']);
-
-    $this->request->addFile('/my/file2.dat');
-    $this->assertEquals('@/my/file2.dat', $this->request->fields['file_2']);
-
-    $this->request->setField('foo', 'bar');
-    $this->request->addFile('/my/file3.dat');
-    $this->assertEquals('@/my/file3.dat', $this->request->fields['file_3']);
+    $request = new CurlRequest(array('foo' => 'bar'));
+    $this->assertEquals('bar', $request->foo);
   }
 
   public function testGetCurlOptions() {
@@ -89,6 +63,30 @@ class CurlRequestTest extends TransloaditTestCase{
       $this->request->url.'?'.http_build_query($this->request->fields),
       $options[CURLOPT_URL]);
     $this->assertArrayNotHasKey(CURLOPT_POSTFIELDS, $options);
+
+    // test post files
+    $this->request->method = 'POST';
+    $this->request->fields = array('super' => 'cool');
+    $this->request->files = array('foo' => '/my/file.dat');
+    $options = $this->request->getCurlOptions();
+    $this->assertEquals(
+      array_merge(
+        $this->request->fields,
+        array('foo' => '@'.$this->request->files['foo'])
+      ),
+      $options[CURLOPT_POSTFIELDS]
+    );
+
+    // test file numbering
+    $this->request->files = array('/my/file.dat');
+    $options = $this->request->getCurlOptions();
+    $this->assertEquals(
+      array_merge(
+        $this->request->fields,
+        array('file_1' => '@'.$this->request->files[0])
+      ),
+      $options[CURLOPT_POSTFIELDS]
+    );
   }
 
   public function testExecute() {
