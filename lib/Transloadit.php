@@ -24,8 +24,13 @@ class Transloadit{
 
   public static function response() {
     if (!empty($_POST['transloadit'])) {
+      $json = $_POST['transloadit'];
+      if (ini_get('magic_quotes_gpc') === '1') {
+        $json = stripslashes($json);
+      }
+
       $response = new TransloaditResponse();
-      $response->data = json_decode($_POST['transloadit'], true);
+      $response->data = json_decode($json, true);
       return $response;
     }
 
