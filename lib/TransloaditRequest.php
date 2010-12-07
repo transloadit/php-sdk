@@ -10,7 +10,6 @@ class TransloaditRequest extends CurlRequest{
   public $key = null;
   public $secret = null;
   public $params = array();
-  public $prepareature = null;
   public $expires = '+2 hours';
 
   public $headers = array(
