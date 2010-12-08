@@ -55,11 +55,16 @@ The auth secret of your transloadit account.
 Creates a new transloadit upload form including the hidden 'params' and
 'signature' field. Available $options are:
 
-* `'params'`: The instructions / steps / template for this assembly.
-* `'expires'`: The time where the signature expires. Default: `'+2 hours'`.
-* `'protocol'`: Can be `'http'` or `'https'`
-* `'fields'`: An optional array with additional field value pairs to include as
-              hidden fields into the form. This can be useful to send some
-              data to transloadit that you'd like to be included in all status
-              requests as well as notifications.
-* `'url'`: You should generally not overwrite this.
+* `'params'`:
+  The instructions / steps / template for this assembly.
+* `'expires'`:
+  The time where the signature expires. Default: `'+2 hours'`.
+* `'protocol'`:
+  Can be `'http'` or `'https'`
+* `'fields'`:
+  An optional array with additional field value pairs to include as
+  hidden fields into the form. This can be useful to send some
+  data to transloadit that you'd like to be included in all status
+  requests as well as notifications.
+* `'url'`:
+  You should generally not overwrite this.
