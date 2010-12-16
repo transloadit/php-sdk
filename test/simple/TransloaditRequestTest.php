@@ -26,7 +26,7 @@ class TransloaditRequestTest extends BaseTestCase{
     $this->assertEquals($this->request->params, array());
     $this->assertEquals($this->request->expires, '+2 hours');
     $this->assertEquals('Expect:', $this->request->headers[0]);
-    $this->assertEquals('User-Agent: Transloadit PHP SDK 0.2', $this->request->headers[1]);
+    $this->assertEquals('User-Agent: Transloadit PHP SDK 0.9', $this->request->headers[1]);
   }
 
   public function testInit() {
