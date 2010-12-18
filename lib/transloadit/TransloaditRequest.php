@@ -3,12 +3,13 @@ require_once(dirname(__FILE__).'/CurlRequest.php');
 require_once(dirname(__FILE__).'/TransloaditResponse.php');
 
 class TransloaditRequest extends CurlRequest{
+  public $key = null;
+  public $secret = null;
+
   public $protocol = 'http';
   public $host = 'api2.transloadit.com';
   public $path = null;
 
-  public $key = null;
-  public $secret = null;
   public $params = array();
   public $expires = '+2 hours';
 
