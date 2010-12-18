@@ -15,7 +15,7 @@ class TransloaditRequest extends CurlRequest{
 
   public $headers = array(
     'Expect:',
-    'User-Agent: Transloadit PHP SDK 0.9',
+    'User-Agent: Transloadit PHP SDK 0.9.1',
   );
 
   public function setMethodAndPath($method, $path) {
