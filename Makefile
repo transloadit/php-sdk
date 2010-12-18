@@ -8,3 +8,7 @@ test-simple:
 	$(call phpunit,test/simple)
 test-system:
 	$(call phpunit,test/system)
+docs:
+	php tool/generate-example-docs.php
+docs-html: docs
+	Markdown.pl --html4tags Readme.md > Readme.html
