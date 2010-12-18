@@ -23,8 +23,15 @@ class CurlResponseTest extends BaseTestCase{
     $data = array('foo' => 'bar');
 
     $this->response->data = json_encode($data);
-    $this->response->parseJson();
+    $r = $this->response->parseJson();
 
+    $this->assertEquals(true, $r);
+    $this->assertEquals($data, $this->response->data);
+
+    $data = $this->response->data = 'no json';
+    $r = $this->response->parseJson();
+
+    $this->assertEquals(false, $r);
     $this->assertEquals($data, $this->response->data);
   }
 

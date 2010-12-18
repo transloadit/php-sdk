@@ -8,6 +8,10 @@ class TransloaditResponse extends CurlResponse{
       return $error;
     }
 
+    if (!is_array($this->data)) {
+      return sprintf('transloadit: bad response, no json: %s', $this->data);
+    }
+
     if (array_key_exists('error', $this->data)) {
       $error = sprintf('transloadit: %s', $this->data['error']);
 

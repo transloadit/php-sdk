@@ -13,6 +13,13 @@ class TransloaditResponseTest extends BaseTestCase{
   }
 
   public function testError() {
+    $this->response->data = 'no json';
+    $error = $this->response->error();
+    $this->assertEquals(
+      sprintf('transloadit: bad response, no json: '.$this->response->data),
+      $error
+    );
+
     $this->response->data = array('ok' => 'ASSEMBLY_DOING_SOMETHING');
     $error = $this->response->error();
     $this->assertEquals(false, $error);

@@ -14,7 +14,13 @@ class CurlResponse{
   }
 
   public function parseJson() {
-    $this->data = json_decode($this->data, true);
+    $decoded = json_decode($this->data, true);
+    if (!is_array($decoded)) {
+      return false;
+    }
+
+    $this->data = $decoded;
+    return true;
   }
 
   public function error() {
