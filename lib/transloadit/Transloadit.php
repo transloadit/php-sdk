@@ -43,8 +43,14 @@ class Transloadit{
     return false;
   }
 
-  public function form($options) {
+  public function createAssemblyForm($options = array()) {
     $out = array();
+
+    $customFormAttributes = array();
+    if (array_key_exists('attributes', $options)) {
+      $customFormAttributes = $options['attributes'];
+      unset($options['attributes']);
+    }
 
     $assembly = $this->request($options + array(
       'method' => 'POST',
@@ -52,12 +58,18 @@ class Transloadit{
     ), false);
     $assembly->prepare();
 
-    $out[] = sprintf(
-      '<form action="%s" method="%s" enctype="%s">',
-      $assembly->url,
-      $assembly->method,
-      'multipart/form-data'
-    );
+    $formAttributes = array(
+      'action' => $assembly->url,
+      'method' => $assembly->method,
+      'enctype' => 'multipart/form-data',
+    ) + $customFormAttributes;
+
+    $formAttributeList = array();
+    foreach ($formAttributes as $key => $val) {
+      $formAttributeList[] = sprintf('%s="%s"', $key, htmlentities($val));
+    }
+
+    $out[] = '<form '.join(' ', $formAttributeList).'>';
 
     foreach ($assembly->fields as $field => $val) {
       $out[] = sprintf(

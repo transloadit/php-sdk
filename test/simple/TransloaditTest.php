@@ -77,7 +77,7 @@ class TransloaditTest extends BaseTestCase{
     // Can't really test the $_GET['assembly_url'] case because of PHP for now.
   }
 
-  public function testForm() {
+  public function testCreateAssemblyForm() {
     $transloadit = $this->getMock('Transloadit', array('request'));
     $assembly = $this->getMock('TransloaditResponse', array('prepare'));
 
@@ -102,7 +102,8 @@ class TransloaditTest extends BaseTestCase{
       ->expects($this->at(0))
       ->method('prepare');
 
-    $tags = explode("\n", $transloadit->form($options));
+    $options['attributes'] = array('class' => 'nice');
+    $tags = explode("\n", $transloadit->createAssemblyForm($options));
 
     $this->assertTag(array(
       'tag' => 'form',
@@ -110,6 +111,7 @@ class TransloaditTest extends BaseTestCase{
         'action' => $assembly->url,
         'method' => $assembly->method,
         'enctype' => 'multipart/form-data',
+        'class' => 'nice',
       )
     ), array_shift($tags));
 
