@@ -1,0 +1,10 @@
+<?php
+// In order to get the examples to run:
+//
+// 1. Copy this file to: example/config/config.php
+// 2. Replace the credentials below with a valid transloadit account
+
+$exampleConfig = array(
+  'key' => 'your-key',
+  'secret' => 'your-secret',
+);
