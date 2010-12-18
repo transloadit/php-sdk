@@ -84,10 +84,18 @@ class Transloadit{
   }
 
   public function createAssembly($options) {
+    // Before sending our assembly, we ask transloadit to recommend a
+    // particular non-busy instance. This is not required, but it
+    // can help to get our assembly executed faster.
     $boredInstance = $this->request(array(
       'method' => 'GET',
       'path' => '/instances/bored',
     ), true);
+
+    $error = $boredInstance->error();
+    if ($error) {
+      return $error;
+    }
 
     return $this->request($options + array(
       'method' => 'POST',

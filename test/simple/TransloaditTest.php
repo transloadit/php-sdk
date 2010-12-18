@@ -37,6 +37,11 @@ class TransloaditTest extends BaseTestCase{
       )))
       ->will($this->returnValue($boredInstance));
 
+    $boredInstance
+      ->expects($this->at(0))
+      ->method('error')
+      ->will($this->returnValue(false));
+
     $transloadit
       ->expects($this->at(1))
       ->method('request')
