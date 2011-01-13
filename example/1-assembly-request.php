@@ -23,17 +23,6 @@ $response = $transloadit->createAssembly(array(
       )
     )
   ),
-  /*
-  If you set `blocking` to true, this request will hang until
-  transloadit has finished resizing the image.
-
-  This is ok to do with small files, but it requires that the
-  network connection remains uninterrupted for the whole time.
-
-  So for bigger files you should use our `notify_url` parameter,
-  which contacts your server when the processing is done.
-  */
-  'blocking' => false,
 ));
 
 // Show the results of the assembly we spawned

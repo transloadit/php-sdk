@@ -32,7 +32,6 @@ echo $transloadit->createAssemblyForm(array(
         'height' => 100,
       )
     ),
-    'blocking' => false,
     'redirect_url' => $redirectUrl
   )
 ));
