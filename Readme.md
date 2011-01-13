@@ -48,17 +48,6 @@ resizing job on it.
           )
         )
       ),
-      /*
-      If you set `blocking` to true, this request will hang until
-      transloadit has finished resizing the image.
-
-      This is ok to do with small files, but it requires that the
-      network connection remains uninterrupted for the whole time.
-
-      So for bigger files you should use our `notify_url` parameter,
-      which contacts your server when the processing is done.
-      */
-      'blocking' => false,
     ));
 
     // Show the results of the assembly we spawned
@@ -110,8 +99,6 @@ the `notify_url` parameter for this.
             'height' => 100,
           )
         ),
-         // See note about this parameter from example 1
-        'blocking' => false,
         'redirect_url' => $redirectUrl
       )
     ));
@@ -153,7 +140,6 @@ to the previous example. Check the HTML comments below to see what changed.
             'height' => 100,
           )
         ),
-        'blocking' => false,
         'redirect_url' => $redirectUrl
       )
     ));
