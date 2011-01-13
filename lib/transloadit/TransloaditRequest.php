@@ -65,7 +65,10 @@ class TransloaditRequest extends CurlRequest{
     );
   }
 
-  public function execute() {
+  public function execute($response = null) {
+    // note: $response is not used here, only needed to keep PHP strict mode
+    // happy.
+
     $this->prepare();
     $response = parent::execute(new TransloaditResponse());
     $response->parseJson();
