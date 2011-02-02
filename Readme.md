@@ -16,8 +16,8 @@ Transloadit instance like this
     <?php
     require_once('/path/to/php-sdk/lib/transloadit/Transloadit.php');
     $transloadit = new Transloadit(array(
-      'key' => 'your-key'
-      'secret' => 'your-secret'
+      'key' => 'your-key',
+      'secret' => 'your-secret',
     ));
 
     // Example code goes here!
