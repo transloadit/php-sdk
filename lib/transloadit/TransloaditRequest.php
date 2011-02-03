@@ -25,7 +25,11 @@ class TransloaditRequest extends CurlRequest{
 
   public function getParamsString() {
     $params = $this->params;
-    $params['auth'] = array(
+    if (!isset($params['auth'])) {
+      $params['auth'] = array();
+    }
+
+    $params['auth'] = $this->params + array(
       'key' => $this->key,
       'expires' => gmdate('Y/m/d H:i:s+00:00', strtotime($this->expires)),
     );
