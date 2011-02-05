@@ -29,7 +29,7 @@ class TransloaditRequest extends CurlRequest{
       $params['auth'] = array();
     }
 
-    $params['auth'] = $this->params + array(
+    $params['auth'] = $this->params['auth'] + array(
       'key' => $this->key,
       'expires' => gmdate('Y/m/d H:i:s+00:00', strtotime($this->expires)),
     );
