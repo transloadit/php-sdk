@@ -13,14 +13,16 @@ existing files from your server.
 To get started, each of our examples requires that you create a new
 Transloadit instance like this
 
-    <?php
-    require_once('/path/to/php-sdk/lib/transloadit/Transloadit.php');
-    $transloadit = new Transloadit(array(
-      'key' => 'your-key'
-      'secret' => 'your-secret'
-    ));
+``` php
+<?php
+require_once('/path/to/php-sdk/lib/transloadit/Transloadit.php');
+$transloadit = new Transloadit(array(
+  'key' => 'your-key'
+  'secret' => 'your-secret'
+));
 
-    // Example code goes here!
+// Example code goes here!
+```
 
 **Note:** All of the examples below can be found and run from within the
 `example/` folder.
@@ -35,25 +37,26 @@ on your server.
 It takes a sample image file, uploads it to transloadit, and starts a
 resizing job on it.
 
-    <?php
+``` php
+<?php
+$response = $transloadit->createAssembly(array(
+  'files' => array(dirname(__FILE__).'/fixture/straw-apple.jpg'),
+  'params' => array(
+    'steps' => array(
+      'resize' => array(
+        'robot' => '/image/resize',
+        'width' => 200,
+        'height' => 100,
+      )
+    )
+  ),
+));
 
-    $response = $transloadit->createAssembly(array(
-      'files' => array(dirname(__FILE__).'/fixture/straw-apple.jpg'),
-      'params' => array(
-        'steps' => array(
-          'resize' => array(
-            'robot' => '/image/resize',
-            'width' => 200,
-            'height' => 100,
-          )
-        )
-      ),
-    ));
-
-    // Show the results of the assembly we spawned
-    echo '<pre>';
-    print_r($response);
-    echo '</pre>';
+// Show the results of the assembly we spawned
+echo '<pre>';
+print_r($response);
+echo '</pre>';
+```
 
 
 ### 2. Create a simple end-user upload form
@@ -68,103 +71,103 @@ Note: There is no guarantee that the assembly has already finished
 executing by the time the `$response` is fetched. You should use
 the `notify_url` parameter for this.
 
-    <?php
+``` php
+<?php
+// Check if this request is a transloadit redirect_url notification.
+// If so fetch the response and output the current assembly status:
+$response = Transloadit::response();
+if ($response) {
+  echo '<h1>Assembly status:</h1>';
+  echo '<pre>';
+  print_r($response);
+  echo '</pre>';
+  exit;
+}
 
-    // Check if this request is a transloadit redirect_url notification.
-    // If so fetch the response and output the current assembly status:
-    $response = Transloadit::response();
-    if ($response) {
-      echo '<h1>Assembly status:</h1>';
-      echo '<pre>';
-      print_r($response);
-      echo '</pre>';
-      exit;
-    }
+// This should work on most environments, but you might have to modify
+// this for your particular setup.
+$redirectUrl = sprintf(
+  'http://%s%s',
+  $_SERVER['HTTP_HOST'],
+  $_SERVER['REQUEST_URI']
+);
 
-    // This should work on most environments, but you might have to modify
-    // this for your particular setup.
-    $redirectUrl = sprintf(
-      'http://%s%s',
-      $_SERVER['HTTP_HOST'],
-      $_SERVER['REQUEST_URI']
-    );
-
-    // Setup a simple file upload form that resizes an image to 200x100px
-    echo $transloadit->createAssemblyForm(array(
-      'params' => array(
-        'steps' => array(
-          'resize' => array(
-            'robot' => '/image/resize',
-            'width' => 200,
-            'height' => 100,
-          )
-        ),
-        'redirect_url' => $redirectUrl
+// Setup a simple file upload form that resizes an image to 200x100px
+echo $transloadit->createAssemblyForm(array(
+  'params' => array(
+    'steps' => array(
+      'resize' => array(
+        'robot' => '/image/resize',
+        'width' => 200,
+        'height' => 100,
       )
-    ));
-    ?>
-    <h1>Pick an image to resize</h1>
-    <input name="example_upload" type="file">
-    <input type="submit" value="Upload">
-    </form>
-
+    ),
+    'redirect_url' => $redirectUrl
+  )
+));
+?>
+<h1>Pick an image to resize</h1>
+<input name="example_upload" type="file">
+<input type="submit" value="Upload">
+</form>
+```
 
 ### 3. Integrate the jQuery plugin into the previous example
 
 Integrating the jQuery plugin simply means adding a few lines of JavaScript
 to the previous example. Check the HTML comments below to see what changed.
 
-    <?php
+``` php
+<?php
+$response = Transloadit::response();
+if ($response) {
+  echo '<h1>Assembly status:</h1>';
+  echo '<pre>';
+  print_r($response);
+  echo '</pre>';
+  exit;
+}
 
-    $response = Transloadit::response();
-    if ($response) {
-      echo '<h1>Assembly status:</h1>';
-      echo '<pre>';
-      print_r($response);
-      echo '</pre>';
-      exit;
-    }
+$redirectUrl = sprintf(
+  'http://%s%s',
+  $_SERVER['HTTP_HOST'],
+  $_SERVER['REQUEST_URI']
+);
 
-    $redirectUrl = sprintf(
-      'http://%s%s',
-      $_SERVER['HTTP_HOST'],
-      $_SERVER['REQUEST_URI']
-    );
-
-    echo $transloadit->createAssemblyForm(array(
-      'params' => array(
-        'steps' => array(
-          'resize' => array(
-            'robot' => '/image/resize',
-            'width' => 200,
-            'height' => 100,
-          )
-        ),
-        'redirect_url' => $redirectUrl
+echo $transloadit->createAssemblyForm(array(
+  'params' => array(
+    'steps' => array(
+      'resize' => array(
+        'robot' => '/image/resize',
+        'width' => 200,
+        'height' => 100,
       )
-    ));
-    ?>
-    <!--
-    Including the jQuery plugin is as simple as adding jQuery and including the
-    JS snippet for the plugin. See http://transloadit.com/docs/jquery-plugin
-    -->
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
-    <script type="text/javascript">
-    var tlProtocol = (('https:' == document.location.protocol) ? 'https://' : 'http://');
-    document.write(unescape("%3Cscript src='" + tlProtocol + "assets.transloadit.com/js/jquery.transloadit2.js' type='text/javascript'%3E%3C/script%3E"));
-    </script>
-    <script type="text/javascript">
-     $(document).ready(function() {
-       // Tell the transloadit plugin to bind itself to our form
-       $('form').transloadit();
-     });
-    </script>
-    <!-- Nothing changed below here -->
-    <h1>Pick an image to resize</h1>
-    <input name="example_upload" type="file">
-    <input type="submit" value="Upload">
-    </form>
-
+    ),
+    'redirect_url' => $redirectUrl
+  )
+));
+?>
+<!--
+Including the jQuery plugin is as simple as adding jQuery and including the
+JS snippet for the plugin. See http://transloadit.com/docs/jquery-plugin
+-->
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+<script type="text/javascript">
+var tlProtocol = (('https:' == document.location.protocol) ? 'https://' : 'http://');
+document.write(unescape("%3Cscript src='" + tlProtocol + "assets.transloadit.com/js/jquery.transloadit2.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+ $(document).ready(function() {
+   // Tell the transloadit plugin to bind itself to our form
+   $('form').transloadit();
+ });
+</script>
+<!-- Nothing changed below here -->
+<h1>Pick an image to resize</h1>
+<input name="example_upload" type="file">
+<input type="submit" value="Upload">
+</form>
+```
 <!-- End of generated doc section -->
 
 ## API
@@ -202,12 +205,14 @@ For example: `"params"`, `"expires"`, `"protocol"`, etc..
 In addition to that, you can also pass an `"attributes"` key, which allows
 you to set custom form attributes. For example:
 
+``` php
     $transloadit->createAssemblyForm(array(
       'attributes' => array(
         'id' => 'my_great_upload_form',
         'class' => 'transloadit_form',
       ),
     ));
+```
 
 #### $transloadit->createAssembly($options);
 
@@ -281,11 +286,15 @@ will include those in all assembly related notifications.
 
 An array of paths to local files you would like to upload. For example:
 
-    $transloaditRequest->files = array('/my/file.jpg');
+``` php
+$transloaditRequest->files = array('/my/file.jpg');
+```
 
 or
 
-    $transloaditRequest->files = array('my_upload' => '/my/file.jpg');
+``` php
+$transloaditRequest->files = array('my_upload' => '/my/file.jpg');
+```
 
 The first example would automatically give your file a field name of
 `'file_1'` when executing the request.
