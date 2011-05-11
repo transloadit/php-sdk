@@ -16,7 +16,7 @@ Transloadit instance like this
 ``` php
 <?php
 require_once '/path/to/php-sdk/lib/transloadit/Transloadit.php';
-$transloadit = new Transloadit(array(
+$Transloadit = new Transloadit(array(
   'key' => 'your-key',
   'secret' => 'your-secret',
 ));
@@ -39,7 +39,7 @@ resizing job on it.
 
 ``` php
 <?php
-$response = $transloadit->createAssembly(array(
+$response = $Transloadit->createAssembly(array(
   'files' => array(dirname(__FILE__).'/fixture/straw-apple.jpg'),
   'params' => array(
     'steps' => array(
@@ -93,7 +93,7 @@ $redirectUrl = sprintf(
 );
 
 // Setup a simple file upload form that resizes an image to 200x100px
-echo $transloadit->createAssemblyForm(array(
+echo $Transloadit->createAssemblyForm(array(
   'params' => array(
     'steps' => array(
       'resize' => array(
@@ -134,7 +134,7 @@ $redirectUrl = sprintf(
   $_SERVER['REQUEST_URI']
 );
 
-echo $transloadit->createAssemblyForm(array(
+echo $Transloadit->createAssemblyForm(array(
   'params' => array(
     'steps' => array(
       'resize' => array(
@@ -172,29 +172,29 @@ document.write(unescape("%3Cscript src='" + tlProtocol + "assets.transloadit.com
 
 ## API
 
-### $transloadit = new Transloadit($properties = array());
+### $Transloadit = new Transloadit($properties = array());
 
 Creates a new Transloadit instance and applies the given $properties.
 
-#### $transloadit->key = null;
+#### $Transloadit->key = null;
 
 The auth key of your transloadit account.
 
-#### $transloadit->secret = null;
+#### $Transloadit->secret = null;
 
 The auth secret of your transloadit account.
 
-#### $transloadit->request($options = array(), $execute = true);
+#### $Transloadit->request($options = array(), $execute = true);
 
-Creates a new `TransloaditRequest` using the `$transloadit->key` and
-`$transloadit->secret` properties.
+Creates a new `TransloaditRequest` using the `$Transloadit->key` and
+`$Transloadit->secret` properties.
 
-If `$execute` is set to `true`, `$transloaditRequest->execute()` will be
+If `$execute` is set to `true`, `$TransloaditRequest->execute()` will be
 called and used as the return value.
 
 Otherwise the new `TransloaditRequest` instance is being returned.
 
-#### $transloadit->createAssemblyForm($options = array());
+#### $Transloadit->createAssemblyForm($options = array());
 
 Creates a new transloadit assembly form including the hidden 'params' and
 'signature' fields. A closing form tag is not included.
@@ -206,7 +206,7 @@ In addition to that, you can also pass an `"attributes"` key, which allows
 you to set custom form attributes. For example:
 
 ``` php
-    $transloadit->createAssemblyForm(array(
+    $Transloadit->createAssemblyForm(array(
       'attributes' => array(
         'id' => 'my_great_upload_form',
         'class' => 'transloadit_form',
@@ -214,7 +214,7 @@ you to set custom form attributes. For example:
     ));
 ```
 
-#### $transloadit->createAssembly($options);
+#### $Transloadit->createAssembly($options);
 
 Sends a new assembly request to transloadit. This is the preferred way of
 uploading files from your server.
@@ -230,11 +230,11 @@ your server.
 
 There are two kinds of notifications this method handles:
 
-* When using the `"redirect_url"` parameter, and transloadit redirects
+* When using the `"redirect_url"` parameter, and Transloadit redirects
   back to your site, a `$_GET['assembly_url']` query parameter gets added.
   This method detects the presence of this parameter and fetches the current
   assembly status from that url and returns it as a `TransloaditResponse`.
-* When using the `"notify_url"` parameter, transloadit sends a
+* When using the `"notify_url"` parameter, Transloadit sends a
   `$_POST['transloadit']` parameter. This method detects this, and parses
   the notification JSON into a `TransloaditResponse` object for you.
 
@@ -242,103 +242,103 @@ If the current request does not seem to be invoked by Transloadit, this
 method returns `false`.
 
 
-### $transloaditRequest = new TransloaditRequest($properties = array());
+### $TransloaditRequest = new TransloaditRequest($properties = array());
 
 Creates a new TransloaditRequest instance and applies the given $properties.
 
-#### $transloaditRequest->key = null;
+#### $TransloaditRequest->key = null;
 
 The auth key of your transloadit account.
 
-#### $transloaditRequest->secret = null;
+#### $TransloaditRequest->secret = null;
 
 The auth secret of your transloadit account.
 
-#### $transloaditRequest->protocol = 'http';
+#### $TransloaditRequest->protocol = 'http';
 
 The protocol to use when making this request. Valid values are `'http'` and
 `'https'`.
 
-#### $transloaditRequest->method = 'GET';
+#### $TransloaditRequest->method = 'GET';
 
 Inherited from `CurlRequest`. Can be used to set the type of request to be
 made.
 
-#### $transloaditRequest->host = 'api2.transloadit.com';
+#### $TransloaditRequest->host = 'api2.transloadit.com';
 
 The host to send this request to.
 
-#### $transloaditRequest->path = null;
+#### $TransloaditRequest->path = null;
 
 The url path to request.
 
-#### $transloaditRequest->url = null;
+#### $TransloaditRequest->url = null;
 
 Inherited from `CurlRequest`. Lets you overwrite the above host / path
 properties with a fully custom url alltogether.
 
-#### $transloaditRequest->fields = array();
+#### $TransloaditRequest->fields = array();
 
 A list of additional fields to send along with your request. Transloadit
 will include those in all assembly related notifications.
 
-#### $transloaditRequest->files = array();
+#### $TransloaditRequest->files = array();
 
 An array of paths to local files you would like to upload. For example:
 
 ``` php
-$transloaditRequest->files = array('/my/file.jpg');
+$TransloaditRequest->files = array('/my/file.jpg');
 ```
 
 or
 
 ``` php
-$transloaditRequest->files = array('my_upload' => '/my/file.jpg');
+$TransloaditRequest->files = array('my_upload' => '/my/file.jpg');
 ```
 
 The first example would automatically give your file a field name of
 `'file_1'` when executing the request.
 
-#### $transloaditRequest->params = array();
+#### $TransloaditRequest->params = array();
 
 An array representing the JSON params to be send to transloadit. You
 do not have to include an `'auth'` key here, as this class handles that
 for you as part of `$transloaditRequest->prepare()`.
 
-#### $transloaditRequest->expires = '+2 hours';
+#### $TransloaditRequest->expires = '+2 hours';
 
 If you have configured a '`$transloaditRequest->secret`', this class will
 automatically sign your request. The expires property lets you configure
 the duration for which the signature is valid.
 
-#### $transloaditRequest->headers = array();
+#### $TransloaditRequest->headers = array();
 
 Lets you send additional headers along with your request. You should not
 have to change this property.
 
-#### $transloaditRequest->execute()
+#### $TransloaditRequest->execute()
 
 Sends this request to Transloadit and returns a `TransloaditResponse`
 instance.
 
-### $transloaditResponse = new TransloaditResponse($properties = array());
+### $TransloaditResponse = new TransloaditResponse($properties = array());
 
 Creates a new TransloaditResponse instance and applies the given $properties.
 
-#### $transloaditResponse->data = null;
+#### $TransloaditResponse->data = null;
 
 Inherited from `CurlResponse`. Contains an array of the parsed JSON
 response from transloadit.
 
 You should generally only access this property after having checked for
-errors using `$transloaditResponse->error()`.
+errors using `$TransloaditResponse->error()`.
 
-#### $transloaditResponse->error();
+#### $TransloaditResponse->error();
 
 Returns `false` or a string containing an explanation of what went wrong.
 
 All of the following will cause an error string to be returned:
 
 * Network issues of any kind
-* The transloadit response JSON contains an `{"error": "..."}` key
+* The Transloadit response JSON contains an `{"error": "..."}` key
 * A malformed response was received
