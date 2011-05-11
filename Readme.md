@@ -61,7 +61,7 @@ echo '</pre>';
 
 ### 2. Create a simple end-user upload form
 
-This example shows you how to create a simple transloadit upload form
+This example shows you how to create a simple Transloadit upload form
 that redirects back to your site after the upload is done.
 
 Once the script receives the redirect request, the current status for
@@ -73,10 +73,10 @@ the `notify_url` parameter for this.
 
 ``` php
 <?php
-// Check if this request is a transloadit redirect_url notification.
+// Check if this request is a Transloadit redirect_url notification.
 // If so fetch the response and output the current assembly status:
-$response = Transloadit::response();
-if ($response) {
+$Response = Transloadit::response();
+if ($Response) {
   echo '<h1>Assembly status:</h1>';
   echo '<pre>';
   print_r($response);
@@ -158,7 +158,7 @@ document.write(unescape("%3Cscript src='" + tlProtocol + "assets.transloadit.com
 </script>
 <script type="text/javascript">
  $(document).ready(function() {
-   // Tell the transloadit plugin to bind itself to our form
+   // Tell the Transloadit plugin to bind itself to our form
    $('form').transloadit();
  });
 </script>
@@ -178,11 +178,11 @@ Creates a new Transloadit instance and applies the given $properties.
 
 #### $Transloadit->key = null;
 
-The auth key of your transloadit account.
+The auth key of your Transloadit account.
 
 #### $Transloadit->secret = null;
 
-The auth secret of your transloadit account.
+The auth secret of your Transloadit account.
 
 #### $Transloadit->request($options = array(), $execute = true);
 
@@ -196,7 +196,7 @@ Otherwise the new `TransloaditRequest` instance is being returned.
 
 #### $Transloadit->createAssemblyForm($options = array());
 
-Creates a new transloadit assembly form including the hidden 'params' and
+Creates a new Transloadit assembly form including the hidden 'params' and
 'signature' fields. A closing form tag is not included.
 
 `$options` is an array of `TransloaditRequest` properties to be used.
@@ -216,7 +216,7 @@ you to set custom form attributes. For example:
 
 #### $Transloadit->createAssembly($options);
 
-Sends a new assembly request to transloadit. This is the preferred way of
+Sends a new assembly request to Transloadit. This is the preferred way of
 uploading files from your server.
 
 `$options` is an array of `TransloaditRequest` properties to be used.
@@ -248,11 +248,11 @@ Creates a new TransloaditRequest instance and applies the given $properties.
 
 #### $TransloaditRequest->key = null;
 
-The auth key of your transloadit account.
+The auth key of your Transloadit account.
 
 #### $TransloaditRequest->secret = null;
 
-The auth secret of your transloadit account.
+The auth secret of your Transloadit account.
 
 #### $TransloaditRequest->protocol = 'http';
 
@@ -301,13 +301,13 @@ The first example would automatically give your file a field name of
 
 #### $TransloaditRequest->params = array();
 
-An array representing the JSON params to be send to transloadit. You
+An array representing the JSON params to be send to Transloadit. You
 do not have to include an `'auth'` key here, as this class handles that
-for you as part of `$transloaditRequest->prepare()`.
+for you as part of `$TransloaditRequest->prepare()`.
 
 #### $TransloaditRequest->expires = '+2 hours';
 
-If you have configured a '`$transloaditRequest->secret`', this class will
+If you have configured a '`$TransloaditRequest->secret`', this class will
 automatically sign your request. The expires property lets you configure
 the duration for which the signature is valid.
 
@@ -328,7 +328,7 @@ Creates a new TransloaditResponse instance and applies the given $properties.
 #### $TransloaditResponse->data = null;
 
 Inherited from `CurlResponse`. Contains an array of the parsed JSON
-response from transloadit.
+response from Transloadit.
 
 You should generally only access this property after having checked for
 errors using `$TransloaditResponse->error()`.
