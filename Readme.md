@@ -206,12 +206,12 @@ In addition to that, you can also pass an `"attributes"` key, which allows
 you to set custom form attributes. For example:
 
 ``` php
-    $Transloadit->createAssemblyForm(array(
-      'attributes' => array(
-        'id' => 'my_great_upload_form',
-        'class' => 'transloadit_form',
-      ),
-    ));
+$Transloadit->createAssemblyForm(array(
+  'attributes' => array(
+    'id' => 'my_great_upload_form',
+    'class' => 'transloadit_form',
+  ),
+));
 ```
 
 #### $Transloadit->createAssembly($options);
