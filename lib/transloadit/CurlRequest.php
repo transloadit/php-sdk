@@ -33,6 +33,10 @@ class CurlRequest{
     if ($hasBody) {
       $fields = $this->fields;
       foreach ($this->files as $field => $file) {
+        if (!file_exists($file)) {
+          trigger_error('File ' . $file . ' does not exist', E_USER_ERROR);
+          return false;
+        }
         if (is_int($field)) {
           $field = 'file_'.($field+1);
         }
@@ -62,4 +66,3 @@ class CurlRequest{
     return $response;
   }
 }
-?>
