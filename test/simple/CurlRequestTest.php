@@ -64,10 +64,12 @@ class CurlRequestTest extends BaseTestCase{
       $options[CURLOPT_URL]);
     $this->assertArrayNotHasKey(CURLOPT_POSTFIELDS, $options);
 
+    $fixture = dirname(dirname(__FILE__)) . '/fixture/image-resize-robot.jpg';
+
     // test post files
     $this->request->method = 'POST';
     $this->request->fields = array('super' => 'cool');
-    $this->request->files = array('foo' => '/my/file.dat');
+    $this->request->files = array('foo' => $fixture);
     $options = $this->request->getCurlOptions();
     $this->assertEquals(
       array_merge(
@@ -78,7 +80,7 @@ class CurlRequestTest extends BaseTestCase{
     );
 
     // test file numbering
-    $this->request->files = array('/my/file.dat');
+    $this->request->files = array($fixture);
     $options = $this->request->getCurlOptions();
     $this->assertEquals(
       array_merge(
