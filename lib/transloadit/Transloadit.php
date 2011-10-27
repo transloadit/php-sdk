@@ -103,5 +103,32 @@ class Transloadit{
       'host' => $boredInstance->data['api2_host'],
     ));
   }
+  
+  public function deleteAssembly($assembly_id) {
+    // Look up the host for this assembly
+    $response = $this->request(array(
+      'method' => 'GET',
+      'path' => '/assemblies/'.$assembly_id,
+    ), true);
+
+    $error = $response->error();
+    if ($error) {
+      return $error;
+    }
+    
+    $url = parse_url($response->data['assembly_url']);
+  	
+    $response = $this->request(array(
+      'method' => 'DELETE',
+      'path' => $url['path'],
+      'host' => $url['host'],
+    ));
+    
+    $error = $response->error();
+    if ($error) {
+      return $error;
+    } else {
+      return $response;
+    }
+  }
 }
-?>
