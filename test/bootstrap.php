@@ -6,6 +6,8 @@ if (file_exists(__DIR__ . '/config.php')) {
     require __DIR__ . '/config.php';
 }
 
+define('TEST_FIXTURE_DIR', __DIR__ . '/fixture');
+
 abstract class SystemTestCase extends PHPUnit_Framework_TestCase{
   public function setUp() {
     if (!defined('TEST_ACCOUNT_KEY')) {

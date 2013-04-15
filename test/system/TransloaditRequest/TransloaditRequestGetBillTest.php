@@ -1,6 +1,6 @@
 <?php
 
-class TransloaditRequestGetBillTest extends TransloaditRequestTestCase{
+class TransloaditRequestGetBillTest extends SystemTestCase{
   public function testRoot() {
     $this->request->setMethodAndPath('GET', '/bill/'.date('Y-m'));
     $response = $this->request->execute();
