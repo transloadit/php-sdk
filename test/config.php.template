@@ -1,8 +1,0 @@
-<?php
-// In order to get the full test suite to run:
-//
-// 1. Copy this file to: test/config.php
-// 2. Replace the credentials below with a valid transloadit account
-
-define('TEST_ACCOUNT_KEY', 'your-key');
-define('TEST_ACCOUNT_SECRET', 'your-secret');
