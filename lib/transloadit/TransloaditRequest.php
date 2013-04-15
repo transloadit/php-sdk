@@ -1,6 +1,6 @@
 <?php
-require_once(dirname(__FILE__).'/CurlRequest.php');
-require_once(dirname(__FILE__).'/TransloaditResponse.php');
+
+namespace transloadit;
 
 class TransloaditRequest extends CurlRequest{
   public $key = null;

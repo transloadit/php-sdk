@@ -1,8 +1,8 @@
 <?php
-require_once(dirname(dirname(__FILE__)).'/BaseTestCase.php');
-require_once(TEST_LIB_DIR.'/CurlRequest.php');
 
-class CurlRequestTest extends BaseTestCase{
+use transloadit\CurlRequest;
+
+class CurlRequestTest extends PHPUnit_Framework_TestCase{
   public function setUp() {
     $this->request = new CurlRequest();
   }

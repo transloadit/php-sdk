@@ -1,5 +1,4 @@
 <?php
-require_once(dirname(__FILE__).'/TransloaditRequestTestCase.php');
 
 class TransloaditRequestRootTest extends TransloaditRequestTestCase{
   public function testRoot() {

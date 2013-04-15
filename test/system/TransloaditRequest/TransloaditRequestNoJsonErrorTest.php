@@ -1,5 +1,4 @@
 <?php
-require_once(dirname(__FILE__).'/TransloaditRequestTestCase.php');
 
 class TransloaditRequestNoJsonErrorTest extends TransloaditRequestTestCase{
   public function testRoot() {
