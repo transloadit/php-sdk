@@ -342,3 +342,50 @@ All of the following will cause an error string to be returned:
 * Network issues of any kind
 * The Transloadit response JSON contains an `{"error": "..."}` key
 * A malformed response was received
+
+## Contributing
+
+Feel free to fork this project. We will happily merge bug fixes or other small
+improvements. For bigger changes you should probably get in touch with us
+before you start to avoid not seeing them merged.
+
+## Versioning
+
+This project implements the Semantic Versioning guidelines.
+
+Releases will be numbered with the following format:
+
+`<major>.<minor>.<patch>`
+
+And constructed with the following guidelines:
+
+* Breaking backward compatibility bumps the major (and resets the minor and patch)
+* New additions without breaking backward compatibility bumps the minor (and resets the patch)
+* Bug fixes and misc changes bumps the patch
+
+For more information on SemVer, please visit http://semver.org/.
+
+## Versions
+
+### untagged since v0.9.1 
+
+https://github.com/transloadit/php-sdk/compare/v0.9.1...master
+
+### v0.9.1
+
+https://github.com/transloadit/php-sdk/compare/v0.9...v0.9.1
+
+### v0.9
+
+https://github.com/transloadit/php-sdk/compare/v0.2...v0.9
+
+### v0.2
+
+https://github.com/transloadit/php-sdk/compare/v0.1...v0.2
+
+### v0.1
+
+https://github.com/transloadit/php-sdk/tree/v0.1
+
+
+
