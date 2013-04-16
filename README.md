@@ -13,7 +13,7 @@ existing files from your server.
 To get started, each of our examples requires that you create a new
 Transloadit instance like this
 
-``` php
+```php
 <?php
 require_once '/path/to/php-sdk/lib/transloadit/Transloadit.php';
 $Transloadit = new Transloadit(array(
@@ -37,7 +37,7 @@ on your server.
 It takes a sample image file, uploads it to transloadit, and starts a
 resizing job on it.
 
-``` php
+```php
 <?php
 $response = $Transloadit->createAssembly(array(
   'files' => array(dirname(__FILE__).'/fixture/straw-apple.jpg'),
@@ -71,7 +71,7 @@ Note: There is no guarantee that the assembly has already finished
 executing by the time the `$response` is fetched. You should use
 the `notify_url` parameter for this.
 
-``` php
+```php
 <?php
 // Check if this request is a Transloadit redirect_url notification.
 // If so fetch the response and output the current assembly status:
@@ -117,7 +117,7 @@ echo $Transloadit->createAssemblyForm(array(
 Integrating the jQuery plugin simply means adding a few lines of JavaScript
 to the previous example. Check the HTML comments below to see what changed.
 
-``` php
+```php
 <?php
 $response = Transloadit::response();
 if ($response) {
@@ -205,7 +205,7 @@ For example: `"params"`, `"expires"`, `"protocol"`, etc..
 In addition to that, you can also pass an `"attributes"` key, which allows
 you to set custom form attributes. For example:
 
-``` php
+```php
 $Transloadit->createAssemblyForm(array(
   'attributes' => array(
     'id' => 'my_great_upload_form',
@@ -286,13 +286,13 @@ will include those in all assembly related notifications.
 
 An array of paths to local files you would like to upload. For example:
 
-``` php
+```php
 $TransloaditRequest->files = array('/my/file.jpg');
 ```
 
 or
 
-``` php
+```php
 $TransloaditRequest->files = array('my_upload' => '/my/file.jpg');
 ```
 
