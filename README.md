@@ -372,29 +372,33 @@ For more information on SemVer, please visit http://semver.org/.
 
 ## Versions
 
-### v1.0.0
+### [v1.0.0](https://github.com/transloadit/php-sdk/tree/v1.0.0)
 
-https://github.com/transloadit/php-sdk/compare/v1.0.0...master
+A big thanks to @nervetattoo for making this version happen!
 
-### v0.10.0
+[changes since previous](https://github.com/transloadit/php-sdk/compare/v0.10.0...v1.0.0)
 
-https://github.com/transloadit/php-sdk/compare/v0.10.0...master
+### [v0.10.0](https://github.com/transloadit/php-sdk/tree/v0.10.0)
 
-### v0.9.1
+[changes since previous](https://github.com/transloadit/php-sdk/compare/v0.9.1...v0.10.0)
 
-https://github.com/transloadit/php-sdk/compare/v0.9...v0.9.1
+### [v0.9.1](https://github.com/transloadit/php-sdk/tree/v0.9.1)
 
-### v0.9
+[changes since previous](https://github.com/transloadit/php-sdk/compare/v0.9...v0.9.1)
 
-https://github.com/transloadit/php-sdk/compare/v0.2...v0.9
+### [v0.9](https://github.com/transloadit/php-sdk/tree/v0.9)
 
-### v0.2
+[changes since previous](https://github.com/transloadit/php-sdk/compare/v0.2...v0.9)
 
-https://github.com/transloadit/php-sdk/compare/v0.1...v0.2
+### [v0.2](https://github.com/transloadit/php-sdk/tree/v0.2)
 
-### v0.1
+[changes since previous](https://github.com/transloadit/php-sdk/compare/v0.1...v0.2)
 
-https://github.com/transloadit/php-sdk/tree/v0.1
+### [v0.1](https://github.com/transloadit/php-sdk/tree/v0.1)
+
+The very first version
+
+
 
 
 
