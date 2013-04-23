@@ -1,7 +1,7 @@
 <?php
-require_once(dirname(__FILE__).'/CurlResponse.php');
+namespace transloadit;
 
-class CurlRequest{
+class CurlRequest {
   public $method = 'GET';
   public $url = null;
   public $headers = array();

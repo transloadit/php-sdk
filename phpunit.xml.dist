@@ -1,0 +1,2 @@
+<phpunit bootstrap="test/bootstrap.php">
+</phpunit>

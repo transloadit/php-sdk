@@ -1,8 +1,8 @@
 <?php
-require_once(dirname(dirname(__FILE__)).'/BaseTestCase.php');
-require_once(TEST_LIB_DIR.'/Transloadit.php');
 
-class TransloaditTest extends BaseTestCase{
+use transloadit\Transloadit;
+
+class TransloaditTest extends \PHPUnit_Framework_TestCase{
   public function setUp() {
     $this->transloadit = new Transloadit();
   }
@@ -18,12 +18,12 @@ class TransloaditTest extends BaseTestCase{
   }
 
   public function testCreateAssembly() {
-    $transloadit = $this->getMock('Transloadit', array(
+    $transloadit = $this->getMock('transloadit\\Transloadit', array(
       'request'
     ));
 
-    $assembly = $this->getMock('TransloaditResponse');
-    $boredInstance = $this->getMock('TransloaditResponse');
+    $assembly = $this->getMock('transloadit\\TransloaditResponse');
+    $boredInstance = $this->getMock('transloadit\\TransloaditResponse');
     $boredInstance->data = array('api2_host' => 'super.transloadit.com');
 
     $options = array('foo' => 'bar');
@@ -75,7 +75,7 @@ class TransloaditTest extends BaseTestCase{
     $data = array('foo' => 'bar');
     $_POST['transloadit'] = json_encode($data);
     $response = Transloadit::response();
-    $this->assertEquals('TransloaditResponse', get_class($response));
+    $this->assertInstanceOf('transloadit\\TransloaditResponse', $response);
     $this->assertEquals($data, $response->data);
 
 
@@ -83,8 +83,8 @@ class TransloaditTest extends BaseTestCase{
   }
 
   public function testCreateAssemblyForm() {
-    $transloadit = $this->getMock('Transloadit', array('request'));
-    $assembly = $this->getMock('TransloaditResponse', array('prepare'));
+    $transloadit = $this->getMock('transloadit\\Transloadit', array('request'));
+    $assembly = $this->getMock('transloadit\\TransloaditResponse', array('prepare'));
 
     $assembly->method = 'ROCK';
     $assembly->url = 'http://api999.transloadit.com/assemblies';

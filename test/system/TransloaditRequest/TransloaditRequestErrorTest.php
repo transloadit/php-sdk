@@ -1,7 +1,6 @@
 <?php
-require_once(dirname(__FILE__).'/TransloaditRequestTestCase.php');
 
-class TransloaditRequestErrorTest extends TransloaditRequestTestCase{
+class TransloaditRequestErrorTest extends SystemTestCase{
   public function testRoot() {
     $this->request->setMethodAndPath('POST', '/assemblies');
     $response = $this->request->execute();
