@@ -1,5 +1,10 @@
 # Transloadit PHP SDK
 
+# Important
+
+If you are on v0.10.0 or below, just pull-updating to v1.0.0 will break the SDK for you.
+v1.0.0 makes PHP 5.3.0 a requirement. For development use `composer install --dev` to get phpunit version and run `vendor/bin/phpunit test` to run tests.
+
 # Purpose
 
 This is the official PHP SDK for the
@@ -366,6 +371,10 @@ And constructed with the following guidelines:
 For more information on SemVer, please visit http://semver.org/.
 
 ## Versions
+
+### v1.0.0
+
+https://github.com/transloadit/php-sdk/compare/v1.0.0...master
 
 ### v0.10.0
 
