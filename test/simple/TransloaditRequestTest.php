@@ -1,20 +1,20 @@
 <?php
-require_once(dirname(dirname(__FILE__)).'/BaseTestCase.php');
-require_once(TEST_LIB_DIR.'/TransloaditRequest.php');
 
-class TransloaditRequestTest extends BaseTestCase{
+use transloadit\TransloaditRequest;
+use transloadit\CurlRequest;
+
+class TransloaditRequestTest extends \PHPUnit_Framework_TestCase{
   public function setUp() {
     $this->request = new TransloaditRequest();
   }
 
   private function _mock() {
     $methods = func_get_args();
-    $this->request = $this->getMock('TransloaditRequest', $methods);
+    $this->request = $this->getMock('transloadit\\TransloaditRequest', $methods);
   }
 
   public function testConstructor() {
-    $parent = get_parent_class($this->request);
-    $this->assertEquals('CurlRequest', $parent);
+    $this->assertInstanceOf('transloadit\\CurlRequest', $this->request);
   }
 
   public function testAttributes() {

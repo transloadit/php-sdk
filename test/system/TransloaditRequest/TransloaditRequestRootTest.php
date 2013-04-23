@@ -1,12 +1,11 @@
 <?php
-require_once(dirname(__FILE__).'/TransloaditRequestTestCase.php');
 
-class TransloaditRequestRootTest extends TransloaditRequestTestCase{
+class TransloaditRequestRootTest extends SystemTestCase{
   public function testRoot() {
     $this->request->setMethodAndPath('GET', '/');
     $response = $this->request->execute();
 
-    $this->assertEquals(true, array_key_exists('ok', $response->data));
-    $this->assertEquals('TransloaditResponse', get_class($response));
+    $this->assertEquals(true, isset($response->data['ok']));
+    $this->assertInstanceOf('transloadit\TransloaditResponse', $response);
   }
 }

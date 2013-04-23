@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__FILE__).'/TransloaditRequest.php');
+namespace transloadit;
 
 class Transloadit{
   public $key = null;

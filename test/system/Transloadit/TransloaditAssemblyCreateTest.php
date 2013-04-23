@@ -1,7 +1,21 @@
 <?php
-require_once(dirname(__FILE__).'/TransloaditTestCase.php');
+use transloadit\Transloadit;
 
-class TransloaditAssemblyCreateTest extends TransloaditTestCase{
+class TransloaditAssemblyCreateTest extends \PHPUnit_Framework_TestCase{
+  public function setUp() {
+    if (!defined('TEST_ACCOUNT_KEY')) {
+      $this->markTestSkipped(
+        'Have a look at test/config.php.template to get this test to run.'
+      );
+      return;
+    }
+
+    // @todo Load config from git excluded config file
+    $this->transloadit = new Transloadit(array(
+      'key' => TEST_ACCOUNT_KEY,
+      'secret' => TEST_ACCOUNT_SECRET,
+    ));
+  }
   public function testRoot() {
     $response = $this->transloadit->createAssembly(array(
       'files' => array(TEST_FIXTURE_DIR.'/image-resize-robot.jpg'),

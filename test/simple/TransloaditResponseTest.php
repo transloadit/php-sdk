@@ -1,15 +1,15 @@
 <?php
-require_once(dirname(dirname(__FILE__)).'/BaseTestCase.php');
-require_once(TEST_LIB_DIR.'/TransloaditResponse.php');
 
-class TransloaditResponseTest extends BaseTestCase{
+use transloadit\TransloaditResponse;
+use transloadit\CurlResponse;
+
+class TransloaditResponseTest extends \PHPUnit_Framework_TestCase{
   public function setUp() {
     $this->response = new TransloaditResponse();
   }
 
   public function testConstructor() {
-    $parent = get_parent_class($this->response);
-    $this->assertEquals('CurlResponse', $parent);
+    $this->assertInstanceOf('transloadit\\CurlResponse', $this->response);
   }
 
   public function testError() {

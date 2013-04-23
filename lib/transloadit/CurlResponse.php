@@ -1,4 +1,7 @@
 <?php
+
+namespace transloadit;
+
 class CurlResponse{
   public $data = null;
 
