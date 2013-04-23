@@ -367,9 +367,9 @@ For more information on SemVer, please visit http://semver.org/.
 
 ## Versions
 
-### untagged since v0.9.1 
+### v0.10.0
 
-https://github.com/transloadit/php-sdk/compare/v0.9.1...master
+https://github.com/transloadit/php-sdk/compare/v0.10.0...master
 
 ### v0.9.1
 
