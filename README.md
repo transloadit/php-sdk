@@ -20,7 +20,7 @@ Transloadit instance like this
 
 ```php
 <?php
-require_once '/path/to/php-sdk/lib/transloadit/Transloadit.php';
+use transloadit\Transloadit;
 $Transloadit = new Transloadit(array(
   'key' => 'your-key',
   'secret' => 'your-secret',
@@ -44,7 +44,8 @@ resizing job on it.
 
 ```php
 <?php
-$response = $Transloadit->createAssembly(array(
+
+$response = $transloadit->createAssembly(array(
   'files' => array(dirname(__FILE__).'/fixture/straw-apple.jpg'),
   'params' => array(
     'steps' => array(
@@ -61,12 +62,12 @@ $response = $Transloadit->createAssembly(array(
 echo '<pre>';
 print_r($response);
 echo '</pre>';
-```
 
+```
 
 ### 2. Create a simple end-user upload form
 
-This example shows you how to create a simple Transloadit upload form
+This example shows you how to create a simple transloadit upload form
 that redirects back to your site after the upload is done.
 
 Once the script receives the redirect request, the current status for
@@ -78,10 +79,11 @@ the `notify_url` parameter for this.
 
 ```php
 <?php
-// Check if this request is a Transloadit redirect_url notification.
+
+// Check if this request is a transloadit redirect_url notification.
 // If so fetch the response and output the current assembly status:
-$Response = Transloadit::response();
-if ($Response) {
+$response = Transloadit::response();
+if ($response) {
   echo '<h1>Assembly status:</h1>';
   echo '<pre>';
   print_r($response);
@@ -98,7 +100,7 @@ $redirectUrl = sprintf(
 );
 
 // Setup a simple file upload form that resizes an image to 200x100px
-echo $Transloadit->createAssemblyForm(array(
+echo $transloadit->createAssemblyForm(array(
   'params' => array(
     'steps' => array(
       'resize' => array(
@@ -115,6 +117,7 @@ echo $Transloadit->createAssemblyForm(array(
 <input name="example_upload" type="file">
 <input type="submit" value="Upload">
 </form>
+
 ```
 
 ### 3. Integrate the jQuery plugin into the previous example
@@ -124,6 +127,7 @@ to the previous example. Check the HTML comments below to see what changed.
 
 ```php
 <?php
+
 $response = Transloadit::response();
 if ($response) {
   echo '<h1>Assembly status:</h1>';
@@ -139,7 +143,7 @@ $redirectUrl = sprintf(
   $_SERVER['REQUEST_URI']
 );
 
-echo $Transloadit->createAssemblyForm(array(
+echo $transloadit->createAssemblyForm(array(
   'params' => array(
     'steps' => array(
       'resize' => array(
@@ -163,7 +167,7 @@ document.write(unescape("%3Cscript src='" + tlProtocol + "assets.transloadit.com
 </script>
 <script type="text/javascript">
  $(document).ready(function() {
-   // Tell the Transloadit plugin to bind itself to our form
+   // Tell the transloadit plugin to bind itself to our form
    $('form').transloadit();
  });
 </script>
@@ -172,6 +176,7 @@ document.write(unescape("%3Cscript src='" + tlProtocol + "assets.transloadit.com
 <input name="example_upload" type="file">
 <input type="submit" value="Upload">
 </form>
+
 ```
 <!-- End of generated doc section -->
 
@@ -374,7 +379,7 @@ For more information on SemVer, please visit http://semver.org/.
 
 ### [v1.0.0](https://github.com/transloadit/php-sdk/tree/v1.0.0)
 
-A big thanks to @nervetattoo for making this version happen!
+A big thanks to [@nervetattoo](https://github.com/nervetattoo) for making this version happen!
 
 [changes since previous](https://github.com/transloadit/php-sdk/compare/v0.10.0...v1.0.0)
 
