@@ -1,7 +1,17 @@
 <?php
-require_once(dirname(dirname(dirname(__FILE__))).'/lib/Transloadit/Transloadit.php');
+$autoloader = dirname(dirname(__DIR__)) . '/vendor/autoload.php';
+$config = __DIR__ . '/config.php';
 
-
-if (!@include_once(dirname(__FILE__).'/config.php')) {
-  die('Please check example/config/config.php.template for running the examples.');
+if (!file_exists($autoloader)) {
+    throw new \Exception(
+        "composer autoload not found, run composer install first"
+    );
 }
+if (!file_exists($config)) {
+    throw new \Exception(
+        "Please check example/config/config.php.template for running the examples"
+    );
+}
+
+require $autoloader;
+return require $config;

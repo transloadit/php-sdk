@@ -1,6 +1,9 @@
 <?php
-require_once('./config/common.php');
-$transloadit = new Transloadit($exampleConfig);
+$config = require __DIR__ . '/config/common.php';
+
+use transloadit\Transloadit;
+
+$transloadit = new Transloadit($config);
 /*
 ### 2. Create a simple end-user upload form
 

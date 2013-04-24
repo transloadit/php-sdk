@@ -1,6 +1,6 @@
 <?php
-require_once('./config/common.php');
-$transloadit = new Transloadit($exampleConfig);
+$config = require __DIR__ . '/config/common.php';
+$transloadit = new transloadit\Transloadit($config);
 
 /*
 ### 1. Upload and resize an image from your server
