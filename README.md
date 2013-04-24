@@ -377,12 +377,18 @@ For more information on SemVer, please visit http://semver.org/.
 
 ## Versions
 
+
+
 ### [master](https://github.com/transloadit/php-sdk/tree/master)
+
+diff: https://github.com/transloadit/php-sdk/compare/v1.0.1...master
+
+### [v1.0.1](https://github.com/transloadit/php-sdk/tree/v1.0.1)
 
  - Fix broken examples
  - Improve documentation (version changelogs)
 
-diff: https://github.com/transloadit/php-sdk/compare/v1.0.0...master
+diff: https://github.com/transloadit/php-sdk/compare/v1.0.0...v1.0.1
 
 ### [v1.0.0](https://github.com/transloadit/php-sdk/tree/v1.0.0)
 
