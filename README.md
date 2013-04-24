@@ -377,27 +377,56 @@ For more information on SemVer, please visit http://semver.org/.
 
 ## Versions
 
+### [master](https://github.com/transloadit/php-sdk/tree/master)
+
+ - Fix broken examples
+ - Improve documentation (version changelogs)
+
+diff: https://github.com/transloadit/php-sdk/compare/v1.0.0...master
+
 ### [v1.0.0](https://github.com/transloadit/php-sdk/tree/v1.0.0)
 
 A big thanks to [@nervetattoo](https://github.com/nervetattoo) for making this version happen!
 
-changes since previous: https://github.com/transloadit/php-sdk/compare/v0.10.0...v1.0.0
+ - Add support for Composer
+ - Make phpunit run through Composer
+ - Change to namespaced PHP
+
+diff: https://github.com/transloadit/php-sdk/compare/v0.10.0...v1.0.0
 
 ### [v0.10.0](https://github.com/transloadit/php-sdk/tree/v0.10.0)
 
-changes since previous: https://github.com/transloadit/php-sdk/compare/v0.9.1...v0.10.0
+ - Add support for Strict mode
+ - Add support for more auth params
+ - Improve documentation
+ - Bug fixes
+ - Refactoring
+
+diff: https://github.com/transloadit/php-sdk/compare/v0.9.1...v0.10.0
 
 ### [v0.9.1](https://github.com/transloadit/php-sdk/tree/v0.9.1)
 
-changes since previous: https://github.com/transloadit/php-sdk/compare/v0.9...v0.9.1
+ - Improve documentation
+ - Better handling of errors & non-json responses
+ - Change directory layout
+
+diff: https://github.com/transloadit/php-sdk/compare/v0.9...v0.9.1
 
 ### [v0.9](https://github.com/transloadit/php-sdk/tree/v0.9)
 
-changes since previous: https://github.com/transloadit/php-sdk/compare/v0.2...v0.9
+ - Use markdown for docs
+ - Add support for signed GET requests
+ - Add support for HTTPS
+ - Simplified API
+ - Improve handling of magic quotes
+ 
+diff: https://github.com/transloadit/php-sdk/compare/v0.2...v0.9
 
 ### [v0.2](https://github.com/transloadit/php-sdk/tree/v0.2)
 
-changes since previous: https://github.com/transloadit/php-sdk/compare/v0.1...v0.2
+- Add error handling
+
+diff: https://github.com/transloadit/php-sdk/compare/v0.1...v0.2
 
 ### [v0.1](https://github.com/transloadit/php-sdk/tree/v0.1)
 
