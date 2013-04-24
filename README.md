@@ -2,7 +2,7 @@
 
 # Important
 
-If you are on v0.10.0 or below, just pull-updating to v1.0.0 will break the SDK for you.
+If you are on v0.10.0 or below, just pull-updating to the latest v1.x.x will break the SDK for you.
 v1.0.0 makes PHP 5.3.0 a requirement. For development use `composer install --dev` to get phpunit version and run `vendor/bin/phpunit test` to run tests.
 
 # Purpose
