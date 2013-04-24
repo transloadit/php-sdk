@@ -10,12 +10,13 @@ function parseExample($file) {
   preg_match('/\/\*(.+?)\*\/\n(.+)/s', $php, $match);
   list(, $markdown, $code) = $match;
 
-  $code = join("\n", array(
+  return join("\n", array(
+    $markdown,
+    '```php',
     '<?php',
-    $code
+    $code,
+    '```'
   ));
-  $code = preg_replace('/^.+$/m', '    $0', $code);
-  return $markdown."\n".$code;
 }
 
 $examples = array();
@@ -25,7 +26,7 @@ foreach ($files as $file) {
   $examples[] = $example;
 }
 
-$readmePath = SDK_ROOT.'/Readme.md';
+$readmePath = SDK_ROOT.'/README.md';
 $readme = file_get_contents($readmePath);
 $exampleDocs = join("\n", $examples);
 
