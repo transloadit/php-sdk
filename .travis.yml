@@ -1,0 +1,9 @@
+language: php
+php:
+  - 5.4
+  - 5.3
+# You can also install Composer packages into the Travis PHP environment.
+# The composer command comes pre-installed, so just use the following:
+before_script:
+  - composer install --dev
+
