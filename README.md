@@ -1,5 +1,9 @@
 # Transloadit PHP SDK
 
+[![Build Status](https://travis-ci.org/transloadit/php-sdk.png?branch=master)](https://travis-ci.org/transloadit/php-sdk)
+[![Coverage Status](https://coveralls.io/repos/transloadit/php-sdk/badge.png?branch=master)](https://coveralls.io/r/transloadit/php-sdk)
+
+
 # Important
 
 If you are on v0.10.0 or below, just pull-updating to the latest v1.x.x will break the SDK for you.
@@ -425,7 +429,7 @@ diff: https://github.com/transloadit/php-sdk/compare/v0.9...v0.9.1
  - Add support for HTTPS
  - Simplified API
  - Improve handling of magic quotes
- 
+
 diff: https://github.com/transloadit/php-sdk/compare/v0.2...v0.9
 
 ### [v0.2](https://github.com/transloadit/php-sdk/tree/v0.2)
