@@ -2,7 +2,9 @@
     "name": "transloadit/php-sdk",
     "type": "library",
     "description": "Transloadit SDK",
+    "keywords": ["transloadit","video","encoding","thumbnails","image","resizing","audio", "waveform", "document","processing","file","uploading"],
     "homepage": "https://github.com/transloadit/php-sdk",
+    "license": "MIT",    
     "require": {
         "php": ">=5.3.0"
     },
