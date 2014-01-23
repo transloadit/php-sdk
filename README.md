@@ -4,18 +4,67 @@
 [![Coverage Status](https://coveralls.io/repos/transloadit/php-sdk/badge.png?branch=master)](https://coveralls.io/r/transloadit/php-sdk)
 
 
-# Important
+## Important
 
-If you are on v0.10.0 or below, just pull-updating to the latest v1.x.x will break the SDK for you.
-v1.0.0 makes PHP 5.3.0 a requirement. For development use `composer install --dev` to get phpunit version and run `vendor/bin/phpunit test` to run tests.
+If you are on `v0.10.0` or below, just pull-updating to the latest `v1.x.x `will break the SDK for you.
+`v1.0.0` makes PHP 5.3.0 a requirement. For development use `composer install --dev` to get phpunit version and run `vendor/bin/phpunit test` to run tests.
 
-# Purpose
+## Purpose
 
 This is the official PHP SDK for the
 [transloadit.com](http://transloadit.com/) API.
 
 You can use it to setup file upload forms for your users, or to upload
 existing files from your server.
+
+
+## Getting started
+
+
+Step 1. Create a new project and install Composer
+
+```bash
+mkdir transloadit-client && cd $_
+curl -s http://getcomposer.org/installer | php
+```
+
+Step 2. Create composer file:
+
+```bash
+$EDITOR composer.json
+```
+
+Step 3. Add the Transloadit PHP SDK as a dependency
+
+```json
+{
+  "require": {
+    "transloadit/php-sdk": "dev-master"
+  }
+}
+```
+
+Step 4. Install the composer dependency, this downloads the sdk for you
+
+```bash
+php composer.phar install --dev
+```
+
+Step 5. Now let's open up a new PHP file
+
+```bash
+$EDITOR cli.php
+```
+
+Step 6. Include our SDK code (and any other Composer dependency that you may have defined)
+
+```php
+<?php
+require 'vendor/autoload.php';
+?>
+```
+
+Step 7. Keep your Transloadit account's key & secret key nearby, and you're ready to try out some examples!
 
 ## Examples
 
@@ -25,7 +74,7 @@ Transloadit instance like this
 ```php
 <?php
 use transloadit\Transloadit;
-$Transloadit = new Transloadit(array(
+$transloadit = new Transloadit(array(
   'key' => 'your-key',
   'secret' => 'your-secret',
 ));
