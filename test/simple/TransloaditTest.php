@@ -1,5 +1,5 @@
 <?php
-
+date_default_timezone_set('UTC');
 use transloadit\Transloadit;
 
 class TransloaditTest extends \PHPUnit_Framework_TestCase{
@@ -46,9 +46,9 @@ class TransloaditTest extends \PHPUnit_Framework_TestCase{
       ->expects($this->at(1))
       ->method('request')
       ->with($this->equalTo($options + array(
-        'method' => 'POST',
-        'path' => '/assemblies',
-        'host' => $boredInstance->data['api2_host'],
+        'method'   => 'POST',
+        'path'     => '/assemblies',
+        'endpoint' => 'https://' . $boredInstance->data['api2_host'],
       )))
       ->will($this->returnValue($assembly));
 

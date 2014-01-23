@@ -2,8 +2,9 @@
 namespace transloadit;
 
 class Transloadit{
-  public $key = null;
-  public $secret = null;
+  public $key      = null;
+  public $secret   = null;
+  public $endpoint = 'https://api2.transloadit.com';
 
   public function __construct($attributes = array()) {
     foreach ($attributes as $key => $val) {
@@ -13,8 +14,9 @@ class Transloadit{
 
   public function request($options = array(), $execute = true) {
     $options = $options + array(
-      'key' => $this->key,
-      'secret' => $this->secret,
+      'key'      => $this->key,
+      'secret'   => $this->secret,
+      'endpoint' => $this->endpoint,
     );
     $request = new TransloaditRequest($options);
     return ($execute)
@@ -54,13 +56,13 @@ class Transloadit{
 
     $assembly = $this->request($options + array(
       'method' => 'POST',
-      'path' => '/assemblies',
+      'path'   => '/assemblies',
     ), false);
     $assembly->prepare();
 
     $formAttributes = array(
-      'action' => $assembly->url,
-      'method' => $assembly->method,
+      'action'  => $assembly->url,
+      'method'  => $assembly->method,
       'enctype' => 'multipart/form-data',
     ) + $customFormAttributes;
 
@@ -89,7 +91,7 @@ class Transloadit{
     // can help to get our assembly executed faster.
     $boredInstance = $this->request(array(
       'method' => 'GET',
-      'path' => '/instances/bored',
+      'path'   => '/instances/bored',
     ), true);
 
     $error = $boredInstance->error();
@@ -98,32 +100,32 @@ class Transloadit{
     }
 
     return $this->request($options + array(
-      'method' => 'POST',
-      'path' => '/assemblies',
-      'host' => $boredInstance->data['api2_host'],
+      'method'   => 'POST',
+      'path'     => '/assemblies',
+      'endpoint' => 'https://' . $boredInstance->data['api2_host'],
     ));
   }
-  
+
   public function deleteAssembly($assembly_id) {
     // Look up the host for this assembly
     $response = $this->request(array(
       'method' => 'GET',
-      'path' => '/assemblies/'.$assembly_id,
+      'path'   => '/assemblies/'.$assembly_id,
     ), true);
 
     $error = $response->error();
     if ($error) {
       return $error;
     }
-    
+
     $url = parse_url($response->data['assembly_url']);
-  	
+
     $response = $this->request(array(
       'method' => 'DELETE',
-      'path' => $url['path'],
-      'host' => $url['host'],
+      'path'   => $url['path'],
+      'host'   => $url['host'],
     ));
-    
+
     $error = $response->error();
     if ($error) {
       return $error;

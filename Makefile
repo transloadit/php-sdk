@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 
-phpunit = phpunit --colors --verbose $(1)
+phpunit = vendor/phpunit/phpunit/phpunit.php --colors --verbose $(1)
 
 test: test-simple
 test-all: test-simple test-system

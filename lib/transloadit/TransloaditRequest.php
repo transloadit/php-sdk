@@ -3,17 +3,16 @@
 namespace transloadit;
 
 class TransloaditRequest extends CurlRequest{
-  public $key = null;
-  public $secret = null;
+  public $key      = null;
+  public $secret   = null;
 
-  public $protocol = 'http';
-  public $host = 'api2.transloadit.com';
-  public $path = null;
+  public $endpoint = 'https://api2.transloadit.com';
+  public $path     = null;
 
-  public $params = array();
-  public $expires = '+2 hours';
+  public $params   = array();
+  public $expires  = '+2 hours';
 
-  public $headers = array(
+  public $headers  = array(
     'Expect:',
     'User-Agent: Transloadit PHP SDK 0.10.0',
   );
@@ -30,7 +29,7 @@ class TransloaditRequest extends CurlRequest{
     }
 
     $params['auth'] = $params['auth'] + array(
-      'key' => $this->key,
+      'key'     => $this->key,
       'expires' => gmdate('Y/m/d H:i:s+00:00', strtotime($this->expires)),
     );
     return json_encode($params);
@@ -62,9 +61,8 @@ class TransloaditRequest extends CurlRequest{
     }
 
     $this->url = sprintf(
-      '%s://%s%s',
-      $this->protocol,
-      $this->host,
+      '%s%s',
+      $this->endpoint,
       $this->path
     );
   }
@@ -79,4 +77,3 @@ class TransloaditRequest extends CurlRequest{
     return $response;
   }
 }
-?>

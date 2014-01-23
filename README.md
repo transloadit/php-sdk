@@ -263,7 +263,7 @@ Creates a new Transloadit assembly form including the hidden 'params' and
 'signature' fields. A closing form tag is not included.
 
 `$options` is an array of `TransloaditRequest` properties to be used.
-For example: `"params"`, `"expires"`, `"protocol"`, etc..
+For example: `"params"`, `"expires"`, `"endpoint"`, etc..
 
 In addition to that, you can also pass an `"attributes"` key, which allows
 you to set custom form attributes. For example:
@@ -317,19 +317,14 @@ The auth key of your Transloadit account.
 
 The auth secret of your Transloadit account.
 
-#### $TransloaditRequest->protocol = 'http';
-
-The protocol to use when making this request. Valid values are `'http'` and
-`'https'`.
-
 #### $TransloaditRequest->method = 'GET';
 
 Inherited from `CurlRequest`. Can be used to set the type of request to be
 made.
 
-#### $TransloaditRequest->host = 'api2.transloadit.com';
+#### $TransloaditRequest->endpoint = 'https://api2.transloadit.com';
 
-The host to send this request to.
+The endpoint to send this request to.
 
 #### $TransloaditRequest->path = null;
 
@@ -337,7 +332,7 @@ The url path to request.
 
 #### $TransloaditRequest->url = null;
 
-Inherited from `CurlRequest`. Lets you overwrite the above host / path
+Inherited from `CurlRequest`. Lets you overwrite the above endpoint / path
 properties with a fully custom url alltogether.
 
 #### $TransloaditRequest->fields = array();
@@ -435,6 +430,15 @@ For more information on SemVer, please visit http://semver.org/.
 ### [master](https://github.com/transloadit/php-sdk/tree/master)
 
 diff: https://github.com/transloadit/php-sdk/compare/v1.0.1...master
+
+### [v2.0.0](https://github.com/transloadit/php-sdk/tree/v2.0.0)
+
+ - Retire host + protocol in favor of one endpoint property,
+ allow passing that on to the Request object.
+ - Improve readme (getting started)
+ - Don't rely on globally installed phpunit when we can ship it via Composer
+
+diff: https://github.com/transloadit/php-sdk/compare/v1.0.1...v2.0.0
 
 ### [v1.0.1](https://github.com/transloadit/php-sdk/tree/v1.0.1)
 

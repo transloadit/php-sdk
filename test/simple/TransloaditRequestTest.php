@@ -18,8 +18,7 @@ class TransloaditRequestTest extends \PHPUnit_Framework_TestCase{
   }
 
   public function testAttributes() {
-    $this->assertEquals($this->request->protocol, 'http');
-    $this->assertEquals($this->request->host, 'api2.transloadit.com');
+    $this->assertEquals($this->request->endpoint, 'https://api2.transloadit.com');
     $this->assertEquals($this->request->path, null);
     $this->assertEquals($this->request->key, null);
     $this->assertEquals($this->request->secret, null);
@@ -97,15 +96,11 @@ class TransloaditRequestTest extends \PHPUnit_Framework_TestCase{
   }
 
   public function testConfigureUrl() {
-    $PROTOCOL = $this->request->protocol = 'ftp';
-    $PATH = $this->request->path = '/foo';
-    $HOST = $this->request->host = 'bar.com';
+    $PATH     = $this->request->path = '/foo';
+    $ENDPOINT = $this->request->endpoint = 'ftp://bar.com';
     $this->request->configureUrl();
 
-    $this->assertEquals(
-      sprintf('%s://%s%s', $PROTOCOL, $HOST, $PATH),
-      $this->request->url
-    );
+    $this->assertEquals('ftp://bar.com/foo', $this->request->url);
 
     $URL = $this->request->url = 'http://custom.org/manual';
     $this->request->configureUrl();
