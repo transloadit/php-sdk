@@ -429,7 +429,7 @@ For more information on SemVer, please visit http://semver.org/.
 
 ### [master](https://github.com/transloadit/php-sdk/tree/master)
 
-diff: https://github.com/transloadit/php-sdk/compare/v1.0.1...master
+diff: https://github.com/transloadit/php-sdk/compare/v2.0.0...master
 
 ### [v2.0.0](https://github.com/transloadit/php-sdk/tree/v2.0.0)
 
