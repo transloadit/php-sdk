@@ -2,6 +2,7 @@
 namespace transloadit;
 
 class CurlRequest {
+  private static $curlEnvironmentOptions = array();
   public $method = 'GET';
   public $url = null;
   public $headers = array();
@@ -23,7 +24,7 @@ class CurlRequest {
       $url .= '?'.http_build_query($this->fields);
     }
 
-    $options = array(
+    $options = $curlEnvironmentOptions + array(
       CURLOPT_RETURNTRANSFER => true,
       CURLOPT_CUSTOMREQUEST => $this->method,
       CURLOPT_URL => $url,
@@ -64,5 +65,9 @@ class CurlRequest {
     curl_close($curl);
 
     return $response;
+  }
+  
+  public static function setCurlEnvironmentOptions(array $curlEnvironmentOptions = array()) {
+    self::$curlEnvironmentOptions = $curlEnvironmentOptions;
   }
 }
