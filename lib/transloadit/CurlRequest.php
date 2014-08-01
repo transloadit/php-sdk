@@ -24,7 +24,7 @@ class CurlRequest {
       $url .= '?'.http_build_query($this->fields);
     }
 
-    $options = $curlEnvironmentOptions + array(
+    $options = self::$curlEnvironmentOptions + array(
       CURLOPT_RETURNTRANSFER => true,
       CURLOPT_CUSTOMREQUEST => $this->method,
       CURLOPT_URL => $url,
