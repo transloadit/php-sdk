@@ -2,12 +2,12 @@
 namespace transloadit;
 
 class CurlRequest {
-  private static $curlEnvironmentOptions = array();
   public $method = 'GET';
   public $url = null;
   public $headers = array();
   public $fields = array();
   public $files = array();
+  public $curlOptions = array();
 
   // Apply all passed attributes to the instance
   public function __construct($attributes = array()) {
@@ -24,7 +24,11 @@ class CurlRequest {
       $url .= '?'.http_build_query($this->fields);
     }
 
-    $options = self::$curlEnvironmentOptions + array(
+    if(!is_array($this->curlOptions)){
+        $this->curlOptions = array($this->curlOptions);
+    }
+
+    $options = $this->curlOptions + array(
       CURLOPT_RETURNTRANSFER => true,
       CURLOPT_CUSTOMREQUEST => $this->method,
       CURLOPT_URL => $url,
@@ -66,8 +70,5 @@ class CurlRequest {
 
     return $response;
   }
-  
-  public static function setCurlEnvironmentOptions(array $curlEnvironmentOptions = array()) {
-    self::$curlEnvironmentOptions = $curlEnvironmentOptions;
-  }
+
 }
