@@ -70,7 +70,7 @@ class CurlRequest {
     
     // -- Start edit --
     // For PHP 5.6 Safe Upload is required to upload files using curl in PHP 5.5, add the CURLOPT_SAFE_UPLOAD = true option
-    if (defined(CURLOPT_SAFE_UPLOAD)) {
+    if (defined('CURLOPT_SAFE_UPLOAD')) {
           curl_setopt($curl, CURLOPT_SAFE_UPLOAD, function_exists('curl_file_create') ? true : false);  
     }
     // -- End edit --
