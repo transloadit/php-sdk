@@ -92,8 +92,8 @@ class CurlRequestTest extends PHPUnit_Framework_TestCase{
     $options = $this->request->getCurlOptions();
 
     $filesOptions = function_exists('curl_file_create') ? 
-      array('foo' => curl_file_create($this->request->$files[0])) :
-      array('foo' => '@'.$this->request->files[0]);
+      array('file_1' => curl_file_create($this->request->$files[0])) :
+      array('file_1' => '@'.$this->request->files[0]);
 
     $this->assertEquals(
       array_merge(
