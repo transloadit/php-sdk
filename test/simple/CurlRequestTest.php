@@ -71,10 +71,18 @@ class CurlRequestTest extends PHPUnit_Framework_TestCase{
     $this->request->fields = array('super' => 'cool');
     $this->request->files = array('foo' => $fixture);
     $options = $this->request->getCurlOptions();
+
+    // -- Start edit --
+    // Edit by Aart Berkhout involving issue #8: CURL depricated functions (PHP 5.5)
+    // https://github.com/transloadit/php-sdk/issues/8
+    $filesOptions = function_exists('curl_file_create') ? 
+      array('foo' => curl_file_create($this->request->$files['foo'])) :
+      array('foo' => '@'.$this->request->files['foo']);
+
     $this->assertEquals(
       array_merge(
         $this->request->fields,
-        array('foo' => '@'.$this->request->files['foo'])
+        $filesOptions
       ),
       $options[CURLOPT_POSTFIELDS]
     );
@@ -82,13 +90,20 @@ class CurlRequestTest extends PHPUnit_Framework_TestCase{
     // test file numbering
     $this->request->files = array($fixture);
     $options = $this->request->getCurlOptions();
+
+    $filesOptions = function_exists('curl_file_create') ? 
+      array('foo' => curl_file_create($this->request->$files[0])) :
+      array('foo' => '@'.$this->request->files[0]);
+
     $this->assertEquals(
       array_merge(
         $this->request->fields,
-        array('file_1' => '@'.$this->request->files[0])
+        $filesOptions
       ),
       $options[CURLOPT_POSTFIELDS]
     );
+    // -- End edit --
+
   }
 
   public function testExecute() {
