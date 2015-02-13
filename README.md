@@ -78,6 +78,7 @@ $transloadit = new Transloadit(array(
   'key' => 'your-key',
   'secret' => 'your-secret',
 ));
+?>
 
 // Example code goes here!
 ```
@@ -115,6 +116,7 @@ $response = $transloadit->createAssembly(array(
 echo '<pre>';
 print_r($response);
 echo '</pre>';
+?>
 
 ```
 
