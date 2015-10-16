@@ -7,6 +7,8 @@ php:
   - 5.5
   - 5.4
   - 5.3
+  - hhvm
+  - nightly
 
 before_script:
   - composer install --dev --no-interaction --prefer-source
