@@ -11,7 +11,7 @@ php:
   - nightly
 
 before_script:
-  - composer install --dev --no-interaction --prefer-source
+  - composer install --no-interaction --prefer-source
 
 script:
   - phpunit --stderr --coverage-clover build/logs/clover.xml --configuration phpunit.xml.dist test/
