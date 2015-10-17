@@ -12,6 +12,7 @@ php:
 
 before_script:
   - composer install --no-interaction --prefer-source
+  - composer global require "phpunit/phpunit=4.1.*"
 
 script:
   - phpunit --stderr --coverage-clover build/logs/clover.xml --configuration phpunit.xml.dist test/
