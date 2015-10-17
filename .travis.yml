@@ -13,6 +13,7 @@ php:
 before_script:
   - composer install --no-interaction --prefer-source
   - composer global require "phpunit/phpunit=4.1.*"
+  - export PATH=./vendor/bin:$PATH
 
 script:
   - phpunit --stderr --coverage-clover build/logs/clover.xml --configuration phpunit.xml.dist test/
