@@ -10,6 +10,10 @@ php:
   - hhvm
   - nightly
 
+matrix:
+  allow_failures:
+    - php: nightly
+
 before_script:
   - composer install --no-interaction --prefer-source
   - composer global require "phpunit/phpunit=4.1.*"
