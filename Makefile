@@ -7,7 +7,7 @@ phpUnit = vendor/phpunit/phpunit/phpunit.php --colors --verbose --stderr --confi
 
 .PHONY: install
 install:
-	which composer || mkdir -p bin && curl -sS https://getcomposer.org/installer | php -- --install-dir=bin --filename=composer
+	which composer || curl -sS https://getcomposer.org/installer | php -- --install-dir=bin --filename=composer
 	composer install --no-interaction --prefer-source
 	composer global require "phpunit/phpunit=4.1.*"
 
