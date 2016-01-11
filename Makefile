@@ -1,14 +1,38 @@
-SHELL := /bin/bash
+SHELL := /usr/bin/env bash
 
-phpunit = vendor/phpunit/phpunit/phpunit.php --colors --verbose $(1)
+export PATH := $(PATH):bin
 
+phpUnit = vendor/phpunit/phpunit/phpunit.php --colors --verbose --stderr --configuration phpunit.xml.dist $(2) $(1)
+
+
+.PHONY: install
+install:
+	which composer || mkdir -p bin && curl -sS https://getcomposer.org/installer | php -- --install-dir=bin --filename=composer
+	composer install --no-interaction --prefer-source
+	composer global require "phpunit/phpunit=4.1.*"
+
+.PHONY: test
 test: test-simple
+
+.PHONY: test-all-coverage
+test-all-coverage:
+	$(call phpUnit,test,--coverage-clover build/logs/clover.xml)
+
+.PHONY: test-all
 test-all: test-simple test-system
+
+.PHONY: test-simple
 test-simple:
-	$(call phpunit,test/simple)
+	$(call phpUnit,test/simple)
+
+.PHONY: test-system
 test-system:
-	$(call phpunit,test/system)
+	$(call phpUnit,test/system)
+
+.PHONY: docs
 docs:
 	php tool/generate-example-docs.php
+
+.PHONY: docs-html
 docs-html: docs
 	Markdown.pl --html4tags Readme.md > Readme.html
