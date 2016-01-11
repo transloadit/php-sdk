@@ -12,7 +12,7 @@ If you are on `v0.10.0` or below, just pull-updating to the latest `v1.x.x `will
 ## Purpose
 
 This is the official PHP SDK for the
-[transloadit.com](http://transloadit.com/) API.
+[transloadit.com](https://transloadit.com/) API.
 
 You can use it to setup file upload forms for your users, or to upload
 existing files from your server.
@@ -24,17 +24,17 @@ existing files from your server.
 Step 1. Create a new project and install Composer
 
 ```bash
-mkdir transloadit-client && cd $_
-curl -s http://getcomposer.org/installer | php
+mkdir my-app && cd $_
+curl -sSL http://getcomposer.org/installer | php
 ```
 
 Step 2. Create composer file:
 
 ```bash
-$EDITOR composer.json
+${EDITOR} composer.json
 ```
 
-Step 3. Add the Transloadit PHP SDK as a dependency
+Step 3. Add the Transloadit PHP SDK as a dependency. Consider switching 'dev-master' with the latest version in order to pin your dependencies:
 
 ```json
 {
@@ -44,7 +44,7 @@ Step 3. Add the Transloadit PHP SDK as a dependency
 }
 ```
 
-Step 4. Install the composer dependency, this downloads the sdk for you
+Step 4. Install the composer dependency, this downloads the SDK for you
 
 ```bash
 php composer.phar install --dev
@@ -75,11 +75,12 @@ Transloadit instance like this
 <?php
 use transloadit\Transloadit;
 $transloadit = new Transloadit(array(
-  'key' => 'your-key',
+  'key'    => 'your-key',
   'secret' => 'your-secret',
 ));
 
 // Example code goes here!
+?>
 ```
 
 **Note:** All of the examples below can be found and run from within the
@@ -89,10 +90,10 @@ $transloadit = new Transloadit(array(
 
 ### 1. Upload and resize an image from your server
 
-This example demonstrates how you can use the sdk to create an assembly
+This example demonstrates how you can use the SDK to create an assembly
 on your server.
 
-It takes a sample image file, uploads it to transloadit, and starts a
+It takes a sample image file, uploads it to Transloadit, and starts a
 resizing job on it.
 
 ```php
@@ -271,7 +272,7 @@ you to set custom form attributes. For example:
 ```php
 $Transloadit->createAssemblyForm(array(
   'attributes' => array(
-    'id' => 'my_great_upload_form',
+    'id'    => 'my_great_upload_form',
     'class' => 'transloadit_form',
   ),
 ));
@@ -293,11 +294,11 @@ your server.
 
 There are two kinds of notifications this method handles:
 
-* When using the `"redirect_url"` parameter, and Transloadit redirects
+- When using the `redirect_url` parameter, and Transloadit redirects
   back to your site, a `$_GET['assembly_url']` query parameter gets added.
   This method detects the presence of this parameter and fetches the current
   assembly status from that url and returns it as a `TransloaditResponse`.
-* When using the `"notify_url"` parameter, Transloadit sends a
+- When using the `notify_url` parameter, Transloadit sends a
   `$_POST['transloadit']` parameter. This method detects this, and parses
   the notification JSON into a `TransloaditResponse` object for you.
 
@@ -397,9 +398,9 @@ Returns `false` or a string containing an explanation of what went wrong.
 
 All of the following will cause an error string to be returned:
 
-* Network issues of any kind
-* The Transloadit response JSON contains an `{"error": "..."}` key
-* A malformed response was received
+- Network issues of any kind
+- The Transloadit response JSON contains an `{"error": "..."}` key
+- A malformed response was received
 
 ## Contributing
 
@@ -417,9 +418,9 @@ Releases will be numbered with the following format:
 
 And constructed with the following guidelines:
 
-* Breaking backward compatibility bumps the major (and resets the minor and patch)
-* New additions without breaking backward compatibility bumps the minor (and resets the patch)
-* Bug fixes and misc changes bumps the patch
+- Breaking backward compatibility bumps the major (and resets the minor and patch)
+- New additions without breaking backward compatibility bumps the minor (and resets the patch)
+- Bug fixes and misc changes bumps the patch
 
 For more information on SemVer, please visit http://semver.org/.
 
@@ -494,8 +495,3 @@ diff: https://github.com/transloadit/php-sdk/compare/v0.1...v0.2
 ### [v0.1](https://github.com/transloadit/php-sdk/tree/v0.1)
 
 The very first version
-
-
-
-
-
