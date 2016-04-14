@@ -90,10 +90,10 @@ $transloadit = new Transloadit(array(
 
 ### 1. Upload and resize an image from your server
 
-This example demonstrates how you can use the SDK to create an assembly
+This example demonstrates how you can use the sdk to create an assembly
 on your server.
 
-It takes a sample image file, uploads it to Transloadit, and starts a
+It takes a sample image file, uploads it to transloadit, and starts a
 resizing job on it.
 
 ```php
@@ -230,6 +230,24 @@ document.write(unescape("%3Cscript src='" + tlProtocol + "assets.transloadit.com
 <input name="example_upload" type="file">
 <input type="submit" value="Upload">
 </form>
+
+```
+
+### 4. Fetch the assembly status JSON
+
+You can just use the TransloaditRequest class to get the job done easily.
+
+```php
+<?php
+$assemblyId = 'YOUR_ASSEMBLY_ID';
+
+$req = new transloadit\TransloaditRequest();
+$req->path = 'assemblies/' . $assemblyId;
+$response = $req->execute();
+
+echo '<pre>';
+print_r($response);
+echo '</pre>';
 
 ```
 <!-- End of generated doc section -->
