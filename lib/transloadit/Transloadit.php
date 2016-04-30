@@ -105,13 +105,19 @@ class Transloadit{
       'endpoint' => 'https://' . $boredInstance->data['api2_host'],
     ));
   }
-
-  public function deleteAssembly($assembly_id) {
-    // Look up the host for this assembly
+  
+  public function getAssembly($assembly_id){
     $response = $this->request(array(
       'method' => 'GET',
       'path'   => '/assemblies/'.$assembly_id,
     ), true);
+    
+    return $response;
+  }
+
+  public function deleteAssembly($assembly_id) {
+    // Look up the host for this assembly
+    $response = $this->getAssembly($assembly_id);
 
     $error = $response->error();
     if ($error) {
