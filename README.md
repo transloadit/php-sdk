@@ -478,7 +478,7 @@ diff: https://github.com/transloadit/php-sdk/compare/v2.1.0...master
  - Add example for fetching the assembly status
  - Add ability to set additional curl_setopt (thanks @michaelkasper)
 
-diff: https://github.com/transloadit/php-sdk/compare/v2.0.0...2.1.0
+diff: https://github.com/transloadit/php-sdk/compare/v2.0.0...v2.1.0
  
 ### [v2.0.0](https://github.com/transloadit/php-sdk/tree/v2.0.0)
 
