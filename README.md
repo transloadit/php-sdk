@@ -467,12 +467,19 @@ For more information on SemVer, please visit http://semver.org/.
 
 ## Versions
 
-
-
 ### [master](https://github.com/transloadit/php-sdk/tree/master)
 
-diff: https://github.com/transloadit/php-sdk/compare/v2.0.0...master
+diff: https://github.com/transloadit/php-sdk/compare/v2.1.0...master
 
+### [v2.1.0](https://github.com/transloadit/php-sdk/tree/v2.1.0)
+
+ - Fix for CURL deprecated functions (thanks @ABerkhout)
+ - CI improvements (phpunit, travis, composer)
+ - Add example for fetching the assembly status
+ - Add ability to set additional curl_setopt (thanks @michaelkasper)
+
+diff: https://github.com/transloadit/php-sdk/compare/v2.0.0...2.1.0
+ 
 ### [v2.0.0](https://github.com/transloadit/php-sdk/tree/v2.0.0)
 
  - Retire host + protocol in favor of one endpoint property,
