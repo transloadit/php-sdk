@@ -28,6 +28,10 @@ class TransloaditRequest extends CurlRequest{
       $params['auth'] = array();
     }
 
+    if (!ini_get('date.timezone')) {
+      date_default_timezone_set('Etc/UTC');
+    }
+
     $params['auth'] = $params['auth'] + array(
       'key'     => $this->key,
       'expires' => gmdate('Y/m/d H:i:s+00:00', strtotime($this->expires)),
