@@ -29,7 +29,7 @@ Add the Transloadit PHP SDK as a dependency to your `composer.json` file:
 }
 ```
 
-*Consider switching 'dev-master' with the latest version in order to pin your dependencies*
+*Consider switching `dev-master` with the latest version in order to pin your dependencies*
 
 Install the composer dependency:
 
@@ -264,6 +264,10 @@ echo '</pre>';
 
 ```
 <!-- End of generated doc section -->
+
+### Signature Authentication
+
+Signature authentication is done by the PHP SDK by default and internally. You do not need to worry about this at all. :)
 
 ## Example
 
