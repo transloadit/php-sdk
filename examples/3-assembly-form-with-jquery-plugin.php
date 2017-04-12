@@ -1,15 +1,18 @@
 <?php
-$config = require __DIR__ . '/config/common.php';
-
-use transloadit\Transloadit;
-
-$transloadit = new Transloadit($config);
+require __DIR__ . '/common/loader.php';
 /*
 ### 3. Integrate the jQuery plugin into the previous example
 
 Integrating the jQuery plugin simply means adding a few lines of JavaScript
 to the previous example. Check the HTML comments below to see what changed.
 */
+
+use transloadit\Transloadit;
+
+$transloadit = new Transloadit(array(
+  'key'    => 'TRANSLOADIT_KEY',
+  'secret' => 'TRANSLOADIT_SECRET',
+));
 
 $response = Transloadit::response();
 if ($response) {

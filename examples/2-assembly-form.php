@@ -1,9 +1,5 @@
 <?php
-$config = require __DIR__ . '/config/common.php';
-
-use transloadit\Transloadit;
-
-$transloadit = new Transloadit($config);
+require __DIR__ . '/common/loader.php';
 /*
 ### 2. Create a simple end-user upload form
 
@@ -17,6 +13,13 @@ Note: There is no guarantee that the assembly has already finished
 executing by the time the `$response` is fetched. You should use
 the `notify_url` parameter for this.
 */
+
+use transloadit\Transloadit;
+
+$transloadit = new Transloadit(array(
+  'key'    => 'TRANSLOADIT_KEY',
+  'secret' => 'TRANSLOADIT_SECRET',
+));
 
 // Check if this request is a transloadit redirect_url notification.
 // If so fetch the response and output the current assembly status:

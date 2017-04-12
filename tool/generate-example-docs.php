@@ -2,18 +2,24 @@
 define('SDK_ROOT', dirname(dirname(__FILE__)));
 
 function findExamples() {
-  return glob(SDK_ROOT.'/example/*.php');
+  return glob(SDK_ROOT.'/examples/*.php');
 }
 
 function parseExample($file) {
   $php = file_get_contents($file);
   preg_match('/\/\*(.+?)\*\/\n(.+)/s', $php, $match);
   list(, $markdown, $code) = $match;
+  $code = str_replace(
+    'dirname(__FILE__).\'/fixture/straw-apple.jpg\'',
+    '\'/PATH/TO/FILE.jpg\'',
+    $code
+  );
 
   return join("\n", array(
     $markdown,
     '```php',
     '<?php',
+    'require \'vendor/autoload.php\';',
     $code,
     '```'
   ));
