@@ -1,7 +1,5 @@
 <?php
-$config = require __DIR__ . '/config/common.php';
-$transloadit = new transloadit\Transloadit($config);
-
+require __DIR__ . '/common/loader.php';
 /*
 ### 1. Upload and resize an image from your server
 
@@ -11,6 +9,13 @@ on your server.
 It takes a sample image file, uploads it to transloadit, and starts a
 resizing job on it.
 */
+
+use transloadit\Transloadit;
+
+$transloadit = new Transloadit(array(
+  'key'    => 'TRANSLOADIT_KEY',
+  'secret' => 'TRANSLOADIT_SECRET',
+));
 
 $response = $transloadit->createAssembly(array(
   'files' => array(dirname(__FILE__).'/fixture/straw-apple.jpg'),
