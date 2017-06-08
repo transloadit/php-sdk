@@ -191,7 +191,7 @@ echo $transloadit->createAssemblyForm(array(
 ?>
 <!--
 Including the jQuery plugin is as simple as adding jQuery and including the
-JS snippet for the plugin. See http://transloadit.com/docs/jquery-plugin
+JS snippet for the plugin. See https://transloadit.com/docs/#jquery-sdk
 -->
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
 <script type="text/javascript">
