@@ -326,6 +326,13 @@ uploading files from your server.
 
 Check example #1 above for more information.
 
+#### $Transloadit->cancelAssembly($assemblyId);
+
+Cancels an assembly that is currently executing and prevents any further encodings costing money.
+
+This will result in `ASSEMBLY_NOT_FOUND` errors if invoked on assemblies that are not currently
+executing (anymore).
+
 #### Transloadit::response()
 
 This static method is used to parse the notifications Transloadit sends to

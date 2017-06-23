@@ -106,7 +106,12 @@ class Transloadit{
     ));
   }
 
+  // Leave this in for BC.
   public function deleteAssembly($assembly_id) {
+    return $this->cancelAssembly($assembly_id);
+  }
+
+  public function cancelAssembly($assembly_id) {
     // Look up the host for this assembly
     $response = $this->request(array(
       'method' => 'GET',
