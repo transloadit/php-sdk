@@ -36,7 +36,9 @@ Install the composer dependency:
 php composer.phar install
 ```
 
-Keep your Transloadit account's key & secret key nearby, and you're ready to try out some examples!
+Keep your Transloadit account's key & secret key nearby. You can check
+the [API credentials](https://transloadit.com/accounts/credentials) page for
+these values.
 
 ## Usage
 
@@ -44,10 +46,10 @@ Keep your Transloadit account's key & secret key nearby, and you're ready to try
 
 ### 1. Upload and resize an image from your server
 
-This example demonstrates how you can use the sdk to create an assembly
+This example demonstrates how you can use the SDK to create an <dfn>Assembly</dfn>
 on your server.
 
-It takes a sample image file, uploads it to transloadit, and starts a
+It takes a sample image file, uploads it to Transloadit, and starts a
 resizing job on it.
 
 ```php
@@ -57,8 +59,8 @@ require 'vendor/autoload.php';
 use transloadit\Transloadit;
 
 $transloadit = new Transloadit(array(
-  'key'    => 'TRANSLOADIT_KEY',
-  'secret' => 'TRANSLOADIT_SECRET',
+  'key'    => 'YOUR_TRANSLOADIT_AUTH_KEY',
+  'secret' => 'YOUR_TRANSLOADIT_AUTH_SECRET',
 ));
 
 $response = $transloadit->createAssembly(array(
@@ -69,8 +71,8 @@ $response = $transloadit->createAssembly(array(
         'robot' => '/image/resize',
         'width' => 200,
         'height' => 100,
-      )
-    )
+      ),
+    ),
   ),
 ));
 
@@ -83,13 +85,13 @@ echo '</pre>';
 
 ### 2. Create a simple end-user upload form
 
-This example shows you how to create a simple transloadit upload form
+This example shows you how to create a simple Transloadit upload form
 that redirects back to your site after the upload is done.
 
 Once the script receives the redirect request, the current status for
-this assembly is shown using Transloadit::response().
+this <dfn>Assembly</dfn> is shown using `Transloadit::response()`.
 
-Note: There is no guarantee that the assembly has already finished
+Note: There is no guarantee that the <dfn>Assembly</dfn> has already finished
 executing by the time the `$response` is fetched. You should use
 the `notify_url` parameter for this.
 
@@ -100,11 +102,11 @@ require 'vendor/autoload.php';
 use transloadit\Transloadit;
 
 $transloadit = new Transloadit(array(
-  'key'    => 'TRANSLOADIT_KEY',
-  'secret' => 'TRANSLOADIT_SECRET',
+  'key'    => 'YOUR_TRANSLOADIT_AUTH_KEY',
+  'secret' => 'YOUR_TRANSLOADIT_AUTH_SECRET',
 ));
 
-// Check if this request is a transloadit redirect_url notification.
+// Check if this request is a Transloadit redirect_url notification.
 // If so fetch the response and output the current assembly status:
 $response = Transloadit::response();
 if ($response) {
@@ -133,8 +135,8 @@ echo $transloadit->createAssemblyForm(array(
         'height' => 100,
       )
     ),
-    'redirect_url' => $redirectUrl
-  )
+    'redirect_url' => $redirectUrl,
+  ),
 ));
 ?>
 <h1>Pick an image to resize</h1>
@@ -156,8 +158,8 @@ require 'vendor/autoload.php';
 use transloadit\Transloadit;
 
 $transloadit = new Transloadit(array(
-  'key'    => 'TRANSLOADIT_KEY',
-  'secret' => 'TRANSLOADIT_SECRET',
+  'key'    => 'YOUR_TRANSLOADIT_AUTH_KEY',
+  'secret' => 'YOUR_TRANSLOADIT_AUTH_SECRET',
 ));
 
 $response = Transloadit::response();
@@ -189,31 +191,32 @@ echo $transloadit->createAssemblyForm(array(
 ));
 ?>
 <!--
-Including the jQuery plugin is as simple as adding jQuery and including the
-JS snippet for the plugin. See https://transloadit.com/docs/#jquery-sdk
+  Including the jQuery plugin is as simple as adding jQuery and including the
+  JS snippet for the plugin. See https://transloadit.com/docs/#jquery-sdk
 -->
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript">
-var tlProtocol = (('https:' == document.location.protocol) ? 'https://' : 'http://');
-document.write(unescape("%3Cscript src='" + tlProtocol + "assets.transloadit.com/js/jquery.transloadit2.js' type='text/javascript'%3E%3C/script%3E"));
+  var tlProtocol = (('https:' === document.location.protocol) ? 'https://' : 'http://');
+  document.write(unescape("%3Cscript src='" + tlProtocol + "assets.transloadit.com/js/jquery.transloadit2.js' type='text/javascript'%3E%3C/script%3E"));
 </script>
 <script type="text/javascript">
- $(document).ready(function() {
-   // Tell the transloadit plugin to bind itself to our form
-   $('form').transloadit();
- });
+  $(document).ready(function() {
+    // Tell the transloadit plugin to bind itself to our form
+    $('form').transloadit();
+  });
 </script>
 <!-- Nothing changed below here -->
 <h1>Pick an image to resize</h1>
-<input name="example_upload" type="file">
-<input type="submit" value="Upload">
+<form>
+  <input name="example_upload" type="file">
+  <input type="submit" value="Upload">
 </form>
 
 ```
 
 ### 4. Fetch the assembly status JSON
 
-You can just use the TransloaditRequest class to get the job done easily.
+You can just use the `TransloaditRequest` class to get the job done easily.
 
 ```php
 <?php
@@ -232,10 +235,10 @@ echo '</pre>';
 
 ### 5. Create an assembly with a template.
 
-This example demonstrates how you can use the sdk to create an assembly
-with templates.
+This example demonstrates how you can use the SDK to create an <dfn>Assembly</dfn>
+with <dfn>Templates</dfn>.
 
-You are expected to create a Template on your Transloadit account dashboard
+You are expected to create a <dfn>Template</dfn> on your Transloadit account dashboard
 and add the template id here.
 
 ```php
@@ -245,8 +248,8 @@ require 'vendor/autoload.php';
 use transloadit\Transloadit;
 
 $transloadit = new Transloadit(array(
-  'key'    => 'TRANSLOADIT_KEY',
-  'secret' => 'TRANSLOADIT_SECRET',
+  'key'    => 'YOUR_TRANSLOADIT_AUTH_KEY',
+  'secret' => 'YOUR_TRANSLOADIT_AUTH_SECRET',
 ));
 
 $response = $transloadit->createAssembly(array(
@@ -266,7 +269,7 @@ echo '</pre>';
 
 ### Signature Authentication
 
-Signature authentication is done by the PHP SDK by default and internally. You do not need to worry about this at all. :)
+<dfn>Signature Authentication</dfn> is done by the PHP SDK by default internally so you do not need to worry about this :)
 
 ## Example
 
