@@ -5,7 +5,6 @@
 
 A **PHP** Integration for [Transloadit](https://transloadit.com)'s file uploading and encoding service
 
-
 ## Important
 
 If you are on `v0.10.0` or below, just pull-updating to the latest `v1.x.x `will break the SDK for you.
