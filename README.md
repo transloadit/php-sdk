@@ -59,8 +59,8 @@ require 'vendor/autoload.php';
 use transloadit\Transloadit;
 
 $transloadit = new Transloadit(array(
-  'key'    => 'YOUR_TRANSLOADIT_AUTH_KEY',
-  'secret' => 'YOUR_TRANSLOADIT_AUTH_SECRET',
+  'key'    => 'YOUR_TRANSLOADIT_KEY',
+  'secret' => 'YOUR_TRANSLOADIT_SECRET',
 ));
 
 $response = $transloadit->createAssembly(array(
@@ -102,8 +102,8 @@ require 'vendor/autoload.php';
 use transloadit\Transloadit;
 
 $transloadit = new Transloadit(array(
-  'key'    => 'YOUR_TRANSLOADIT_AUTH_KEY',
-  'secret' => 'YOUR_TRANSLOADIT_AUTH_SECRET',
+  'key'    => 'YOUR_TRANSLOADIT_KEY',
+  'secret' => 'YOUR_TRANSLOADIT_SECRET',
 ));
 
 // Check if this request is a Transloadit redirect_url notification.
@@ -158,8 +158,8 @@ require 'vendor/autoload.php';
 use transloadit\Transloadit;
 
 $transloadit = new Transloadit(array(
-  'key'    => 'YOUR_TRANSLOADIT_AUTH_KEY',
-  'secret' => 'YOUR_TRANSLOADIT_AUTH_SECRET',
+  'key'    => 'YOUR_TRANSLOADIT_KEY',
+  'secret' => 'YOUR_TRANSLOADIT_SECRET',
 ));
 
 $response = Transloadit::response();
@@ -248,8 +248,8 @@ require 'vendor/autoload.php';
 use transloadit\Transloadit;
 
 $transloadit = new Transloadit(array(
-  'key'    => 'YOUR_TRANSLOADIT_AUTH_KEY',
-  'secret' => 'YOUR_TRANSLOADIT_AUTH_SECRET',
+  'key'    => 'YOUR_TRANSLOADIT_KEY',
+  'secret' => 'YOUR_TRANSLOADIT_SECRET',
 ));
 
 $response = $transloadit->createAssembly(array(
