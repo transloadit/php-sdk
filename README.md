@@ -28,9 +28,9 @@ Add the Transloadit PHP SDK as a dependency to your `composer.json` file:
 }
 ```
 
-*Consider switching `dev-master` with the latest version in order to pin your dependencies*
+Consider replacing `dev-master` with the latest version in order to pin your dependencies.
 
-Install the composer dependency:
+Install the [Composer](https://getcomposer.org/) dependency:
 
 ```bash
 php composer.phar install
@@ -211,10 +211,11 @@ echo $transloadit->createAssemblyForm(array(
   <input name="example_upload" type="file">
   <input type="submit" value="Upload">
 </form>
-
 ```
 
-### 4. Fetch the assembly status JSON
+Alternatively, check our [Uppy](https://transloadit.com/docs/#uppy), our next-gen file uploader for the web.
+
+### 4. Fetch the Assembly Status JSON
 
 You can just use the `TransloaditRequest` class to get the job done easily.
 
@@ -230,7 +231,6 @@ $response = $req->execute();
 echo '<pre>';
 print_r($response);
 echo '</pre>';
-
 ```
 
 ### 5. Create an assembly with a template.
@@ -239,7 +239,7 @@ This example demonstrates how you can use the SDK to create an <dfn>Assembly</df
 with <dfn>Templates</dfn>.
 
 You are expected to create a <dfn>Template</dfn> on your Transloadit account dashboard
-and add the template id here.
+and add the <dfn>Template</dfn> ID here.
 
 ```php
 <?php
