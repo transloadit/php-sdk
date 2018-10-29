@@ -9,6 +9,8 @@ class TransloaditRequest extends CurlRequest{
   public $endpoint = 'https://api2.transloadit.com';
   public $path     = null;
 
+  public $waitForCompletion = false;
+
   public $params   = array();
   public $expires  = '+2 hours';
 
@@ -78,6 +80,28 @@ class TransloaditRequest extends CurlRequest{
     $this->prepare();
     $response = parent::execute(new TransloaditResponse());
     $response->parseJson();
+
+    if ($this->path === '/assemblies' && $this->waitForCompletion) {
+      return $this->_waitForCompletion($response);
+    }
     return $response;
+  }
+
+  private function _waitForCompletion($response) {
+    $assemblyUrl = $response->data['assembly_ssl_url'];
+    $parts = parse_url($assemblyUrl);
+
+    while (true) {
+      $req = new TransloaditRequest();
+      $req->endpoint = 'https://' . $parts['host'];
+      $req->path = $parts['path'];
+      $response = $req->execute();
+
+      if ($response->data['ok'] === 'ASSEMBLY_COMPLETED') {
+        return $response;
+      }
+
+      sleep(1);
+    }
   }
 }

@@ -324,7 +324,13 @@ $Transloadit->createAssemblyForm(array(
 Sends a new assembly request to Transloadit. This is the preferred way of
 uploading files from your server.
 
-`$options` is an array of `TransloaditRequest` properties to be used.
+`$options` is an array of `TransloaditRequest` properties to be used with the exception that you can
+also use the `waitForCompletion` option here:
+
+`waitForCompletion` is a boolean (default is false) to indicate whether you want to wait for the
+Assembly to finish with all encoding results present before the callback is called. If
+waitForCompletion is true, this SDK will poll for status updates and return when all encoding work
+is done.
 
 Check example #1 above for more information.
 

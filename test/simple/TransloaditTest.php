@@ -23,32 +23,15 @@ class TransloaditTest extends \PHPUnit_Framework_TestCase{
     ));
 
     $assembly = $this->getMock('transloadit\\TransloaditResponse');
-    $boredInstance = $this->getMock('transloadit\\TransloaditResponse');
-    $boredInstance->data = array('api2_host' => 'super.transloadit.com');
 
     $options = array('foo' => 'bar');
 
     $transloadit
       ->expects($this->at(0))
       ->method('request')
-      ->with($this->equalTo(array(
-        'method' => 'GET',
-        'path' => '/instances/bored',
-      )))
-      ->will($this->returnValue($boredInstance));
-
-    $boredInstance
-      ->expects($this->at(0))
-      ->method('error')
-      ->will($this->returnValue(false));
-
-    $transloadit
-      ->expects($this->at(1))
-      ->method('request')
       ->with($this->equalTo($options + array(
         'method'   => 'POST',
         'path'     => '/assemblies',
-        'endpoint' => 'https://' . $boredInstance->data['api2_host'],
       )))
       ->will($this->returnValue($assembly));
 
