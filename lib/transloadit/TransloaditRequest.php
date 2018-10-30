@@ -101,7 +101,17 @@ class TransloaditRequest extends CurlRequest{
         return $response;
       }
 
-      sleep(1);
+      if (isset($response->data['error']) && !empty($response->data['error'])) {
+        return $response;
+      }
+
+      if ($response->data['ok'] === 'ASSEMBLY_UPLOADING' || $response->data['ok'] === 'ASSEMBLY_EXECUTING') {
+        sleep(1);
+        continue;
+      }
+
+      // If this is an unknown Assembly completion state, return anyway.
+      return $response;
     }
   }
 }
