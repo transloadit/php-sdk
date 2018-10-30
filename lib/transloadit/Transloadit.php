@@ -14,9 +14,10 @@ class Transloadit{
 
   public function request($options = array(), $execute = true) {
     $options = $options + array(
-      'key'      => $this->key,
-      'secret'   => $this->secret,
-      'endpoint' => $this->endpoint,
+      'key'               => $this->key,
+      'secret'            => $this->secret,
+      'endpoint'          => $this->endpoint,
+      'waitForCompletion' => false,
     );
     $request = new TransloaditRequest($options);
     return ($execute)
@@ -86,23 +87,9 @@ class Transloadit{
   }
 
   public function createAssembly($options) {
-    // Before sending our assembly, we ask transloadit to recommend a
-    // particular non-busy instance. This is not required, but it
-    // can help to get our assembly executed faster.
-    $boredInstance = $this->request(array(
-      'method' => 'GET',
-      'path'   => '/instances/bored',
-    ), true);
-
-    $error = $boredInstance->error();
-    if ($error) {
-      return $error;
-    }
-
     return $this->request($options + array(
-      'method'   => 'POST',
-      'path'     => '/assemblies',
-      'endpoint' => 'https://' . $boredInstance->data['api2_host'],
+      'method' => 'POST',
+      'path'   => '/assemblies',
     ));
   }
 
