@@ -94,6 +94,15 @@ class Transloadit{
   }
 
   // Leave this in for BC.
+  public function getAssembly($assembly_id) {
+    $response = $this->request(array(
+      'method' => 'GET',
+      'path'   => '/assemblies/'.$assembly_id,
+    ), true);
+
+    return $response;
+  }
+
   public function deleteAssembly($assembly_id) {
     return $this->cancelAssembly($assembly_id);
   }

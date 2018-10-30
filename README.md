@@ -222,11 +222,13 @@ You can just use the `TransloaditRequest` class to get the job done easily.
 ```php
 <?php
 require 'vendor/autoload.php';
-$assemblyId = 'YOUR_ASSEMBLY_ID';
 
-$req = new transloadit\TransloaditRequest();
-$req->path = '/assemblies/' . $assemblyId;
-$response = $req->execute();
+$assemblyId = 'YOUR_ASSEMBLY_ID';
+$transloadit = new Transloadit(array(
+  'key'    => 'YOUR_TRANSLOADIT_KEY',
+  'secret' => 'YOUR_TRANSLOADIT_SECRET',
+));
+$response = $transloadit->getAssembly($assemblyId);
 
 echo '<pre>';
 print_r($response);
@@ -333,6 +335,10 @@ waitForCompletion is true, this SDK will poll for status updates and return when
 is done.
 
 Check example #1 above for more information.
+
+#### $Transloadit->getAssembly($assemblyId);
+
+Retrieves the Assembly status json for a given Assembly ID.
 
 #### $Transloadit->cancelAssembly($assemblyId);
 
