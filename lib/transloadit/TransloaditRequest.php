@@ -97,20 +97,18 @@ class TransloaditRequest extends CurlRequest{
       $req->path = $parts['path'];
       $response = $req->execute();
 
-      if ($response->data['ok'] === 'ASSEMBLY_COMPLETED') {
-        return $response;
+      if (isset($response->data['ok'])) {
+        if ($response->data['ok'] === 'ASSEMBLY_COMPLETED') {
+          return $response;
+        }
+
+        if ($response->data['ok'] === 'ASSEMBLY_UPLOADING' || $response->data['ok'] === 'ASSEMBLY_EXECUTING') {
+          sleep(1);
+          continue;
+        }
       }
 
-      if (isset($response->data['error']) && !empty($response->data['error'])) {
-        return $response;
-      }
-
-      if ($response->data['ok'] === 'ASSEMBLY_UPLOADING' || $response->data['ok'] === 'ASSEMBLY_EXECUTING') {
-        sleep(1);
-        continue;
-      }
-
-      // If this is an unknown Assembly completion state, return anyway.
+      // If this is an unknown or erroneous Assembly completion state, return right away.
       return $response;
     }
   }
