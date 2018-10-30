@@ -8,6 +8,7 @@ class CurlRequest {
   public $fields = array();
   public $files = array();
   public $curlOptions = array();
+  public $version = false;
 
   // Apply all passed attributes to the instance
   public function __construct($attributes = array()) {
@@ -24,8 +25,22 @@ class CurlRequest {
       $url .= '?'.http_build_query($this->fields);
     }
 
-    if(!is_array($this->curlOptions)){
-        $this->curlOptions = array($this->curlOptions);
+    if (!is_array($this->curlOptions)){
+      $this->curlOptions = array($this->curlOptions);
+    }
+
+    // Obtain SDK version
+    if (empty($this->version)) {
+      $composerData = json_decode(file_get_contents('composer.json'));
+      $this->version = $composerData->version;
+    }
+
+    if (!empty($this->headers)) {
+      foreach ($this->headers as $key => $value) {
+        if (strpos($value, 'Transloadit-Client') === 0) {
+          $this->headers[$key] = sprintf($value, $this->version);
+        }
+      }
     }
 
     $options = $this->curlOptions + array(
@@ -45,7 +60,7 @@ class CurlRequest {
         if (is_int($field)) {
           $field = 'file_'.($field+1);
         }
-        
+
         // -- Start edit --
         // Edit by Aart Berkhout involving issue #8: CURL depricated functions (PHP 5.5)
         // https://github.com/transloadit/php-sdk/issues/8
@@ -57,7 +72,7 @@ class CurlRequest {
           $fields[$field] = '@'.$file;
         }
         // -- End edit --
-        
+
       }
       $options[CURLOPT_POSTFIELDS] = $fields;
     }
@@ -67,11 +82,11 @@ class CurlRequest {
 
   public function execute($response = null) {
     $curl = curl_init();
-    
+
     // -- Start edit --
     // For PHP 5.6 Safe Upload is required to upload files using curl in PHP 5.5, add the CURLOPT_SAFE_UPLOAD = true option
     if (defined('CURLOPT_SAFE_UPLOAD')) {
-          curl_setopt($curl, CURLOPT_SAFE_UPLOAD, function_exists('curl_file_create') ? true : false);  
+          curl_setopt($curl, CURLOPT_SAFE_UPLOAD, function_exists('curl_file_create') ? true : false);
     }
     // -- End edit --
 
