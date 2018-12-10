@@ -31,7 +31,9 @@ class CurlRequest {
 
     // Obtain SDK version
     if (empty($this->version)) {
-      $composerData = json_decode(file_get_contents('composer.json'));
+      $pathToComposerJson = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..';
+      $pathToComposerJson .= DIRECTORY_SEPARATOR . 'composer.json';
+      $composerData = json_decode(file_get_contents($pathToComposerJson));
       $this->version = $composerData->version;
     }
 
