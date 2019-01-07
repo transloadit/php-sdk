@@ -222,13 +222,11 @@ You can just use the `TransloaditRequest` class to get the job done easily.
 ```php
 <?php
 require 'vendor/autoload.php';
-
 $assemblyId = 'YOUR_ASSEMBLY_ID';
-$transloadit = new Transloadit(array(
-  'key'    => 'YOUR_TRANSLOADIT_KEY',
-  'secret' => 'YOUR_TRANSLOADIT_SECRET',
-));
-$response = $transloadit->getAssembly($assemblyId);
+
+$req = new transloadit\TransloaditRequest();
+$req->path = '/assemblies/' . $assemblyId;
+$response = $req->execute();
 
 echo '<pre>';
 print_r($response);
