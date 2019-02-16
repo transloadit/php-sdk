@@ -269,7 +269,7 @@ echo '</pre>';
 ```
 <!-- End of generated doc section -->
 
-### Signature Authentication
+### Signature Auth
 
 <dfn>Signature Authentication</dfn> is done by the PHP SDK by default internally so you do not need to worry about this :)
 
