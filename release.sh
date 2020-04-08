@@ -5,12 +5,12 @@ set -o nounset
 set -o pipefail
 # set -o xtrace
 
-if ! grep composer.json |grep "${VERSION}"; then
-  echo "First update composer.json please"
+if ! grep "${VERSION}" composer.json; then
+  echo "First add '${VERSION}' to composer.json please"
   exit 1
 fi
-if ! grep CHANGELOG.md |grep "v${VERSION}"; then
-  echo "First update CHANGELOG.md please"
+if ! grep "v${VERSION}" CHANGELOG.md; then
+  echo "First add 'v${VERSION}' to CHANGELOG.md please"
   exit 1
 fi
 
