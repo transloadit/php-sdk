@@ -2,10 +2,11 @@
 
 ### [master](https://github.com/transloadit/php-sdk/tree/master)
 
-diff: https://github.com/transloadit/php-sdk/compare/v3.0.3...master
+diff: https://github.com/transloadit/php-sdk/compare/3.0.4...master
 
-### [v3.0.3](https://github.com/transloadit/php-sdk/tree/v3.0.3)
+### [3.0.4](https://github.com/transloadit/php-sdk/tree/3.0.4)
 
+ - Ditch `v` prefix in versions as that's more idiomatic
  - Bring back the getAssembly() function
  - Implement Transloadit client header. Closes #25. (#28) 
  - Fix waitForCompletion
@@ -13,7 +14,7 @@ diff: https://github.com/transloadit/php-sdk/compare/v3.0.3...master
  - fix: remove deprecation warning
  - Rename tl->deleteAssembly to cancelAssembly and add it to the Readme
 
-diff: https://github.com/transloadit/php-sdk/compare/v2.0.0...v3.0.3
+diff: https://github.com/transloadit/php-sdk/compare/v2.0.0...3.0.4
 
 ### [v2.1.0](https://github.com/transloadit/php-sdk/tree/v2.1.0)
 
