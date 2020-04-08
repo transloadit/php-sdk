@@ -1,1 +1,0 @@
-export PACKAGIST_TOKEN=5wypsbkth9sskk4s80kc

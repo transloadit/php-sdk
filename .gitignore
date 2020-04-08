@@ -6,3 +6,4 @@ composer.phar
 build/
 vendor/
 bin/composer
+env.sh
