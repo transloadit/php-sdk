@@ -487,8 +487,10 @@ For more information on SemVer, please visit http://semver.org/.
 ## Releasing a new version
 
 ```bash
-# first update CHANGELOG.md and commit all your work
-source env.sh && VERSION=v3.0.1 ./release.sh
+# 1. update CHANGELOG.md 
+# 2. update composer.json
+# 3. commit all your work
+source env.sh && VERSION=3.0.2 ./release.sh
 ```
 
 ## License
