@@ -2,7 +2,18 @@
 
 ### [master](https://github.com/transloadit/php-sdk/tree/master)
 
-diff: https://github.com/transloadit/php-sdk/compare/v2.1.0...master
+diff: https://github.com/transloadit/php-sdk/compare/v3.0.0...master
+
+### [v3.0.0](https://github.com/transloadit/php-sdk/tree/v3.0.0)
+
+ - Bring back the getAssembly() function
+ - Implement Transloadit client header. Closes #25. (#28) 
+ - Fix waitForCompletion
+ - Travis php & ubuntu version changes
+ - fix: remove deprecation warning
+ - Rename tl->deleteAssembly to cancelAssembly and add it to the Readme
+
+diff: https://github.com/transloadit/php-sdk/compare/v2.0.0...v3.0.0
 
 ### [v2.1.0](https://github.com/transloadit/php-sdk/tree/v2.1.0)
 

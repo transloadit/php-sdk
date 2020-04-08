@@ -4,7 +4,6 @@ export PATH := $(PATH):bin
 
 phpUnit = vendor/phpunit/phpunit/phpunit.php --colors --verbose --stderr --configuration phpunit.xml.dist $(2) $(1)
 
-
 .PHONY: install
 install:
 	which composer || curl -sS https://getcomposer.org/installer | php -- --install-dir=bin --filename=composer
@@ -32,6 +31,10 @@ test-system:
 .PHONY: docs
 docs:
 	php tool/generate-example-docs.php
+
+.PHONY: release
+release:
+	bahs release.sh
 
 .PHONY: docs-html
 docs-html: docs
