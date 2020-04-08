@@ -13,6 +13,10 @@ if ! grep "v${VERSION}" CHANGELOG.md; then
   echo "First add 'v${VERSION}' to CHANGELOG.md please"
   exit 1
 fi
+if [ -n "$(git status --porcelain)" ]; then 
+  echo "Git working tree not clean. First commit all your work please."
+  exit 1
+fi
 
 git tag "v${VERSION}"
 git push --tags
