@@ -32,10 +32,6 @@ test-system:
 docs:
 	php tool/generate-example-docs.php
 
-.PHONY: release
-release:
-	bahs release.sh
-
 .PHONY: docs-html
 docs-html: docs
 	Markdown.pl --html4tags Readme.md > Readme.html

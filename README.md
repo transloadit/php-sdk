@@ -484,6 +484,13 @@ And constructed with the following guidelines:
 
 For more information on SemVer, please visit http://semver.org/.
 
+## Releasing a new version
+
+```bash
+# first update CHANGELOG.md and commit all your work
+source env.sh && VERSION=v3.0.1 ./release.sh
+```
+
 ## License
 
 [MIT Licensed](LICENSE)
