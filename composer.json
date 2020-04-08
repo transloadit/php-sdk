@@ -5,7 +5,7 @@
     "keywords": ["transloadit","video","encoding","thumbnails","image","resizing","audio", "waveform", "document","processing","file","uploading"],
     "homepage": "https://github.com/transloadit/php-sdk",
     "license": "MIT",
-    "version": "3.0.2",
+    "version": "v3.0.3",
     "require": {
         "php": ">=5.3.0"
     },

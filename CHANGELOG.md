@@ -2,9 +2,9 @@
 
 ### [master](https://github.com/transloadit/php-sdk/tree/master)
 
-diff: https://github.com/transloadit/php-sdk/compare/v3.0.2...master
+diff: https://github.com/transloadit/php-sdk/compare/v3.0.3...master
 
-### [v3.0.2](https://github.com/transloadit/php-sdk/tree/v3.0.2)
+### [v3.0.3](https://github.com/transloadit/php-sdk/tree/v3.0.3)
 
  - Bring back the getAssembly() function
  - Implement Transloadit client header. Closes #25. (#28) 
@@ -13,7 +13,7 @@ diff: https://github.com/transloadit/php-sdk/compare/v3.0.2...master
  - fix: remove deprecation warning
  - Rename tl->deleteAssembly to cancelAssembly and add it to the Readme
 
-diff: https://github.com/transloadit/php-sdk/compare/v2.0.0...v3.0.2
+diff: https://github.com/transloadit/php-sdk/compare/v2.0.0...v3.0.3
 
 ### [v2.1.0](https://github.com/transloadit/php-sdk/tree/v2.1.0)
 
