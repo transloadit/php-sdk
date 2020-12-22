@@ -462,6 +462,8 @@ All of the following will cause an error string to be returned:
 - The Transloadit response JSON contains an `{"error": "..."}` key
 - A malformed response was received
 
+***Note***: You will need to set waitForCompletion = True in the $Transloadit->createAssembly($options) function call.  
+
 ## Contributing
 
 Feel free to fork this project. We will happily merge bug fixes or other small
