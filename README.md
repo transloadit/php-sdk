@@ -91,9 +91,11 @@ that redirects back to your site after the upload is done.
 Once the script receives the redirect request, the current status for
 this <dfn>Assembly</dfn> is shown using `Transloadit::response()`.
 
-Note: There is no guarantee that the <dfn>Assembly</dfn> has already finished
-executing by the time the `$response` is fetched. You should use
-the `notify_url` parameter for this.
+<div class="tip" markdown="1">
+  There is no guarantee that the <dfn>Assembly</dfn> has already finished
+  executing by the time the `$response` is fetched. You should use
+  the `notify_url` parameter for this.
+</div>
 
 ```php
 <?php
@@ -462,7 +464,7 @@ All of the following will cause an error string to be returned:
 - The Transloadit response JSON contains an `{"error": "..."}` key
 - A malformed response was received
 
-***Note***: You will need to set waitForCompletion = True in the $Transloadit->createAssembly($options) function call.  
+***Note***: You will need to set waitForCompletion = True in the $Transloadit->createAssembly($options) function call.
 
 ## Contributing
 
