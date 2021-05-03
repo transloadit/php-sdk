@@ -1,9 +1,19 @@
-/test/config.php
-/Readme.html
-
+###> composer ###
 composer.lock
 composer.phar
-build/
 vendor/
-bin/composer
-env.sh
+###< composer ###
+
+###> phpunit ###
+.phpunit.cache
+.phpunit.result.cache
+coverage.xml
+###< phpunit ###
+
+###> phpcs ###
+.phpcs-cache
+###< phpcs ###
+
+###> others ###
+test.php
+###< others ###

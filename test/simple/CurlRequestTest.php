@@ -2,8 +2,8 @@
 
 use transloadit\CurlRequest;
 
-class CurlRequestTest extends PHPUnit_Framework_TestCase{
-  public function setUp() {
+class CurlRequestTest extends \PHPUnit\Framework\TestCase {
+  public function setUp(): void {
     $this->request = new CurlRequest();
   }
 
@@ -104,12 +104,6 @@ class CurlRequestTest extends PHPUnit_Framework_TestCase{
     );
     // -- End edit --
 
-  }
-
-  public function testExecute() {
-    // Can't test this method because PHP doesn't allow stubbing the calls
-    // to curl easily. However, the method hardly contains any logic as all
-    // of that is located in other methods.
   }
 }
 ?>
