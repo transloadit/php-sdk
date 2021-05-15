@@ -6,13 +6,12 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Contracts\HttpClient\{HttpClientInterface, ResponseInterface};
 use Transloadit\Enum\Status;
-use Transloadit\Factory\AssemblyFactory;
 use Transloadit\Factory\AssemblyResourceServiceFactory;
-use Transloadit\Factory\AuthFactory;
+use Transloadit\Model\Auth;
 use Transloadit\Model\Parameter;
-use Transloadit\Factory\StepFactory;
-use Transloadit\Factory\ParameterFactory;
 use DateTime;
+use Transloadit\Model\Resource\Assembly;
+use Transloadit\Model\Step;
 
 class AssemblyResourceServiceTest extends TestCase
 {
@@ -20,12 +19,12 @@ class AssemblyResourceServiceTest extends TestCase
 
     public function setUp(): void
     {
-        $this->auth = AuthFactory::create('fake_key', 'fake_secret', new DateTime('2000-10-20 10:10:00'));
+        $this->auth = new Auth('fake_key', 'fake_secret', new DateTime('2000-10-20 10:10:00'));
     }
 
     public function testCanCreateAnAssembly()
     {
-        $assembly = AssemblyFactory::create($this->getParameterObject());
+        $assembly = new Assembly($this->getParameterObject());
 
         $client = $this->mockClient('tests/Snapshot/simple_params_post_assembly.json');
         AssemblyResourceServiceFactory::create($this->auth, $client)
@@ -41,7 +40,7 @@ class AssemblyResourceServiceTest extends TestCase
             ->setNotifyUrl('https://fake.local')
             ->setTemplateId('template_fake')
         ;
-        $step = StepFactory::create();
+        $step = new Step();
         $step
             ->setName('thumbed_fake')
             ->setValue(
@@ -53,9 +52,9 @@ class AssemblyResourceServiceTest extends TestCase
             )
         ;
         $parameter->addStep($step);
-        $assembly = AssemblyFactory::create()
-            ->setParameter($parameter)
-        ;
+
+        $assembly = new Assembly();
+        $assembly->setParameter($parameter);
 
         $client = $this->mockClient('tests/Snapshot/full_params_post_assembly.json');
         $assembly = AssemblyResourceServiceFactory::create($this->auth, $client)
@@ -151,7 +150,7 @@ class AssemblyResourceServiceTest extends TestCase
 
     private function getParameterObject(): Parameter
     {
-        $step1 = StepFactory::create(
+        $step1 = new Step(
             'encoded',
             [
                 'use' => ':original',
@@ -160,7 +159,7 @@ class AssemblyResourceServiceTest extends TestCase
             ]
         );
 
-        $step2 = StepFactory::create(
+        $step2 = new Step(
             'thumbed',
             [
                 'use' => 'encoded',
@@ -169,8 +168,8 @@ class AssemblyResourceServiceTest extends TestCase
             ]
         );
 
-        return ParameterFactory::create([$step1])
-            ->addStep($step2);
+        $parameter = new Parameter([$step1]);
 
+        return $parameter->addStep($step2);
     }
 }

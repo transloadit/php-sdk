@@ -1,6 +1,12 @@
 <?php
 namespace transloadit;
 
+/**
+ * Class CurlRequest
+ * @package transloadit
+ *
+ * @deprecated Tis deprecated since version 3.1.0, please use Transloadit\Service\AssemblyResourceService
+ */
 class CurlRequest {
   public $method = 'GET';
   public $url = null;
@@ -12,6 +18,15 @@ class CurlRequest {
 
   // Apply all passed attributes to the instance
   public function __construct($attributes = array()) {
+      @trigger_error(
+          sprintf(
+              'This class %s is deprecated since version 3.1.0, please use %s',
+              CurlRequest::class,
+              'Transloadit\Service\AssemblyResourceService'
+          ),
+          E_USER_DEPRECATED
+      );
+
     foreach ($attributes as $key => $val) {
       $this->{$key} = $val;
     }

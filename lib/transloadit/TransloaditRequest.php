@@ -2,6 +2,13 @@
 
 namespace transloadit;
 
+/**
+ * Class TransloaditRequest
+ * @package transloadit
+ *
+ * @deprecated This class will be removed on version 4.x,
+ *                  please consider use Transloadit\Service\AssemblyResourceService
+ */
 class TransloaditRequest extends CurlRequest{
   public $key      = null;
   public $secret   = null;

@@ -31,30 +31,30 @@ Full documentation can be found over on [transloadit.github.io/php-sdk]([documen
 ```php
 require_once 'vendor/autoload.php';
 
-use Transloadit\Factory\AuthFactory;
+use Transloadit\Model\Auth;
 use Transloadit\Factory\AssemblyResourceServiceFactory;
-use Transloadit\Factory\StepFactory;
-use Transloadit\Factory\ParameterFactory;
-use Transloadit\Factory\AssemblyFactory;
+use Transloadit\Model\Step;
+use Transloadit\Model\Parameter;
+use Transloadit\Model\Resource\Assembly;
 
 //This Auth you will use to all resources.
-$auth = AuthFactory::create('your_key', 'your_secret');
+$auth = new Auth('your_key', 'your_secret');
 
 //create a resource instance, this service will be used to consume assembly resource
 $assemblyResource = AssemblyResourceServiceFactory::create($auth);
 
 //create a step
-$step1 = StepFactory::create('resize', [
+$step1 = new Step('resize', [
     'robot' => '/image/resize',
     'width' => 200,
     'height' => 100,
 ]);
 
-$parameter = ParameterFactory::create([$step1]);
+$parameter = new Parameter([$step1]);
 // you can add an step this way too $parameter->addStep($step1)
 
 #create a assembly instance
-$assembly = AssemblyFactory::create($parameter);
+$assembly = new Assembly($parameter);
 $assembly->addFilePath('/PATH/TO/FILE.jpg');
 
 #creating a assembly in transloadit api

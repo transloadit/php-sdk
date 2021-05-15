@@ -7,7 +7,6 @@ namespace Transloadit\Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Contracts\HttpClient\ResponseInterface;
-use Transloadit\Factory\AssemblyFactory;
 use Transloadit\Factory\AssemblyResourceServiceFactory;
 use Transloadit\Model\Contracts\AuthInterface;
 use Transloadit\Model\Parameter;
@@ -40,7 +39,7 @@ class AssemblyResourceServiceTest extends TestCase
 
     public function testCheckAddFile()
     {
-        $assembly = AssemblyFactory::create($this->createMock(Parameter::class));
+        $assembly = new Assembly($this->createMock(Parameter::class));
         $assembly->addFilePath('tests/Files/transloadit.png');
 
         $this->assertCount(1, $assembly->getFiles());
