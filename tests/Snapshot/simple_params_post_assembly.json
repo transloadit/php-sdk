@@ -1,0 +1,18 @@
+{
+  "auth": {
+    "expires": "2000/10/20 10:10:00+00:00",
+    "key": "fake_key"
+  },
+  "steps": {
+    "encoded": {
+      "preset": "iphone-high",
+      "robot": "/video/encode",
+      "use": ":original"
+    },
+    "thumbed": {
+      "count": 8,
+      "robot": "/video/thumbs",
+      "use": "encoded"
+    }
+  }
+}

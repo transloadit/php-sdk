@@ -1,13 +1,28 @@
 <?php
 namespace transloadit;
 
+/**
+ * Class Transloadit
+ * @package transloadit
+ *
+ * @deprecated Tis deprecated since version 3.1.0 please use Transloadit\Service\AssemblyResourceService
+ */
 class Transloadit{
   public $key      = null;
   public $secret   = null;
   public $endpoint = 'https://api2.transloadit.com';
 
   public function __construct($attributes = array()) {
-    foreach ($attributes as $key => $val) {
+      @trigger_error(
+          sprintf(
+              'This class %s is deprecated since version 3.1.0, please use %s',
+              Transloadit::class,
+              'Transloadit\Service\AssemblyResourceService'
+          ),
+          E_USER_DEPRECATED
+      );
+
+      foreach ($attributes as $key => $val) {
       $this->{$key} = $val;
     }
   }

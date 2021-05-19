@@ -3,8 +3,8 @@
 use transloadit\TransloaditResponse;
 use transloadit\CurlResponse;
 
-class TransloaditResponseTest extends \PHPUnit_Framework_TestCase{
-  public function setUp() {
+class TransloaditResponseTest extends \PHPUnit\Framework\TestCase {
+  public function setUp():void {
     $this->response = new TransloaditResponse();
   }
 
@@ -57,7 +57,7 @@ class TransloaditResponseTest extends \PHPUnit_Framework_TestCase{
 
     $this->response->curlErrorNumber = 27;
     $error = $this->response->error();
-    $this->assertContains('curl', $error);
+    $this->assertStringContainsString('curl', $error);
   }
 }
 ?>

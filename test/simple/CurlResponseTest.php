@@ -2,8 +2,8 @@
 
 use transloadit\CurlResponse;
 
-class CurlResponseTest extends \PHPUnit_Framework_TestCase {
-  public function setUp() {
+class CurlResponseTest extends \PHPUnit\Framework\TestCase {
+  public function setUp(): void {
     $this->response = new CurlResponse();
   }
 

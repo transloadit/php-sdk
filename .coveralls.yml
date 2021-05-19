@@ -1,5 +1,0 @@
-# for php-coveralls
-# https://coveralls.io/r/transloadit/php-sdk
-# https://github.com/satooshi/php-coveralls
-src_dir: lib/transloadit
-coverage_clover: build/logs/clover.xml

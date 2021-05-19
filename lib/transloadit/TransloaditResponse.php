@@ -1,6 +1,13 @@
 <?php
 namespace transloadit;
 
+/**
+ * Class TransloaditResponse
+ * @package transloadit
+ *
+ * @deprecated This class will be removed on version 4.x,
+ *                  please consider use Transloadit\Service\AssemblyResourceService
+ */
 class TransloaditResponse extends CurlResponse{
   public function error() {
     $error = parent::error();

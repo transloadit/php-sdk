@@ -1,0 +1,29 @@
+{
+  "allow_steps_override": false,
+  "auth": {
+    "expires": "2000/10/20 10:10:00+00:00",
+    "key": "fake_key"
+  },
+  "fields": {
+    "user_width": 800
+  },
+  "notify_url": "https://fake.local",
+  "steps": {
+    "encoded": {
+      "preset": "iphone-high",
+      "robot": "/video/encode",
+      "use": ":original"
+    },
+    "thumbed": {
+      "count": 8,
+      "robot": "/video/thumbs",
+      "use": "encoded"
+    },
+    "thumbed_fake": {
+      "count": 100,
+      "robot": "/video/thumbs/fake",
+      "use": "encoded_fake"
+    }
+  },
+  "template_id": "template_fake"
+}
