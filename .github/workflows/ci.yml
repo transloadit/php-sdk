@@ -22,9 +22,6 @@ jobs:
       - name: Install
         run : |
           make install
-      - name: Build
-        run : |
-          yarn build
       - name: Test
         run : |
           make test-all-coverage
