@@ -1,0 +1,28 @@
+name: PHP SDK CI
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types:
+      - opened
+      - synchronize
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps  : 
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-php@master
+        with:
+          php-version: 7.x 
+      - name: Install
+        run : |
+          make install
+      - name: Build
+        run : |
+          yarn build
+      - name: Test
+        run : |
+          make test-all-coverage
