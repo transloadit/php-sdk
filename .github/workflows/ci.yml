@@ -14,9 +14,11 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 1
-      - uses: actions/setup-php@master
+      - uses: shivammathur/setup-php@v2
+        # https://github.com/boyney123/github-actions/blob/master/src/actions/setup-php.md
         with:
-          php-version: 7.x 
+          php-version: '7.4'
+          tools: php-cs-fixer, phpunit
       - name: Install
         run : |
           make install
