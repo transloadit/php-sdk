@@ -2,7 +2,7 @@
 use transloadit\Transloadit;
 
 class TransloaditAssemblyCreateTest extends \PHPUnit\Framework\TestCase{
-  public function setUp() {
+  public function setUp(): void {
     if (!defined('TEST_ACCOUNT_KEY')) {
       $this->markTestSkipped(
         'Have a look at test/config.php.template to get this test to run.'

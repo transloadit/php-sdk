@@ -11,4 +11,3 @@ class CurlRequestRootTest extends \PHPUnit\Framework\TestCase{
     $this->assertContains('"ok"', $response->data);
   }
 }
-?>
