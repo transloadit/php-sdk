@@ -19,8 +19,11 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase{
   }
 
   public function testCreateAssembly() {
-    $transloadit = $this->createMock(Transloadit::class);
-    $assembly = $this->createMock(TransloaditResponse::class);
+    $transloadit = $this->getMockBuilder(Transloadit::class)
+                        ->setMethods(['request'])
+                        ->getMock();
+    $assembly = $this->getMockBuilder(TransloaditResponse::class)
+                     ->getMock();
 
     $options = array('foo' => 'bar');
 
@@ -31,7 +34,7 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase{
         'method'   => 'POST',
         'path'     => '/assemblies',
       )))
-      ->will($this->returnValue($assembly));
+      ->willReturn($assembly);
 
     $transloadit->createAssembly($options);
   }
