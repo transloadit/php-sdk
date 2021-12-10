@@ -1,9 +1,10 @@
 <?php
 date_default_timezone_set('UTC');
 use transloadit\Transloadit;
+use transloadit\TransloaditResponse;
 
-class TransloaditTest extends \PHPUnit_Framework_TestCase{
-  public function setUp() {
+class TransloaditTest extends \PHPUnit\Framework\TestCase{
+  public function setUp(): void {
     $this->transloadit = new Transloadit();
   }
 
@@ -18,11 +19,8 @@ class TransloaditTest extends \PHPUnit_Framework_TestCase{
   }
 
   public function testCreateAssembly() {
-    $transloadit = $this->getMock('transloadit\\Transloadit', array(
-      'request'
-    ));
-
-    $assembly = $this->getMock('transloadit\\TransloaditResponse');
+    $transloadit = $this->createMock(Transloadit::class);
+    $assembly = $this->createMock(TransloaditResponse::class);
 
     $options = array('foo' => 'bar');
 
@@ -58,7 +56,7 @@ class TransloaditTest extends \PHPUnit_Framework_TestCase{
     $data = array('foo' => 'bar');
     $_POST['transloadit'] = json_encode($data);
     $response = Transloadit::response();
-    $this->assertInstanceOf('transloadit\\TransloaditResponse', $response);
+    $this->assertInstanceOf(TransloaditResponse::class, $response);
     $this->assertEquals($data, $response->data);
 
 
@@ -66,8 +64,8 @@ class TransloaditTest extends \PHPUnit_Framework_TestCase{
   }
 
   public function testCreateAssemblyForm() {
-    $transloadit = $this->getMock('transloadit\\Transloadit', array('request'));
-    $assembly = $this->getMock('transloadit\\TransloaditResponse', array('prepare'));
+    $transloadit = $this->createMock(Transloadit::class);
+    $assembly = $this->createMock(TransloaditResponse::class);
 
     $assembly->method = 'ROCK';
     $assembly->url = 'http://api999.transloadit.com/assemblies';

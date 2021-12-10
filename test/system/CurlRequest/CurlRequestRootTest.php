@@ -2,7 +2,7 @@
 
 use transloadit\CurlRequest;
 
-class CurlRequestRootTest extends \PHPUnit_Framework_TestCase{
+class CurlRequestRootTest extends \PHPUnit\Framework\TestCase{
   public function testRoot() {
     $request = new CurlRequest();
     $request->url = 'http://api2.transloadit.com/';

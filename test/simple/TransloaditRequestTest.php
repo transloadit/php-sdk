@@ -3,14 +3,15 @@
 use transloadit\TransloaditRequest;
 use transloadit\CurlRequest;
 
-class TransloaditRequestTest extends \PHPUnit_Framework_TestCase{
-  public function setUp() {
+class TransloaditRequestTest extends \PHPUnit\Framework\TestCase{
+  private $request;
+
+  public function setUp(): void {
     $this->request = new TransloaditRequest();
   }
 
   private function _mock() {
-    $methods = func_get_args();
-    $this->request = $this->getMock('transloadit\\TransloaditRequest', $methods);
+    $this->request = $this->createMock(TransloaditRequest::class);
   }
 
   public function testConstructor() {
@@ -25,7 +26,7 @@ class TransloaditRequestTest extends \PHPUnit_Framework_TestCase{
     $this->assertEquals($this->request->params, array());
     $this->assertEquals($this->request->expires, '+2 hours');
     $this->assertEquals('Expect:', $this->request->headers[0]);
-    $this->assertContains('Transloadit-Client: php-sdk:%s', $this->request->headers[1]);
+    $this->assertContains('Transloadit-Client: php-sdk:%s', $this->request->headers);
   }
 
   public function testInit() {
@@ -38,12 +39,7 @@ class TransloaditRequestTest extends \PHPUnit_Framework_TestCase{
   }
 
   public function testPrepare() {
-    // With secret
-    $this->_mock(
-      'getParamsString',
-      'signString',
-      'configureUrl'
-    );
+    $this->_mock();
 
     $PARAMS_STRING = '{super}';
     $SIGNATURE_STRING = 'dsasjhdsajda';
@@ -68,11 +64,7 @@ class TransloaditRequestTest extends \PHPUnit_Framework_TestCase{
     $this->assertEquals($SIGNATURE_STRING, $this->request->fields['signature']);
 
     // Without signature
-    $this->_mock(
-      'getParamsString',
-      'signString',
-      'configureUrl'
-    );
+    $this->_mock();
     $SIGNATURE_STRING = null;
 
     $this->request

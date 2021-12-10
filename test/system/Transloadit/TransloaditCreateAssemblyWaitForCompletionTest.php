@@ -1,7 +1,7 @@
 <?php
 use transloadit\Transloadit;
 
-class TransloaditCreateAssemblyWaitForCompletionTest extends \PHPUnit_Framework_TestCase{
+class TransloaditCreateAssemblyWaitForCompletionTest extends \PHPUnit\Framework\TestCase{
   public function setUp() {
     if (!defined('TEST_ACCOUNT_KEY')) {
       $this->markTestSkipped(

@@ -8,8 +8,8 @@ if (file_exists(__DIR__ . '/config.php')) {
 
 define('TEST_FIXTURE_DIR', __DIR__ . '/fixture');
 
-abstract class SystemTestCase extends PHPUnit_Framework_TestCase{
-  public function setUp() {
+abstract class SystemTestCase extends PHPUnit\Framework\TestCase{
+  public function setUp(): void {
     if (!defined('TEST_ACCOUNT_KEY')) {
       $this->markTestSkipped(
         'Have a look at test/config.php.template to get this test to run.'
@@ -25,8 +25,8 @@ abstract class SystemTestCase extends PHPUnit_Framework_TestCase{
   }
 }
 
-class TransloaditRequestTestCase extends PHPUnit_Framework_TestCase{
-  public function setUp() {
+class TransloaditRequestTestCase extends PHPUnit\Framework\TestCase{
+  public function setUp(): void {
     if (!defined('TEST_ACCOUNT_KEY')) {
       $this->markTestSkipped(
         'Have a look at test/config.php.template to get this test to run.'

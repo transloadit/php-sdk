@@ -2,14 +2,9 @@
 
 use transloadit\CurlRequest;
 
-class CurlRequestTest extends PHPUnit_Framework_TestCase{
-  public function setUp() {
+class CurlRequestTest extends PHPUnit\Framework\TestCase{
+  public function setUp(): void {
     $this->request = new CurlRequest();
-  }
-
-  private function _mock() {
-    $methods = func_get_args();
-    $this->request = $this->getMock('CurlRequest', $methods);
   }
 
   public function testAttributes() {
