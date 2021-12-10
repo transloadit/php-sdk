@@ -64,8 +64,12 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase{
   }
 
   public function testCreateAssemblyForm() {
-    $transloadit = $this->createMock(Transloadit::class);
-    $assembly = $this->createMock(TransloaditResponse::class);
+    $transloadit = $this->getMockBuilder(Transloadit::class)
+                        ->setMethods(['request'])
+                        ->getMock();
+    $assembly = $this->getMockBuilder(TransloaditResponse::class)
+                     ->setMethods(['prepare'])
+                     ->getMock();
 
     $assembly->method = 'ROCK';
     $assembly->url = 'http://api999.transloadit.com/assemblies';
@@ -82,7 +86,7 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase{
         'method' => 'POST',
         'path' => '/assemblies',
       )), $this->equalTo(false))
-      ->will($this->returnValue($assembly));
+      ->willReturn($assembly);
 
     $assembly
       ->expects($this->at(0))
@@ -91,32 +95,17 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase{
     $options['attributes'] = array('class' => 'nice');
     $tags = explode("\n", $transloadit->createAssemblyForm($options));
 
-    $this->assertTag(array(
-      'tag' => 'form',
-      'attributes' => array(
-        'action' => $assembly->url,
-        'method' => $assembly->method,
-        'enctype' => 'multipart/form-data',
-        'class' => 'nice',
-      )
-    ), array_shift($tags));
+    $formTag = array_shift($tags);
+    $this->assertTrue(preg_match('/action="http:\/\/api999\.transloadit\.com\/assemblies"/', $formTag) !== false);
+    $this->assertTrue(preg_match('/method="ROCK"/', $formTag) !== false);
+    $this->assertTrue(preg_match('/enctype="multipart\/form-data"/', $formTag) !== false);
+    $this->assertTrue(preg_match('/class="nice"/', $formTag) !== false);
 
     foreach ($assembly->fields as $field => $val) {
-      $matcher = array(
-        'tag' => 'input',
-        'attributes' => array(
-          'type' => 'hidden',
-          'name' => $field,
-          'value' => $val,
-        )
-      );
-      $tag = array_shift($tags);
-      $this->assertTag($matcher, $tag, sprintf(
-        'Tag %s does not match %s',
-        $tag,
-        json_encode($matcher)
-      ));
+      $inputTag = array_shift($tags);
+      $this->assertTrue(preg_match('/type="hidden"/', $inputTag) !== false);
+      $this->assertTrue(preg_match('/name="'.$field.'"/', $inputTag) !== false);
+      $this->assertTrue(preg_match('/value="'.$val.'"/', $inputTag) !== false);
     }
   }
 }
-?>
