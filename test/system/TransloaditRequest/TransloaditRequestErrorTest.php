@@ -6,7 +6,7 @@ class TransloaditRequestErrorTest extends SystemTestCase{
     $response = $this->request->execute();
 
     $error = $response->error();
-    $this->assertContains('transloadit', $error);
-    $this->assertContains('STEPS', $error);
+    $this->assertStringContainsString('transloadit', $error);
+    $this->assertStringContainsString('STEPS', $error);
   }
 }

@@ -8,6 +8,6 @@ class CurlRequestRootTest extends \PHPUnit\Framework\TestCase{
     $request->url = 'http://api2.transloadit.com/';
     $request->method = 'GET';
     $response = $request->execute();
-    $this->assertContains('"ok"', $response->data);
+    $this->assertStringContainsString('"ok"', $response->data);
   }
 }

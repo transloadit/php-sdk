@@ -5,6 +5,6 @@ class TransloaditRequestGetBillTest extends SystemTestCase{
     $this->request->setMethodAndPath('GET', '/bill/'.date('Y-m'));
     $response = $this->request->execute();
 
-    $this->assertContains('BILL', $response->data['ok']);
+    $this->assertStringContainsString('BILL', $response->data['ok']);
   }
 }

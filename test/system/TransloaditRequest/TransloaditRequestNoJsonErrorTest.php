@@ -6,6 +6,6 @@ class TransloaditRequestNoJsonErrorTest extends SystemTestCase{
     $response = $this->request->execute();
 
     $error = $response->error();
-    $this->assertContains('no json', $error);
+    $this->assertStringContainsString('no json', $error);
   }
 }

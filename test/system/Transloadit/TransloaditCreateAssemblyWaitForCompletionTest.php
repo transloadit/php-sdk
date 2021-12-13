@@ -2,6 +2,8 @@
 use transloadit\Transloadit;
 
 class TransloaditCreateAssemblyWaitForCompletionTest extends \PHPUnit\Framework\TestCase{
+  private Transloadit $transloadit;
+
   public function setUp(): void {
     if (!defined('TEST_ACCOUNT_KEY')) {
       $this->markTestSkipped(
@@ -31,6 +33,7 @@ class TransloaditCreateAssemblyWaitForCompletionTest extends \PHPUnit\Framework\
       ),
       'waitForCompletion' => true
     ));
+    var_dump($response->data);
     $this->assertEquals('ASSEMBLY_COMPLETED', $response->data['ok']);
 
     $getResp = $this->transloadit->getAssembly($response->data['assembly_id']);
