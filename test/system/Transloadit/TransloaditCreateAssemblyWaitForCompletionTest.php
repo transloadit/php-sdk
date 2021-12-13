@@ -5,7 +5,7 @@ class TransloaditCreateAssemblyWaitForCompletionTest extends \PHPUnit\Framework\
   private Transloadit $transloadit;
 
   public function setUp(): void {
-    if (!defined('TEST_ACCOUNT_KEY')) {
+    if (!defined('TEST_ACCOUNT_KEY') || !defined('TEST_ACCOUNT_SECRET')) {
       $this->markTestSkipped(
         'Have a look at test/config.php.template to get this test to run.'
       );

@@ -10,7 +10,7 @@ define('TEST_FIXTURE_DIR', __DIR__ . '/fixture');
 
 abstract class SystemTestCase extends PHPUnit\Framework\TestCase{
   public function setUp(): void {
-    if (!defined('TEST_ACCOUNT_KEY')) {
+    if (!defined('TEST_ACCOUNT_KEY') || !defined('TEST_ACCOUNT_SECRET')) {
       $this->markTestSkipped(
         'Have a look at test/config.php.template to get this test to run.'
       );
@@ -27,7 +27,7 @@ abstract class SystemTestCase extends PHPUnit\Framework\TestCase{
 
 class TransloaditRequestTestCase extends PHPUnit\Framework\TestCase{
   public function setUp(): void {
-    if (!defined('TEST_ACCOUNT_KEY')) {
+    if (!defined('TEST_ACCOUNT_KEY') || !defined('TEST_ACCOUNT_SECRET')) {
       $this->markTestSkipped(
         'Have a look at test/config.php.template to get this test to run.'
       );
