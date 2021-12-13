@@ -10,7 +10,7 @@ on:
 jobs:
   ci:
     runs-on: ubuntu-latest
-    steps  : 
+    steps  :
       - uses: actions/checkout@v2
         with:
           fetch-depth: 1
@@ -25,3 +25,6 @@ jobs:
       - name: Test
         run : |
           make test-all-coverage
+        env:
+          TEST_ACCOUNT_KEY: ${{secrets.TEST_ACCOUNT_KEY}}
+          TEST_ACCOUNT_SECRET: ${{secrets.TEST_ACCOUNT_SECRET}}
