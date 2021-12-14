@@ -19,9 +19,7 @@ jobs:
         with:
           php-version: '7.4'
           tools: php-cs-fixer, phpunit
-      - name: Install
-        run : |
-          make install
+      - uses: ramsey/composer-install@v1
       - name: Test
         run : |
           make test-all-coverage
