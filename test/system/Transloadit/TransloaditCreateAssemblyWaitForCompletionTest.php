@@ -33,7 +33,6 @@ class TransloaditCreateAssemblyWaitForCompletionTest extends \PHPUnit\Framework\
       ),
       'waitForCompletion' => true
     ));
-    var_dump($response->data);
     $this->assertEquals('ASSEMBLY_COMPLETED', $response->data['ok']);
 
     $getResp = $this->transloadit->getAssembly($response->data['assembly_id']);
