@@ -27,4 +27,4 @@ jobs:
           make test-all-coverage
         env:
           TEST_ACCOUNT_KEY: ${{secrets.TEST_ACCOUNT_KEY}}
-          TEST_ACCOUNT_SECRET: ${{secrets.TEST_ACCOUNT_SECRET}}
+          TEST_ACCOUNT_SECRET: ${{secrets.TRANSLOADIT_SECRET}}
