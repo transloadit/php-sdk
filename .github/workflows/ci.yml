@@ -1,0 +1,28 @@
+name: PHP SDK CI
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types:
+      - opened
+      - synchronize
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps  :
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+      - uses: shivammathur/setup-php@v2
+        # https://github.com/boyney123/github-actions/blob/master/src/actions/setup-php.md
+        with:
+          php-version: '7.4'
+          tools: php-cs-fixer, phpunit
+      - uses: ramsey/composer-install@v1
+      - name: Test
+        run : |
+          make test-all-coverage
+        env:
+          TEST_ACCOUNT_KEY: ${{secrets.TEST_ACCOUNT_KEY}}
+          TEST_ACCOUNT_SECRET: ${{secrets.TRANSLOADIT_SECRET}}

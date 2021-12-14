@@ -3,14 +3,11 @@
 use transloadit\TransloaditRequest;
 use transloadit\CurlRequest;
 
-class TransloaditRequestTest extends \PHPUnit_Framework_TestCase{
-  public function setUp() {
-    $this->request = new TransloaditRequest();
-  }
+class TransloaditRequestTest extends \PHPUnit\Framework\TestCase{
+  private $request;
 
-  private function _mock() {
-    $methods = func_get_args();
-    $this->request = $this->getMock('transloadit\\TransloaditRequest', $methods);
+  public function setUp(): void {
+    $this->request = new TransloaditRequest();
   }
 
   public function testConstructor() {
@@ -25,7 +22,7 @@ class TransloaditRequestTest extends \PHPUnit_Framework_TestCase{
     $this->assertEquals($this->request->params, array());
     $this->assertEquals($this->request->expires, '+2 hours');
     $this->assertEquals('Expect:', $this->request->headers[0]);
-    $this->assertContains('Transloadit-Client: php-sdk:%s', $this->request->headers[1]);
+    $this->assertContains('Transloadit-Client: php-sdk:%s', $this->request->headers);
   }
 
   public function testInit() {
@@ -38,12 +35,9 @@ class TransloaditRequestTest extends \PHPUnit_Framework_TestCase{
   }
 
   public function testPrepare() {
-    // With secret
-    $this->_mock(
-      'getParamsString',
-      'signString',
-      'configureUrl'
-    );
+    $this->request = $this->getMockBuilder(TransloaditRequest::class)
+                          ->setMethods(['getParamsString', 'signString', 'configureUrl'])
+                          ->getMock();
 
     $PARAMS_STRING = '{super}';
     $SIGNATURE_STRING = 'dsasjhdsajda';
@@ -51,13 +45,13 @@ class TransloaditRequestTest extends \PHPUnit_Framework_TestCase{
     $this->request
       ->expects($this->at(0))
       ->method('getParamsString')
-      ->will($this->returnValue($PARAMS_STRING));
+      ->willReturn($PARAMS_STRING);
 
     $this->request
       ->expects($this->at(1))
       ->method('signString')
       ->with($this->equalTo($PARAMS_STRING))
-      ->will($this->returnValue($SIGNATURE_STRING));
+      ->willReturn($SIGNATURE_STRING);
 
     $this->request
       ->expects($this->at(2))
@@ -68,11 +62,9 @@ class TransloaditRequestTest extends \PHPUnit_Framework_TestCase{
     $this->assertEquals($SIGNATURE_STRING, $this->request->fields['signature']);
 
     // Without signature
-    $this->_mock(
-      'getParamsString',
-      'signString',
-      'configureUrl'
-    );
+    $this->request = $this->getMockBuilder(TransloaditRequest::class)
+                          ->setMethods(['getParamsString', 'signString', 'configureUrl'])
+                          ->getMock();
     $SIGNATURE_STRING = null;
 
     $this->request
@@ -137,4 +129,3 @@ class TransloaditRequestTest extends \PHPUnit_Framework_TestCase{
     // of that is located in other methods.
   }
 }
-?>

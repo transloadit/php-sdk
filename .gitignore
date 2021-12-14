@@ -1,4 +1,3 @@
-/test/config.php
 /Readme.html
 
 composer.lock
@@ -7,3 +6,4 @@ build/
 vendor/
 bin/composer
 env.sh
+.phpunit.result.cache

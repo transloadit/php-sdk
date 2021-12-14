@@ -1,9 +1,9 @@
 <?php
 use transloadit\Transloadit;
 
-class TransloaditAssemblyCreateTest extends \PHPUnit_Framework_TestCase{
-  public function setUp() {
-    if (!defined('TEST_ACCOUNT_KEY')) {
+class TransloaditAssemblyCreateTest extends \PHPUnit\Framework\TestCase{
+  public function setUp(): void {
+    if (!defined('TEST_ACCOUNT_KEY') || !defined('TEST_ACCOUNT_SECRET')) {
       $this->markTestSkipped(
         'Have a look at test/config.php.template to get this test to run.'
       );

@@ -1,9 +1,10 @@
 <?php
 date_default_timezone_set('UTC');
 use transloadit\Transloadit;
+use transloadit\TransloaditResponse;
 
-class TransloaditTest extends \PHPUnit_Framework_TestCase{
-  public function setUp() {
+class TransloaditTest extends \PHPUnit\Framework\TestCase{
+  public function setUp(): void {
     $this->transloadit = new Transloadit();
   }
 
@@ -18,11 +19,11 @@ class TransloaditTest extends \PHPUnit_Framework_TestCase{
   }
 
   public function testCreateAssembly() {
-    $transloadit = $this->getMock('transloadit\\Transloadit', array(
-      'request'
-    ));
-
-    $assembly = $this->getMock('transloadit\\TransloaditResponse');
+    $transloadit = $this->getMockBuilder(Transloadit::class)
+                        ->setMethods(['request'])
+                        ->getMock();
+    $assembly = $this->getMockBuilder(TransloaditResponse::class)
+                     ->getMock();
 
     $options = array('foo' => 'bar');
 
@@ -33,7 +34,7 @@ class TransloaditTest extends \PHPUnit_Framework_TestCase{
         'method'   => 'POST',
         'path'     => '/assemblies',
       )))
-      ->will($this->returnValue($assembly));
+      ->willReturn($assembly);
 
     $transloadit->createAssembly($options);
   }
@@ -58,7 +59,7 @@ class TransloaditTest extends \PHPUnit_Framework_TestCase{
     $data = array('foo' => 'bar');
     $_POST['transloadit'] = json_encode($data);
     $response = Transloadit::response();
-    $this->assertInstanceOf('transloadit\\TransloaditResponse', $response);
+    $this->assertInstanceOf(TransloaditResponse::class, $response);
     $this->assertEquals($data, $response->data);
 
 
@@ -66,8 +67,12 @@ class TransloaditTest extends \PHPUnit_Framework_TestCase{
   }
 
   public function testCreateAssemblyForm() {
-    $transloadit = $this->getMock('transloadit\\Transloadit', array('request'));
-    $assembly = $this->getMock('transloadit\\TransloaditResponse', array('prepare'));
+    $transloadit = $this->getMockBuilder(Transloadit::class)
+                        ->setMethods(['request'])
+                        ->getMock();
+    $assembly = $this->getMockBuilder(TransloaditResponse::class)
+                     ->setMethods(['prepare'])
+                     ->getMock();
 
     $assembly->method = 'ROCK';
     $assembly->url = 'http://api999.transloadit.com/assemblies';
@@ -84,7 +89,7 @@ class TransloaditTest extends \PHPUnit_Framework_TestCase{
         'method' => 'POST',
         'path' => '/assemblies',
       )), $this->equalTo(false))
-      ->will($this->returnValue($assembly));
+      ->willReturn($assembly);
 
     $assembly
       ->expects($this->at(0))
@@ -93,32 +98,17 @@ class TransloaditTest extends \PHPUnit_Framework_TestCase{
     $options['attributes'] = array('class' => 'nice');
     $tags = explode("\n", $transloadit->createAssemblyForm($options));
 
-    $this->assertTag(array(
-      'tag' => 'form',
-      'attributes' => array(
-        'action' => $assembly->url,
-        'method' => $assembly->method,
-        'enctype' => 'multipart/form-data',
-        'class' => 'nice',
-      )
-    ), array_shift($tags));
+    $formTag = array_shift($tags);
+    $this->assertTrue(preg_match('/action="http:\/\/api999\.transloadit\.com\/assemblies"/', $formTag) !== false);
+    $this->assertTrue(preg_match('/method="ROCK"/', $formTag) !== false);
+    $this->assertTrue(preg_match('/enctype="multipart\/form-data"/', $formTag) !== false);
+    $this->assertTrue(preg_match('/class="nice"/', $formTag) !== false);
 
     foreach ($assembly->fields as $field => $val) {
-      $matcher = array(
-        'tag' => 'input',
-        'attributes' => array(
-          'type' => 'hidden',
-          'name' => $field,
-          'value' => $val,
-        )
-      );
-      $tag = array_shift($tags);
-      $this->assertTag($matcher, $tag, sprintf(
-        'Tag %s does not match %s',
-        $tag,
-        json_encode($matcher)
-      ));
+      $inputTag = array_shift($tags);
+      $this->assertTrue(preg_match('/type="hidden"/', $inputTag) !== false);
+      $this->assertTrue(preg_match('/name="'.$field.'"/', $inputTag) !== false);
+      $this->assertTrue(preg_match('/value="'.$val.'"/', $inputTag) !== false);
     }
   }
 }
-?>

@@ -2,13 +2,12 @@ SHELL := /usr/bin/env bash
 
 export PATH := $(PATH):bin
 
-phpUnit = vendor/phpunit/phpunit/phpunit.php --colors --verbose --stderr --configuration phpunit.xml.dist $(2) $(1)
+phpUnit = vendor/phpunit/phpunit/phpunit --colors --verbose --stderr --configuration phpunit.xml.dist $(2) $(1)
 
 .PHONY: install
 install:
 	which composer || curl -sS https://getcomposer.org/installer | php -- --install-dir=bin --filename=composer
 	composer install --no-interaction --prefer-source
-	composer global require "phpunit/phpunit=4.1.*"
 
 .PHONY: test
 test: test-simple
