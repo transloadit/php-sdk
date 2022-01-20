@@ -194,7 +194,7 @@ echo $transloadit->createAssemblyForm(array(
 ?>
 <!--
   Including the jQuery plugin is as simple as adding jQuery and including the
-  JS snippet for the plugin. See https://transloadit.com/docs/#jquery-sdk
+  JS snippet for the plugin. See https://transloadit.com/docs/sdks/jquery-sdk/
 -->
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript">
@@ -215,7 +215,7 @@ echo $transloadit->createAssemblyForm(array(
 </form>
 ```
 
-Alternatively, check our [Uppy](https://transloadit.com/docs/#uppy), our next-gen file uploader for the web.
+Alternatively, check our [Uppy](https://transloadit.com/docs/sdks/uppy/), our next-gen file uploader for the web.
 
 ### 4. Fetch the Assembly Status JSON
 
