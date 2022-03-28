@@ -23,8 +23,7 @@ jobs:
         with:
           dependency-versions: locked
       - name: Test
-        run : |
-          make test-all-coverage
+        run : composer test -- --coverage-clover build/logs/clover.xml
         env:
           TEST_ACCOUNT_KEY: ${{secrets.TEST_ACCOUNT_KEY}}
           TEST_ACCOUNT_SECRET: ${{secrets.TRANSLOADIT_SECRET}}

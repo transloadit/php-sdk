@@ -17,5 +17,10 @@
         "psr-0": {
             "transloadit": "lib"
         }
+    },
+    "scripts": {
+        "test:simple": "vendor/bin/phpunit test/simple",
+        "test:system": "vendor/bin/phpunit test/system",
+        "test" : "vendor/bin/phpunit"
     }
 }

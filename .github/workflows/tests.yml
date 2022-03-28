@@ -36,8 +36,7 @@ jobs:
         with:
           dependency-versions: "${{ matrix.dependencies }}"
       - name: Test
-        run: |
-          make test-all
+        run: composer test
         env:
           TEST_ACCOUNT_KEY: ${{secrets.TEST_ACCOUNT_KEY}}
           TEST_ACCOUNT_SECRET: ${{secrets.TRANSLOADIT_SECRET}}
