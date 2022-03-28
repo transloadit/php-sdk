@@ -1,14 +1,10 @@
 # Transloadit PHP SDK
 
-[![Build Status](https://travis-ci.org/transloadit/php-sdk.png?branch=master)](https://travis-ci.org/transloadit/php-sdk)
-[![Coverage Status](https://coveralls.io/repos/transloadit/php-sdk/badge.png?branch=master)](https://coveralls.io/r/transloadit/php-sdk)
+[![Test Actions Status][test_badge]][test_link]
+![Packagist PHP Version Support][php_verison_badge]
+[![License][licence_badge]][licence_link]
 
 A **PHP** Integration for [Transloadit](https://transloadit.com)'s file uploading and encoding service
-
-## Important
-
-If you are on `v0.10.0` or below, just pull-updating to the latest `v1.x.x `will break the SDK for you.
-`v1.0.0` makes PHP 5.3.0 a requirement. For development use `composer install --dev` to get phpunit version and run `vendor/bin/phpunit test` to run tests.
 
 ## Intro
 
@@ -18,22 +14,8 @@ This is a **PHP** SDK to make it easy to talk to the [Transloadit](https://trans
 
 ## Install
 
-Add the Transloadit PHP SDK as a dependency to your `composer.json` file:
-
-```json
-{
-  "require": {
-    "transloadit/php-sdk": "dev-master"
-  }
-}
 ```
-
-Consider replacing `dev-master` with the latest version in order to pin your dependencies.
-
-Install the [Composer](https://getcomposer.org/) dependency:
-
-```bash
-php composer.phar install
+composer require transloadit/php-sdk
 ```
 
 Keep your Transloadit account's key & secret key nearby. You can check
@@ -495,3 +477,9 @@ source env.sh && VERSION=3.0.4 ./release.sh
 ## License
 
 [MIT Licensed](LICENSE)
+
+[test_badge]: https://github.com/transloadit/php-sdk/actions/workflows/ci.yml/badge.svg
+[test_link]: https://github.com/transloadit/php-sdk/actions/workflows/ci.yml
+[php_verison_badge]: https://img.shields.io/packagist/php-v/transloadit/php-sdk
+[licence_badge]: https://img.shields.io/badge/License-MIT-green.svg
+[licence_link]: https://github.com/transloadit/php-sdk/blob/master/LICENSE
