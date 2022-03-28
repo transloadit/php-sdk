@@ -1,28 +1,28 @@
 <?php
 require __DIR__ . '/common/loader.php';
 /*
-### 5. Create an assembly with a template.
+### 5. Create an Assembly with a Template.
 
-This example demonstrates how you can use the sdk to create an assembly
-with templates.
+This example demonstrates how you can use the SDK to create an <dfn>Assembly</dfn>
+with <dfn>Templates</dfn>.
 
-You are expected to create a Template on your Transloadit account dashboard
-and add the template id here.
+You are expected to create a <dfn>Template</dfn> on your Transloadit account dashboard
+and add the <dfn>Template</dfn> ID here.
 */
 
 use transloadit\Transloadit;
 
-$transloadit = new Transloadit(array(
-  'key'    => 'TRANSLOADIT_KEY',
-  'secret' => 'TRANSLOADIT_SECRET',
-));
+$transloadit = new Transloadit([
+  'key'    => 'YOUR_TRANSLOADIT_KEY',
+  'secret' => 'YOUR_TRANSLOADIT_SECRET',
+]);
 
-$response = $transloadit->createAssembly(array(
-  'files' => array(dirname(__FILE__).'/fixture/straw-apple.jpg'),
-  'params' => array(
-    'template_id' => 'YOUR_TEMPLATE_ID'
-  ),
-));
+$response = $transloadit->createAssembly((
+  'files' => [dirname(__FILE__).'/fixture/straw-apple.jpg'],
+  'params' => [
+    'template_id' => 'YOUR_TEMPLATE_ID',
+  ],
+]);
 
 // Show the results of the assembly we spawned
 echo '<pre>';

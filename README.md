@@ -58,23 +58,23 @@ require 'vendor/autoload.php';
 
 use transloadit\Transloadit;
 
-$transloadit = new Transloadit(array(
+$transloadit = new Transloadit([
   'key'    => 'YOUR_TRANSLOADIT_KEY',
   'secret' => 'YOUR_TRANSLOADIT_SECRET',
-));
+]);
 
-$response = $transloadit->createAssembly(array(
-  'files' => array('/PATH/TO/FILE.jpg'),
-  'params' => array(
-    'steps' => array(
-      'resize' => array(
+$response = $transloadit->createAssembly([
+  'files' => ['/PATH/TO/FILE.jpg'],
+  'params' => [
+    'steps' => [
+      'resize' => [
         'robot' => '/image/resize',
         'width' => 200,
         'height' => 100,
-      ),
-    ),
-  ),
-));
+      ],
+    ],
+  ],
+]);
 
 // Show the results of the assembly we spawned
 echo '<pre>';
@@ -103,16 +103,16 @@ require 'vendor/autoload.php';
 
 use transloadit\Transloadit;
 
-$transloadit = new Transloadit(array(
+$transloadit = new Transloadit([
   'key'    => 'YOUR_TRANSLOADIT_KEY',
   'secret' => 'YOUR_TRANSLOADIT_SECRET',
-));
+]);
 
 // Check if this request is a Transloadit redirect_url notification.
 // If so fetch the response and output the current assembly status:
 $response = Transloadit::response();
 if ($response) {
-  echo '<h1>Assembly status:</h1>';
+  echo '<h1>Assembly Status:</h1>';
   echo '<pre>';
   print_r($response);
   echo '</pre>';
@@ -121,25 +121,21 @@ if ($response) {
 
 // This should work on most environments, but you might have to modify
 // this for your particular setup.
-$redirectUrl = sprintf(
-  'http://%s%s',
-  $_SERVER['HTTP_HOST'],
-  $_SERVER['REQUEST_URI']
-);
+$redirectUrl = sprintf('http://%s%s', $_SERVER['HTTP_HOST'], $_SERVER['REQUEST_URI']);
 
 // Setup a simple file upload form that resizes an image to 200x100px
-echo $transloadit->createAssemblyForm(array(
-  'params' => array(
-    'steps' => array(
-      'resize' => array(
+echo $transloadit->createAssemblyForm([
+  'params' => [
+    'steps' => [
+      'resize' => [
         'robot' => '/image/resize',
         'width' => 200,
         'height' => 100,
-      )
-    ),
+      ],
+    ],
     'redirect_url' => $redirectUrl,
-  ),
-));
+  ],
+]);
 ?>
 <h1>Pick an image to resize</h1>
 <input name="example_upload" type="file">
@@ -153,44 +149,42 @@ echo $transloadit->createAssemblyForm(array(
 Integrating the jQuery plugin simply means adding a few lines of JavaScript
 to the previous example. Check the HTML comments below to see what changed.
 
+Alternatively, check out [Uppy](https://transloadit.com/docs/sdks/uppy/), our next-gen file uploader for the web.
+
 ```php
 <?php
 require 'vendor/autoload.php';
 
 use transloadit\Transloadit;
 
-$transloadit = new Transloadit(array(
+$transloadit = new Transloadit([
   'key'    => 'YOUR_TRANSLOADIT_KEY',
   'secret' => 'YOUR_TRANSLOADIT_SECRET',
-));
+]);
 
 $response = Transloadit::response();
 if ($response) {
-  echo '<h1>Assembly status:</h1>';
+  echo '<h1>Assembly Status:</h1>';
   echo '<pre>';
   print_r($response);
   echo '</pre>';
   exit;
 }
 
-$redirectUrl = sprintf(
-  'http://%s%s',
-  $_SERVER['HTTP_HOST'],
-  $_SERVER['REQUEST_URI']
-);
+$redirectUrl = sprintf('http://%s%s', $_SERVER['HTTP_HOST'], $_SERVER['REQUEST_URI']);
 
-echo $transloadit->createAssemblyForm(array(
-  'params' => array(
-    'steps' => array(
-      'resize' => array(
+echo $transloadit->createAssemblyForm([
+  'params' => [
+    'steps' => [
+      'resize' => [
         'robot' => '/image/resize',
         'width' => 200,
         'height' => 100,
-      )
-    ),
-    'redirect_url' => $redirectUrl
-  )
-));
+      ],
+    ],
+    'redirect_url' => $redirectUrl,
+  ],
+]);
 ?>
 <!--
   Including the jQuery plugin is as simple as adding jQuery and including the
@@ -213,31 +207,32 @@ echo $transloadit->createAssemblyForm(array(
   <input name="example_upload" type="file">
   <input type="submit" value="Upload">
 </form>
-```
 
-Alternatively, check our [Uppy](https://transloadit.com/docs/sdks/uppy/), our next-gen file uploader for the web.
+```
 
 ### 4. Fetch the Assembly Status JSON
 
-You can just use the `TransloaditRequest` class to get the job done easily.
+You can use the `getAssembly` method to get the <dfn>Assembly</dfn> Status.
 
 ```php
 <?php
 require 'vendor/autoload.php';
-
 $assemblyId = 'YOUR_ASSEMBLY_ID';
-$transloadit = new Transloadit(array(
+
+$transloadit = new Transloadit([
   'key'    => 'YOUR_TRANSLOADIT_KEY',
   'secret' => 'YOUR_TRANSLOADIT_SECRET',
-));
+]);
+
 $response = $transloadit->getAssembly($assemblyId);
 
 echo '<pre>';
 print_r($response);
 echo '</pre>';
+
 ```
 
-### 5. Create an assembly with a template.
+### 5. Create an Assembly with a Template.
 
 This example demonstrates how you can use the SDK to create an <dfn>Assembly</dfn>
 with <dfn>Templates</dfn>.
@@ -251,17 +246,17 @@ require 'vendor/autoload.php';
 
 use transloadit\Transloadit;
 
-$transloadit = new Transloadit(array(
+$transloadit = new Transloadit([
   'key'    => 'YOUR_TRANSLOADIT_KEY',
   'secret' => 'YOUR_TRANSLOADIT_SECRET',
-));
+]);
 
-$response = $transloadit->createAssembly(array(
-  'files' => array('/PATH/TO/FILE.jpg'),
-  'params' => array(
-    'template_id' => 'YOUR_TEMPLATE_ID'
-  ),
-));
+$response = $transloadit->createAssembly((
+  'files' => ['/PATH/TO/FILE.jpg'],
+  'params' => [
+    'template_id' => 'YOUR_TEMPLATE_ID',
+  ],
+]);
 
 // Show the results of the assembly we spawned
 echo '<pre>';
