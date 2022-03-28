@@ -28,3 +28,8 @@ jobs:
         env:
           TEST_ACCOUNT_KEY: ${{secrets.TEST_ACCOUNT_KEY}}
           TEST_ACCOUNT_SECRET: ${{secrets.TRANSLOADIT_SECRET}}
+      - uses: codecov/codecov-action@v2
+        with:
+          files: ./build/logs/clover.xml
+          fail_ci_if_error: true
+          verbose: true

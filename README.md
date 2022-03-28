@@ -1,6 +1,7 @@
 # Transloadit PHP SDK
 
 [![Test Actions Status][test_badge]][test_link]
+[![Code coverage][codecov_badge]][codecov_link]
 ![Packagist PHP Version Support][php_verison_badge]
 [![License][licence_badge]][licence_link]
 
@@ -478,8 +479,10 @@ source env.sh && VERSION=3.0.4 ./release.sh
 
 [MIT Licensed](LICENSE)
 
-[test_badge]: https://github.com/transloadit/php-sdk/actions/workflows/ci.yml/badge.svg
-[test_link]: https://github.com/transloadit/php-sdk/actions/workflows/ci.yml
+[test_badge]: https://github.com/transloadit/php-sdk/actions/workflows/tests.yml/badge.svg
+[test_link]: https://github.com/transloadit/php-sdk/actions/workflows/tests.yml
+[codecov_badge]: https://codecov.io/gh/transloadit/php-sdk/branch/master/graph/badge.svg
+[codecov_link]: https://codecov.io/gh/transloadit/php-sdk
 [php_verison_badge]: https://img.shields.io/packagist/php-v/transloadit/php-sdk
 [licence_badge]: https://img.shields.io/badge/License-MIT-green.svg
 [licence_link]: https://github.com/transloadit/php-sdk/blob/master/LICENSE
