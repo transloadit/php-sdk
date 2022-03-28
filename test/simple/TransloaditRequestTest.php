@@ -19,7 +19,7 @@ class TransloaditRequestTest extends \PHPUnit\Framework\TestCase{
     $this->assertEquals($this->request->path, null);
     $this->assertEquals($this->request->key, null);
     $this->assertEquals($this->request->secret, null);
-    $this->assertEquals($this->request->params, array());
+    $this->assertEquals($this->request->params, []);
     $this->assertEquals($this->request->expires, '+2 hours');
     $this->assertEquals('Expect:', $this->request->headers[0]);
     $this->assertContains('Transloadit-Client: php-sdk:%s', $this->request->headers);
@@ -43,18 +43,15 @@ class TransloaditRequestTest extends \PHPUnit\Framework\TestCase{
     $SIGNATURE_STRING = 'dsasjhdsajda';
 
     $this->request
-      ->expects($this->at(0))
       ->method('getParamsString')
       ->willReturn($PARAMS_STRING);
 
     $this->request
-      ->expects($this->at(1))
       ->method('signString')
       ->with($this->equalTo($PARAMS_STRING))
       ->willReturn($SIGNATURE_STRING);
 
     $this->request
-      ->expects($this->at(2))
       ->method('configureUrl');
 
     $this->request->prepare();
@@ -68,18 +65,15 @@ class TransloaditRequestTest extends \PHPUnit\Framework\TestCase{
     $SIGNATURE_STRING = null;
 
     $this->request
-      ->expects($this->at(0))
       ->method('getParamsString')
       ->will($this->returnValue($PARAMS_STRING));
 
     $this->request
-      ->expects($this->at(1))
       ->method('signString')
       ->with($this->equalTo($PARAMS_STRING))
       ->will($this->returnValue($SIGNATURE_STRING));
 
     $this->request
-      ->expects($this->at(2))
       ->method('configureUrl');
 
     $this->request->prepare();
@@ -114,7 +108,7 @@ class TransloaditRequestTest extends \PHPUnit\Framework\TestCase{
 
   public function testGetParamsString() {
     $this->request->key = 'dskjadjk2j42jkh4';
-    $PARAMS = $this->request->params = array('foo' => 'bar');
+    $PARAMS = $this->request->params = ['foo' => 'bar'];
     $paramsString = $this->request->getParamsString();
     $params = json_decode($paramsString, true);
 

@@ -10,13 +10,13 @@ class CurlRequestTest extends PHPUnit\Framework\TestCase{
   public function testAttributes() {
     $this->assertEquals('GET', $this->request->method);
     $this->assertEquals(null, $this->request->url);
-    $this->assertEquals(array(), $this->request->headers);
-    $this->assertEquals(array(), $this->request->fields);
-    $this->assertEquals(array(), $this->request->files);
+    $this->assertEquals([], $this->request->headers);
+    $this->assertEquals([], $this->request->fields);
+    $this->assertEquals([], $this->request->files);
   }
 
   public function testConstructor() {
-    $request = new CurlRequest(array('foo' => 'bar'));
+    $request = new CurlRequest(['foo' => 'bar']);
     $this->assertEquals('bar', $request->foo);
   }
 
@@ -36,12 +36,12 @@ class CurlRequestTest extends PHPUnit\Framework\TestCase{
     $this->assertEquals($this->request->url, $options[CURLOPT_URL]);
 
     // test headers
-    $this->request->headers = array('Foo: bar');
+    $this->request->headers = ['Foo: bar'];
     $options = $this->request->getCurlOptions();
     $this->assertEquals($this->request->headers, $options[CURLOPT_HTTPHEADER]);
 
     // test put fields
-    $this->request->fields = array('hello' => 'world');
+    $this->request->fields = ['hello' => 'world'];
     $options = $this->request->getCurlOptions();
     $this->assertEquals($this->request->fields, $options[CURLOPT_POSTFIELDS]);
 
@@ -63,16 +63,16 @@ class CurlRequestTest extends PHPUnit\Framework\TestCase{
 
     // test post files
     $this->request->method = 'POST';
-    $this->request->fields = array('super' => 'cool');
-    $this->request->files = array('foo' => $fixture);
+    $this->request->fields = ['super' => 'cool'];
+    $this->request->files = ['foo' => $fixture];
     $options = $this->request->getCurlOptions();
 
     // -- Start edit --
     // Edit by Aart Berkhout involving issue #8: CURL depricated functions (PHP 5.5)
     // https://github.com/transloadit/php-sdk/issues/8
     $filesOptions = function_exists('curl_file_create') ? 
-      array('foo' => curl_file_create($this->request->files['foo'])) :
-      array('foo' => '@'.$this->request->files['foo']);
+      ['foo' => curl_file_create($this->request->files['foo'])] :
+      ['foo' => '@'.$this->request->files['foo']];
 
     $this->assertEquals(
       array_merge(
@@ -83,12 +83,12 @@ class CurlRequestTest extends PHPUnit\Framework\TestCase{
     );
 
     // test file numbering
-    $this->request->files = array($fixture);
+    $this->request->files = [$fixture];
     $options = $this->request->getCurlOptions();
 
     $filesOptions = function_exists('curl_file_create') ? 
-      array('file_1' => curl_file_create($this->request->files[0])) :
-      array('file_1' => '@'.$this->request->files[0]);
+      ['file_1' => curl_file_create($this->request->files[0])] :
+      ['file_1' => '@'.$this->request->files[0]];
 
     $this->assertEquals(
       array_merge(

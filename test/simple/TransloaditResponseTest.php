@@ -22,7 +22,7 @@ class TransloaditResponseTest extends \PHPUnit\Framework\TestCase{
       $error
     );
 
-    $this->response->data = array('ok' => 'ASSEMBLY_DOING_SOMETHING');
+    $this->response->data = ['ok' => 'ASSEMBLY_DOING_SOMETHING'];
     $error = $this->response->error();
     $this->assertEquals(false, $error);
 

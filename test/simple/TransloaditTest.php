@@ -9,7 +9,7 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase{
   }
 
   public function testConstructor() {
-    $transloadit = new Transloadit(array('foo' => 'bar'));
+    $transloadit = new Transloadit(['foo' => 'bar']);
     $this->assertEquals('bar', $transloadit->foo);
   }
 
@@ -25,15 +25,14 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase{
     $assembly = $this->getMockBuilder(TransloaditResponse::class)
                      ->getMock();
 
-    $options = array('foo' => 'bar');
+    $options = ['foo' => 'bar'];
 
     $transloadit
-      ->expects($this->at(0))
       ->method('request')
-      ->with($this->equalTo($options + array(
+      ->with($this->equalTo($options + [
         'method'   => 'POST',
         'path'     => '/assemblies',
-      )))
+      ]))
       ->willReturn($assembly);
 
     $transloadit->createAssembly($options);
@@ -42,7 +41,7 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase{
   public function testRequest() {
     $this->transloadit->key = 'my-key';
     $this->transloadit->secret = 'my-secret';
-    $request = $this->transloadit->request(array('foo' => 'bar'), false);
+    $request = $this->transloadit->request(['foo' => 'bar'], false);
 
     $this->assertEquals($this->transloadit->key, $request->key);
     $this->assertEquals($this->transloadit->secret, $request->secret);
@@ -56,7 +55,7 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase{
     $response = Transloadit::response();
     $this->assertEquals(false, $response);
 
-    $data = array('foo' => 'bar');
+    $data = ['foo' => 'bar'];
     $_POST['transloadit'] = json_encode($data);
     $response = Transloadit::response();
     $this->assertInstanceOf(TransloaditResponse::class, $response);
@@ -76,26 +75,24 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase{
 
     $assembly->method = 'ROCK';
     $assembly->url = 'http://api999.transloadit.com/assemblies';
-    $assembly->fields = array(
+    $assembly->fields = [
       'foo' => 'bar"bar',
       'hey' => 'you',
-    );
-    $options = array('foo' => 'bar');
+    ];
+    $options = ['foo' => 'bar'];
 
     $transloadit
-      ->expects($this->at(0))
       ->method('request')
-      ->with($this->equalTo($options + array(
+      ->with($this->equalTo($options + [
         'method' => 'POST',
         'path' => '/assemblies',
-      )), $this->equalTo(false))
+      ]), $this->equalTo(false))
       ->willReturn($assembly);
 
     $assembly
-      ->expects($this->at(0))
       ->method('prepare');
 
-    $options['attributes'] = array('class' => 'nice');
+    $options['attributes'] = ['class' => 'nice'];
     $tags = explode("\n", $transloadit->createAssemblyForm($options));
 
     $formTag = array_shift($tags);

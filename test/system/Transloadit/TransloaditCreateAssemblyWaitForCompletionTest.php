@@ -13,26 +13,26 @@ class TransloaditCreateAssemblyWaitForCompletionTest extends \PHPUnit\Framework\
     }
 
     // @todo Load config from git excluded config file
-    $this->transloadit = new Transloadit(array(
+    $this->transloadit = new Transloadit([
       'key' => TEST_ACCOUNT_KEY,
       'secret' => TEST_ACCOUNT_SECRET,
-    ));
+    ]);
   }
   public function testRoot() {
-    $response = $this->transloadit->createAssembly(array(
-      'files' => array(TEST_FIXTURE_DIR.'/image-resize-robot.jpg'),
-      'params' => array(
-        'steps' => array(
-          'resize' => array(
+    $response = $this->transloadit->createAssembly([
+      'files' => [TEST_FIXTURE_DIR.'/image-resize-robot.jpg'],
+      'params' => [
+        'steps' => [
+          'resize' => [
             'robot' => '/image/resize',
             'width' => 100,
             'height' => 100,
             'result' => true,
-          ),
-        ),
-      ),
+          ],
+        ],
+      ],
       'waitForCompletion' => true
-    ));
+    ]);
     $this->assertEquals('ASSEMBLY_COMPLETED', $response->data['ok']);
 
     $getResp = $this->transloadit->getAssembly($response->data['assembly_id']);
