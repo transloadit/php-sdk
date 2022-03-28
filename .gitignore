@@ -5,4 +5,4 @@ build/
 vendor/
 bin/composer
 env.sh
-.phpunit.result.cache
+.phpunit.cache
