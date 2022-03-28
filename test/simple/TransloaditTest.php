@@ -38,6 +38,36 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase{
     $this->assertEquals($assembly, $transloadit->createAssembly($options));
   }
 
+  public function testCancelAssembly() {
+    $transloadit = $this->getMockBuilder(Transloadit::class)
+                        ->setMethods(['request'])
+                        ->getMock();
+    $assembly = $this->getMockBuilder(TransloaditResponse::class)
+                     ->getMock();
+    $response = $this->getMockBuilder(TransloaditResponse::class)
+                      ->getMock();
+
+    $assemblyId = 'b7716f21ba1a400f8b1a60a6e1c6acf1';
+    $assembly->data = ['assembly_url' => sprintf('https://api2-phpsdktest.transloadit.com/assemblies/%s', $assemblyId)];
+
+    $transloadit
+      ->method('request')
+      ->withConsecutive(
+        [$this->equalTo([
+          'method'   => 'GET',
+          'path'     => sprintf('/assemblies/%s', $assemblyId),
+        ])],
+        [$this->equalTo([
+          'method'   => 'DELETE',
+          'path'     => sprintf('/assemblies/%s', $assemblyId),
+          'host'     => 'api2-phpsdktest.transloadit.com',
+        ])],
+      )
+      ->willReturnOnConsecutiveCalls($assembly, $response);
+
+    $this->assertEquals($response, $transloadit->cancelAssembly($assemblyId));
+  }
+
   public function testRequest() {
     $this->transloadit->key = 'my-key';
     $this->transloadit->secret = 'my-secret';
