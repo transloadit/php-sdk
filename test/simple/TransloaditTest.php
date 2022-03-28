@@ -35,7 +35,7 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase{
       ]))
       ->willReturn($assembly);
 
-    $transloadit->createAssembly($options);
+    $this->assertEquals($assembly, $transloadit->createAssembly($options));
   }
 
   public function testRequest() {
