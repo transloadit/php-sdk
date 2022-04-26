@@ -19,7 +19,7 @@ This is a **PHP** SDK to make it easy to talk to the [Transloadit](https://trans
 composer require transloadit/php-sdk
 ```
 
-Keep your Transloadit account's key & secret key nearby. You can check
+Keep your Transloadit account's Auth Key & Secret nearby. You can check
 the [API credentials](https://transloadit.com/accounts/credentials) page for
 these values.
 
@@ -74,10 +74,10 @@ that redirects back to your site after the upload is done.
 Once the script receives the redirect request, the current status for
 this <dfn>Assembly</dfn> is shown using `Transloadit::response()`.
 
-<div class="tip" markdown="1">
-  There is no guarantee that the <dfn>Assembly</dfn> has already finished
-  executing by the time the `$response` is fetched. You should use
-  the `notify_url` parameter for this.
+<div class="alert alert-note">
+  <strong>Note:</strong> There is no guarantee that the <dfn>Assembly</dfn> has already finished
+  executing by the time the <code>$response</code> is fetched. You should use
+  the <code>notify_url</code> parameter for this.
 </div>
 
 ```php
