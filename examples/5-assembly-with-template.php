@@ -17,7 +17,7 @@ $transloadit = new Transloadit([
   'secret' => 'YOUR_TRANSLOADIT_SECRET',
 ]);
 
-$response = $transloadit->createAssembly((
+$response = $transloadit->createAssembly([
   'files' => [dirname(__FILE__).'/fixture/straw-apple.jpg'],
   'params' => [
     'template_id' => 'YOUR_TEMPLATE_ID',
