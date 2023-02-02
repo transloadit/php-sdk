@@ -234,7 +234,7 @@ $transloadit = new Transloadit([
   'secret' => 'YOUR_TRANSLOADIT_SECRET',
 ]);
 
-$response = $transloadit->createAssembly((
+$response = $transloadit->createAssembly([
   'files' => ['/PATH/TO/FILE.jpg'],
   'params' => [
     'template_id' => 'YOUR_TEMPLATE_ID',
