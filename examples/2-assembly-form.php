@@ -1,4 +1,5 @@
 <?php
+
 require __DIR__ . '/common/loader.php';
 /*
 ### 2. Create a simple end-user upload form

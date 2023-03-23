@@ -1,28 +1,29 @@
 <?php
+
 namespace transloadit;
 
-class Transloadit{
+class Transloadit {
   public $key      = null;
   public $secret   = null;
   public $endpoint = 'https://api2.transloadit.com';
 
-  public function __construct($attributes = array()) {
+  public function __construct($attributes = []) {
     foreach ($attributes as $key => $val) {
       $this->{$key} = $val;
     }
   }
 
-  public function request($options = array(), $execute = true) {
-    $options = $options + array(
+  public function request($options = [], $execute = true) {
+    $options = $options + [
       'key'               => $this->key,
       'secret'            => $this->secret,
       'endpoint'          => $this->endpoint,
       'waitForCompletion' => false,
-    );
+    ];
     $request = new TransloaditRequest($options);
     return ($execute)
-      ? $request->execute()
-      : $request;
+    ? $request->execute()
+    : $request;
   }
 
   public static function response() {
@@ -38,41 +39,41 @@ class Transloadit{
     }
 
     if (!empty($_GET['assembly_url'])) {
-      $request = new TransloaditRequest(array(
+      $request = new TransloaditRequest([
         'url' => $_GET['assembly_url'],
-      ));
+      ]);
       return $request->execute();
     }
     return false;
   }
 
-  public function createAssemblyForm($options = array()) {
-    $out = array();
+  public function createAssemblyForm($options = []) {
+    $out = [];
 
-    $customFormAttributes = array();
+    $customFormAttributes = [];
     if (array_key_exists('attributes', $options)) {
       $customFormAttributes = $options['attributes'];
       unset($options['attributes']);
     }
 
-    $assembly = $this->request($options + array(
+    $assembly = $this->request($options + [
       'method' => 'POST',
       'path'   => '/assemblies',
-    ), false);
+    ], false);
     $assembly->prepare();
 
-    $formAttributes = array(
+    $formAttributes = [
       'action'  => $assembly->url,
       'method'  => $assembly->method,
       'enctype' => 'multipart/form-data',
-    ) + $customFormAttributes;
+    ] + $customFormAttributes;
 
-    $formAttributeList = array();
+    $formAttributeList = [];
     foreach ($formAttributes as $key => $val) {
       $formAttributeList[] = sprintf('%s="%s"', $key, htmlentities($val));
     }
 
-    $out[] = '<form '.join(' ', $formAttributeList).'>';
+    $out[] = '<form ' . join(' ', $formAttributeList) . '>';
 
     foreach ($assembly->fields as $field => $val) {
       $out[] = sprintf(
@@ -87,18 +88,18 @@ class Transloadit{
   }
 
   public function createAssembly($options) {
-    return $this->request($options + array(
+    return $this->request($options + [
       'method' => 'POST',
       'path'   => '/assemblies',
-    ));
+    ]);
   }
 
   // Leave this in for BC.
   public function getAssembly($assembly_id) {
-    $response = $this->request(array(
+    $response = $this->request([
       'method' => 'GET',
-      'path'   => '/assemblies/'.$assembly_id,
-    ), true);
+      'path'   => '/assemblies/' . $assembly_id,
+    ], true);
 
     return $response;
   }
@@ -109,10 +110,10 @@ class Transloadit{
 
   public function cancelAssembly($assembly_id) {
     // Look up the host for this assembly
-    $response = $this->request(array(
+    $response = $this->request([
       'method' => 'GET',
-      'path'   => '/assemblies/'.$assembly_id,
-    ), true);
+      'path'   => '/assemblies/' . $assembly_id,
+    ], true);
 
     $error = $response->error();
     if ($error) {
@@ -121,11 +122,11 @@ class Transloadit{
 
     $url = parse_url($response->data['assembly_url']);
 
-    $response = $this->request(array(
+    $response = $this->request([
       'method' => 'DELETE',
       'path'   => $url['path'],
       'host'   => $url['host'],
-    ));
+    ]);
 
     $error = $response->error();
     if ($error) {

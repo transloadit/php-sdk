@@ -1,6 +1,6 @@
 <?php
 
-class TransloaditRequestErrorTest extends SystemTestCase{
+class TransloaditRequestErrorTest extends SystemTestCase {
   public function testRoot() {
     $this->request->setMethodAndPath('POST', '/assemblies');
     $response = $this->request->execute();

@@ -1,6 +1,6 @@
 <?php
 
-class TransloaditRequestNoJsonErrorTest extends SystemTestCase{
+class TransloaditRequestNoJsonErrorTest extends SystemTestCase {
   public function testRoot() {
     $this->request->url = 'http://google.com/';
     $response = $this->request->execute();

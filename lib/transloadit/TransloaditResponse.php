@@ -1,7 +1,8 @@
 <?php
+
 namespace transloadit;
 
-class TransloaditResponse extends CurlResponse{
+class TransloaditResponse extends CurlResponse {
   public function error() {
     $error = parent::error();
     if ($error) {
@@ -33,4 +34,3 @@ class TransloaditResponse extends CurlResponse{
     return false;
   }
 }
-?>

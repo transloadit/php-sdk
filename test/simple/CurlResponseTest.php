@@ -15,12 +15,12 @@ class CurlResponseTest extends \PHPUnit\Framework\TestCase {
   }
 
   public function testConstructor() {
-    $transloadit = new CurlResponse(array('foo' => 'bar'));
+    $transloadit = new CurlResponse(['foo' => 'bar']);
     $this->assertEquals('bar', $transloadit->foo);
   }
 
   public function testParseJson() {
-    $data = array('foo' => 'bar');
+    $data = ['foo' => 'bar'];
 
     $this->response->data = json_encode($data);
     $r = $this->response->parseJson();
@@ -45,4 +45,3 @@ class CurlResponseTest extends \PHPUnit\Framework\TestCase {
     $this->assertEquals(sprintf('curl: %d: %s', $number, $message), $error);
   }
 }
-?>

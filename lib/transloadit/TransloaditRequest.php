@@ -2,7 +2,7 @@
 
 namespace transloadit;
 
-class TransloaditRequest extends CurlRequest{
+class TransloaditRequest extends CurlRequest {
   public $key      = null;
   public $secret   = null;
 
@@ -11,13 +11,13 @@ class TransloaditRequest extends CurlRequest{
 
   public $waitForCompletion = false;
 
-  public $params   = array();
+  public $params   = [];
   public $expires  = '+2 hours';
 
-  public $headers  = array(
+  public $headers  = [
     'Expect:',
     'Transloadit-Client: php-sdk:%s',
-  );
+  ];
 
   public function setMethodAndPath($method, $path) {
     $this->method = $method;
@@ -27,17 +27,17 @@ class TransloaditRequest extends CurlRequest{
   public function getParamsString() {
     $params = $this->params;
     if (!isset($params['auth'])) {
-      $params['auth'] = array();
+      $params['auth'] = [];
     }
 
     if (!ini_get('date.timezone')) {
       date_default_timezone_set('Etc/UTC');
     }
 
-    $params['auth'] = $params['auth'] + array(
+    $params['auth'] = $params['auth'] + [
       'key'     => $this->key,
       'expires' => gmdate('Y/m/d H:i:s+00:00', strtotime($this->expires)),
-    );
+    ];
     return json_encode($params);
   }
 

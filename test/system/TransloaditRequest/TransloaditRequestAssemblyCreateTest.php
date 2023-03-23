@@ -1,9 +1,9 @@
 <?php
 
-class TransloaditRequestAssemblyCreateTest extends SystemTestCase{
+class TransloaditRequestAssemblyCreateTest extends SystemTestCase {
   public function testRoot() {
     $this->request->setMethodAndPath('POST', '/assemblies');
-    $this->request->files[] = TEST_FIXTURE_DIR.'/image-resize-robot.jpg';
+    $this->request->files[] = TEST_FIXTURE_DIR . '/image-resize-robot.jpg';
     $this->request->params = [
       'steps' => [
         'resize' => [

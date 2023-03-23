@@ -1,17 +1,18 @@
 <?php
+
 namespace transloadit;
 
 class CurlRequest {
   public $method = 'GET';
   public $url = null;
-  public $headers = array();
-  public $fields = array();
-  public $files = array();
-  public $curlOptions = array();
+  public $headers = [];
+  public $fields = [];
+  public $files = [];
+  public $curlOptions = [];
   public $version = false;
 
   // Apply all passed attributes to the instance
-  public function __construct($attributes = array()) {
+  public function __construct($attributes = []) {
     foreach ($attributes as $key => $val) {
       $this->{$key} = $val;
     }
@@ -22,11 +23,11 @@ class CurlRequest {
 
     $hasBody = ($this->method === 'PUT' || $this->method === 'POST');
     if (!$hasBody) {
-      $url .= '?'.http_build_query($this->fields);
+      $url .= '?' . http_build_query($this->fields);
     }
 
-    if (!is_array($this->curlOptions)){
-      $this->curlOptions = array($this->curlOptions);
+    if (!is_array($this->curlOptions)) {
+      $this->curlOptions = [$this->curlOptions];
     }
 
     // Obtain SDK version
@@ -45,12 +46,12 @@ class CurlRequest {
       }
     }
 
-    $options = $this->curlOptions + array(
+    $options = $this->curlOptions + [
       CURLOPT_RETURNTRANSFER => true,
       CURLOPT_CUSTOMREQUEST => $this->method,
       CURLOPT_URL => $url,
       CURLOPT_HTTPHEADER => $this->headers,
-    );
+    ];
 
     if ($hasBody) {
       $fields = $this->fields;
@@ -60,7 +61,7 @@ class CurlRequest {
           return false;
         }
         if (is_int($field)) {
-          $field = 'file_'.($field+1);
+          $field = 'file_' . ($field + 1);
         }
 
         // -- Start edit --
@@ -69,12 +70,11 @@ class CurlRequest {
         if (function_exists('curl_file_create')) {
           // For >= PHP 5.5 use curl_file_create
           $fields[$field] = curl_file_create($file);
-        }else{
+        } else {
           // For < PHP 5.5 use @filename API
-          $fields[$field] = '@'.$file;
+          $fields[$field] = '@' . $file;
         }
         // -- End edit --
-
       }
       $options[CURLOPT_POSTFIELDS] = $fields;
     }
@@ -88,7 +88,7 @@ class CurlRequest {
     // -- Start edit --
     // For PHP 5.6 Safe Upload is required to upload files using curl in PHP 5.5, add the CURLOPT_SAFE_UPLOAD = true option
     if (defined('CURLOPT_SAFE_UPLOAD')) {
-          curl_setopt($curl, CURLOPT_SAFE_UPLOAD, function_exists('curl_file_create') ? true : false);
+      curl_setopt($curl, CURLOPT_SAFE_UPLOAD, function_exists('curl_file_create') ? true : false);
     }
     // -- End edit --
 
@@ -99,12 +99,11 @@ class CurlRequest {
     }
     $response->data = curl_exec($curl);
     $response->curlInfo = curl_getinfo($curl);
-    $response->curlErrorNumber= curl_errno($curl);
+    $response->curlErrorNumber = curl_errno($curl);
     $response->curlErrorMessage = curl_error($curl);
 
     curl_close($curl);
 
     return $response;
   }
-
 }

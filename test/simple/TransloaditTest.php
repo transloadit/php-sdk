@@ -1,9 +1,10 @@
 <?php
+
 date_default_timezone_set('UTC');
 use transloadit\Transloadit;
 use transloadit\TransloaditResponse;
 
-class TransloaditTest extends \PHPUnit\Framework\TestCase{
+class TransloaditTest extends \PHPUnit\Framework\TestCase {
   public function setUp(): void {
     $this->transloadit = new Transloadit();
   }
@@ -20,10 +21,10 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase{
 
   public function testCreateAssembly() {
     $transloadit = $this->getMockBuilder(Transloadit::class)
-                        ->setMethods(['request'])
-                        ->getMock();
+      ->setMethods(['request'])
+      ->getMock();
     $assembly = $this->getMockBuilder(TransloaditResponse::class)
-                     ->getMock();
+      ->getMock();
 
     $options = ['foo' => 'bar'];
 
@@ -40,12 +41,12 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase{
 
   public function testCancelAssembly() {
     $transloadit = $this->getMockBuilder(Transloadit::class)
-                        ->setMethods(['request'])
-                        ->getMock();
+      ->setMethods(['request'])
+      ->getMock();
     $assembly = $this->getMockBuilder(TransloaditResponse::class)
-                     ->getMock();
+      ->getMock();
     $response = $this->getMockBuilder(TransloaditResponse::class)
-                      ->getMock();
+      ->getMock();
 
     $assemblyId = 'b7716f21ba1a400f8b1a60a6e1c6acf1';
     $assembly->data = ['assembly_url' => sprintf('https://api2-phpsdktest.transloadit.com/assemblies/%s', $assemblyId)];
@@ -56,12 +57,14 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase{
         [$this->equalTo([
           'method'   => 'GET',
           'path'     => sprintf('/assemblies/%s', $assemblyId),
-        ])],
+        ])
+        ],
         [$this->equalTo([
           'method'   => 'DELETE',
           'path'     => sprintf('/assemblies/%s', $assemblyId),
           'host'     => 'api2-phpsdktest.transloadit.com',
-        ])],
+        ])
+        ],
       )
       ->willReturnOnConsecutiveCalls($assembly, $response);
 
@@ -97,11 +100,11 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase{
 
   public function testCreateAssemblyForm() {
     $transloadit = $this->getMockBuilder(Transloadit::class)
-                        ->setMethods(['request'])
-                        ->getMock();
+      ->setMethods(['request'])
+      ->getMock();
     $assembly = $this->getMockBuilder(TransloaditResponse::class)
-                     ->setMethods(['prepare'])
-                     ->getMock();
+      ->setMethods(['prepare'])
+      ->getMock();
 
     $assembly->method = 'ROCK';
     $assembly->url = 'http://api999.transloadit.com/assemblies';
@@ -134,8 +137,8 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase{
     foreach ($assembly->fields as $field => $val) {
       $inputTag = array_shift($tags);
       $this->assertTrue(preg_match('/type="hidden"/', $inputTag) !== false);
-      $this->assertTrue(preg_match('/name="'.$field.'"/', $inputTag) !== false);
-      $this->assertTrue(preg_match('/value="'.$val.'"/', $inputTag) !== false);
+      $this->assertTrue(preg_match('/name="' . $field . '"/', $inputTag) !== false);
+      $this->assertTrue(preg_match('/value="' . $val . '"/', $inputTag) !== false);
     }
   }
 }
