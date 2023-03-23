@@ -1,5 +1,9 @@
 <?php
 
+namespace transloadit\test;
+
+// use PHPUnit\Framework\TestCase;
+
 require dirname(__DIR__) . "/vendor/autoload.php";
 
 if (file_exists(__DIR__ . '/config.php')) {
@@ -8,7 +12,9 @@ if (file_exists(__DIR__ . '/config.php')) {
 
 define('TEST_FIXTURE_DIR', __DIR__ . '/fixture');
 
-abstract class SystemTestCase extends PHPUnit\Framework\TestCase {
+
+
+abstract class SystemTestCase extends \PHPUnit\Framework\TestCase {
   public function setUp(): void {
     if (!defined('TEST_ACCOUNT_KEY') || !defined('TEST_ACCOUNT_SECRET')) {
       $this->markTestSkipped(
@@ -18,14 +24,14 @@ abstract class SystemTestCase extends PHPUnit\Framework\TestCase {
     }
 
     // @todo Load config from git excluded config file
-    $this->request = new transloadit\TransloaditRequest([
+    $this->request = new \transloadit\TransloaditRequest([
       'key' => TEST_ACCOUNT_KEY,
       'secret' => TEST_ACCOUNT_SECRET,
     ]);
   }
 }
 
-class TransloaditRequestTestCase extends PHPUnit\Framework\TestCase {
+class TransloaditRequestTestCase extends \PHPUnit\Framework\TestCase {
   public function setUp(): void {
     if (!defined('TEST_ACCOUNT_KEY') || !defined('TEST_ACCOUNT_SECRET')) {
       $this->markTestSkipped(

@@ -1,8 +1,11 @@
 <?php
 
-date_default_timezone_set('UTC');
+namespace transloadit\test\simple;
+
 use transloadit\Transloadit;
 use transloadit\TransloaditResponse;
+
+date_default_timezone_set('UTC');
 
 class TransloaditTest extends \PHPUnit\Framework\TestCase {
   public function setUp(): void {

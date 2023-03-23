@@ -1,5 +1,7 @@
 <?php
 
+namespace transloadit\test\system\Transloadit;
+
 use transloadit\Transloadit;
 
 class TransloaditCreateAssemblyWaitForCompletionTest extends \PHPUnit\Framework\TestCase {

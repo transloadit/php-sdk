@@ -1,5 +1,7 @@
 <?php
 
+namespace transloadit\test\system\CurlRequest;
+
 use transloadit\CurlRequest;
 
 class CurlRequestRootTest extends \PHPUnit\Framework\TestCase {

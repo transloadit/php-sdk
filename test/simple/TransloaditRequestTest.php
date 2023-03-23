@@ -1,5 +1,7 @@
 <?php
 
+namespace transloadit\test\simple;
+
 use transloadit\TransloaditRequest;
 use transloadit\CurlRequest;
 

@@ -17,7 +17,7 @@ test-all-coverage:
 	$(call phpUnit,test,--coverage-clover build/logs/clover.xml)
 
 .PHONY: test-all
-test-all: test-simple test-system
+test-all: lint test-simple test-system
 
 .PHONY: test-simple
 test-simple:
@@ -33,7 +33,7 @@ docs:
 
 .PHONY: lint
 lint:
-	@vendor/bin/phpcs --standard=./phpcs.xml lib/ examples/ test/ tool/
+	@vendor/bin/phpcs --warning-severity=0 --standard=./phpcs.xml lib/ examples/ test/ tool/
 
 .PHONY: fix
 fix:

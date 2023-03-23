@@ -1,5 +1,7 @@
 <?php
 
+namespace transloadit\test\simple;
+
 use transloadit\CurlResponse;
 
 class CurlResponseTest extends \PHPUnit\Framework\TestCase {
