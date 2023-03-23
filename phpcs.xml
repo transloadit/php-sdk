@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<ruleset name="App">
+    <!-- Paths that have not been autocorrected yet -->
+    <exclude-pattern>plugins/</exclude-pattern>
+    <exclude-pattern>vendor/</exclude-pattern>
+    <exclude-pattern>vendors/</exclude-pattern>
+    <exclude-pattern>webroot/</exclude-pattern>
+
+    <rule ref="PSR12" />
+    <arg name="extensions" value="php,ctp" />
+    <!-- enforce two spaces for indentation (all other company projects use this, and we have been using it for the crm so far too, so this avoids a diff on all lines rolling this out -->
+    <arg name="tab-width" value="2"/>
+
+    <!--
+    Relax line length rules. This is a low value rule
+    that doesn't require strict enforcement for now.
+    -->
+    <rule ref="Generic.Files.LineLength.TooLong">
+        <severity>0</severity>
+    </rule>
+
+    <!-- enforce short array syntax (we were already manually migrating to this as we touched files ourselves, so this is actually very nice to have automated now) -->
+    <rule ref="Generic.Arrays.DisallowLongArraySyntax">
+        <properties>
+            <property name="syntax" value="short" />
+        </properties>
+    </rule>
+
+    <rule ref="Generic.WhiteSpace.ScopeIndent">
+        <properties>
+            <property name="indent" value="2" />
+            <property name="exact" value="true" />
+        </properties>
+    </rule>
+    <rule ref="Generic.WhiteSpace.DisallowTabIndent">
+        <properties>
+            <property name="absolute" value="true" />
+        </properties>
+    </rule>
+    <rule ref="Generic.Arrays.ArrayIndent">
+        <properties>
+            <property name="indent" value="2" />
+            <property name="exact" value="true" />
+        </properties>
+    </rule>
+
+    <!-- enforce opening curly brace on the same line (for team familiarity, smaller diff migrating to phpcs) -->
+    <rule ref="PSR2">
+        <exclude name="Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine" />
+        <exclude name="PSR2.Classes.ClassDeclaration.OpenBraceNewLine" />
+    </rule>
+    <rule ref="Generic.Functions.OpeningFunctionBraceKernighanRitchie" />
+    <rule ref="Generic.Classes.OpeningBraceSameLine"/>
+
+    <!-- enforce consistent indentation of multi line method arrow chaining -->
+    <rule ref="Squiz.WhiteSpace.ObjectOperatorSpacing">
+        <properties>
+            <property name="ignoreNewlines" value="true" />
+        </properties>
+    </rule>
+    <rule ref="PEAR.WhiteSpace.ObjectOperatorIndent">
+        <properties>
+            <property name="indent" value="2" />
+            <property name="multilevel" value="false" />
+        </properties>
+    </rule>
+
+    <!-- enforce that function arguments are indented with 2 spaces -->
+    <rule ref="PSR2.Methods.FunctionCallSignature">
+        <properties>
+            <property name="indent" value="2" />
+        </properties>
+    </rule>
+
+    <!-- allow underscores to hint visibility, to reduce diff and help autofixing efforts -->
+    <rule ref="PSR2">
+        <exclude name="PSR2.Methods.MethodDeclaration.Underscore" />
+        <exclude name="PSR2.Classes.PropertyDeclaration.Underscore" />
+    </rule>
+
+    <!-- Relax some src/* and tests/* rules -->
+    <rule ref="PSR1.Files.SideEffects">
+        <exclude-pattern>*/config/*</exclude-pattern>
+        <exclude-pattern>*/tests/*</exclude-pattern>
+        <exclude-pattern>*/src/Command/*</exclude-pattern>
+    </rule>
+
+    <rule ref="Internal.NoCodeFound">
+        <severity>0</severity>
+    </rule>
+</ruleset>

@@ -31,6 +31,15 @@ test-system:
 docs:
 	php tool/generate-example-docs.php
 
+.PHONY: lint
+lint:
+  vendor/bin/phpcs --standard=./phpcs.xml src/ tests/ plugins/ config/
+
+.PHONY: fix
+fix:
+  vendor/bin/phpcbf --standard=./phpcs.xml src/ tests/ plugins/ config/
+
+
 .PHONY: docs-html
 docs-html: docs
 	Markdown.pl --html4tags Readme.md > Readme.html
