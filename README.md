@@ -247,6 +247,7 @@ print_r($response);
 echo '</pre>';
 
 ```
+
 <!-- End of generated doc section -->
 
 ### Signature Auth
@@ -255,7 +256,7 @@ echo '</pre>';
 
 ## Example
 
-For fully working examples take a look at [`examples/`](https://github.com/transloadit/php-sdk/tree/master/examples).
+For fully working examples take a look at [`examples/`](https://github.com/transloadit/php-sdk/tree/HEAD/examples).
 
 ## API
 
@@ -344,7 +345,6 @@ There are two kinds of notifications this method handles:
 
 If the current request does not seem to be invoked by Transloadit, this
 method returns `false`.
-
 
 ### $TransloaditRequest = new TransloaditRequest($properties = array());
 
@@ -442,7 +442,7 @@ All of the following will cause an error string to be returned:
 - The Transloadit response JSON contains an `{"error": "..."}` key
 - A malformed response was received
 
-***Note***: You will need to set waitForCompletion = True in the $Transloadit->createAssembly($options) function call.
+**_Note_**: You will need to set waitForCompletion = True in the $Transloadit->createAssembly($options) function call.
 
 ## Contributing
 
@@ -469,7 +469,7 @@ For more information on SemVer, please visit http://semver.org/.
 ## Releasing a new version
 
 ```bash
-# 1. update CHANGELOG.md 
+# 1. update CHANGELOG.md
 # 2. update composer.json
 # 3. commit all your work
 source env.sh && VERSION=3.0.4 ./release.sh
@@ -481,8 +481,8 @@ source env.sh && VERSION=3.0.4 ./release.sh
 
 [test_badge]: https://github.com/transloadit/php-sdk/actions/workflows/tests.yml/badge.svg
 [test_link]: https://github.com/transloadit/php-sdk/actions/workflows/tests.yml
-[codecov_badge]: https://codecov.io/gh/transloadit/php-sdk/branch/master/graph/badge.svg
+[codecov_badge]: https://codecov.io/gh/transloadit/php-sdk/branch/main/graph/badge.svg
 [codecov_link]: https://codecov.io/gh/transloadit/php-sdk
 [php_verison_badge]: https://img.shields.io/packagist/php-v/transloadit/php-sdk
 [licence_badge]: https://img.shields.io/badge/License-MIT-green.svg
-[licence_link]: https://github.com/transloadit/php-sdk/blob/master/LICENSE
+[licence_link]: https://github.com/transloadit/php-sdk/blob/main/LICENSE

@@ -2,7 +2,7 @@ name: Tests
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     types:
       - opened
@@ -28,13 +28,13 @@ jobs:
         with:
           fetch-depth: 1
       - uses: shivammathur/setup-php@v2
-        # https://github.com/boyney123/github-actions/blob/master/src/actions/setup-php.md
+        # https://github.com/boyney123/github-actions/blob/HEAD/src/actions/setup-php.md
         with:
           php-version: ${{ matrix.php }}
           coverage: none
       - uses: ramsey/composer-install@v2
         with:
-          dependency-versions: "${{ matrix.dependencies }}"
+          dependency-versions: '${{ matrix.dependencies }}'
       - name: Test
         run: |
           make test-all
