@@ -1,4 +1,5 @@
 <?php
+
 require __DIR__ . '/common/loader.php';
 /*
 ### 5. Create an Assembly with a Template.
@@ -18,7 +19,7 @@ $transloadit = new Transloadit([
 ]);
 
 $response = $transloadit->createAssembly([
-  'files' => [dirname(__FILE__).'/fixture/straw-apple.jpg'],
+  'files' => [dirname(__FILE__) . '/fixture/straw-apple.jpg'],
   'params' => [
     'template_id' => 'YOUR_TEMPLATE_ID',
   ],

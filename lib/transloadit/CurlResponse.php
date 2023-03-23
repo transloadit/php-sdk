@@ -2,7 +2,7 @@
 
 namespace transloadit;
 
-class CurlResponse{
+class CurlResponse {
   public $data = null;
 
   public $curlInfo = null;
@@ -10,7 +10,7 @@ class CurlResponse{
   public $curlErrorMessage = null;
 
   // Apply all passed attributes to the instance
-  public function __construct($attributes = array()) {
+  public function __construct($attributes = []) {
     foreach ($attributes as $key => $val) {
       $this->{$key} = $val;
     }
@@ -38,4 +38,3 @@ class CurlResponse{
     );
   }
 }
-?>

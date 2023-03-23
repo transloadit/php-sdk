@@ -1,9 +1,11 @@
 <?php
 
+namespace transloadit\test\simple;
+
 use transloadit\TransloaditResponse;
 use transloadit\CurlResponse;
 
-class TransloaditResponseTest extends \PHPUnit\Framework\TestCase{
+class TransloaditResponseTest extends \PHPUnit\Framework\TestCase {
   private TransloaditResponse $response;
 
   public function setUp(): void {
@@ -18,7 +20,7 @@ class TransloaditResponseTest extends \PHPUnit\Framework\TestCase{
     $this->response->data = 'no json';
     $error = $this->response->error();
     $this->assertEquals(
-      sprintf('transloadit: bad response, no json: '.$this->response->data),
+      sprintf('transloadit: bad response, no json: ' . $this->response->data),
       $error
     );
 

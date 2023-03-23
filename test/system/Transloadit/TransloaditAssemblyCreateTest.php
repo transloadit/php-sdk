@@ -1,7 +1,10 @@
 <?php
+
+namespace transloadit\test\system\Transloadit;
+
 use transloadit\Transloadit;
 
-class TransloaditAssemblyCreateTest extends \PHPUnit\Framework\TestCase{
+class TransloaditAssemblyCreateTest extends \PHPUnit\Framework\TestCase {
   public function setUp(): void {
     if (!defined('TEST_ACCOUNT_KEY') || !defined('TEST_ACCOUNT_SECRET')) {
       $this->markTestSkipped(
@@ -17,7 +20,7 @@ class TransloaditAssemblyCreateTest extends \PHPUnit\Framework\TestCase{
   }
   public function testRoot() {
     $response = $this->transloadit->createAssembly([
-      'files' => [TEST_FIXTURE_DIR.'/image-resize-robot.jpg'],
+      'files' => [TEST_FIXTURE_DIR . '/image-resize-robot.jpg'],
       'params' => [
         'steps' => [
           'resize' => [

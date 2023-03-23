@@ -1,6 +1,8 @@
 <?php
 
-class TransloaditRequestRootTest extends SystemTestCase{
+namespace transloadit\test\system\TransloaditRequest;
+
+class TransloaditRequestRootTest extends \transloadit\test\SystemTestCase {
   public function testRoot() {
     $this->request->setMethodAndPath('GET', '/');
     $response = $this->request->execute();

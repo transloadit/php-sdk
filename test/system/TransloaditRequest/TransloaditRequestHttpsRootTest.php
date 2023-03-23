@@ -1,6 +1,8 @@
 <?php
 
-class TransloaditRequestHttpsRootTest extends SystemTestCase{
+namespace transloadit\test\system\TransloaditRequest;
+
+class TransloaditRequestHttpsRootTest extends \transloadit\test\SystemTestCase {
   public function testRoot() {
     $this->request->protocol = 'https';
     $this->request->setMethodAndPath('GET', '/');

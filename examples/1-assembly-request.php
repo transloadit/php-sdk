@@ -1,4 +1,5 @@
 <?php
+
 require __DIR__ . '/common/loader.php';
 /*
 ### 1. Upload and resize an image from your server
@@ -18,7 +19,7 @@ $transloadit = new Transloadit([
 ]);
 
 $response = $transloadit->createAssembly([
-  'files' => [dirname(__FILE__).'/fixture/straw-apple.jpg'],
+  'files' => [dirname(__FILE__) . '/fixture/straw-apple.jpg'],
   'params' => [
     'steps' => [
       'resize' => [

@@ -1,7 +1,10 @@
 <?php
+
+namespace transloadit\test\system\Transloadit;
+
 use transloadit\Transloadit;
 
-class TransloaditCreateAssemblyWaitForCompletionTest extends \PHPUnit\Framework\TestCase{
+class TransloaditCreateAssemblyWaitForCompletionTest extends \PHPUnit\Framework\TestCase {
   private Transloadit $transloadit;
 
   public function setUp(): void {
@@ -20,7 +23,7 @@ class TransloaditCreateAssemblyWaitForCompletionTest extends \PHPUnit\Framework\
   }
   public function testRoot() {
     $response = $this->transloadit->createAssembly([
-      'files' => [TEST_FIXTURE_DIR.'/image-resize-robot.jpg'],
+      'files' => [TEST_FIXTURE_DIR . '/image-resize-robot.jpg'],
       'params' => [
         'steps' => [
           'resize' => [

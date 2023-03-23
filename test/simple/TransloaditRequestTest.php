@@ -1,9 +1,11 @@
 <?php
 
+namespace transloadit\test\simple;
+
 use transloadit\TransloaditRequest;
 use transloadit\CurlRequest;
 
-class TransloaditRequestTest extends \PHPUnit\Framework\TestCase{
+class TransloaditRequestTest extends \PHPUnit\Framework\TestCase {
   private $request;
 
   public function setUp(): void {
@@ -36,8 +38,8 @@ class TransloaditRequestTest extends \PHPUnit\Framework\TestCase{
 
   public function testPrepare() {
     $this->request = $this->getMockBuilder(TransloaditRequest::class)
-                          ->setMethods(['getParamsString', 'signString', 'configureUrl'])
-                          ->getMock();
+      ->setMethods(['getParamsString', 'signString', 'configureUrl'])
+      ->getMock();
 
     $PARAMS_STRING = '{super}';
     $SIGNATURE_STRING = 'dsasjhdsajda';
@@ -60,8 +62,8 @@ class TransloaditRequestTest extends \PHPUnit\Framework\TestCase{
 
     // Without signature
     $this->request = $this->getMockBuilder(TransloaditRequest::class)
-                          ->setMethods(['getParamsString', 'signString', 'configureUrl'])
-                          ->getMock();
+      ->setMethods(['getParamsString', 'signString', 'configureUrl'])
+      ->getMock();
     $SIGNATURE_STRING = null;
 
     $this->request

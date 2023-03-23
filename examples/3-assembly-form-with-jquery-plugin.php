@@ -1,4 +1,5 @@
 <?php
+
 require __DIR__ . '/common/loader.php';
 /*
 ### 3. Integrate the jQuery plugin into the previous example
