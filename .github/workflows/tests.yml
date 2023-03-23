@@ -15,7 +15,6 @@ jobs:
       max-parallel: 1
       matrix:
         php:
-          - 7.4
           - 8.0
           - 8.1
         dependencies:
