@@ -17,7 +17,7 @@ jobs:
       - uses: shivammathur/setup-php@v2
         # https://github.com/boyney123/github-actions/blob/HEAD/src/actions/setup-php.md
         with:
-          php-version: '7.4'
+          php-version: '8.1'
           tools: php-cs-fixer, phpunit
       - uses: ramsey/composer-install@v2
         with:
