@@ -22,6 +22,7 @@ jobs:
       - uses: ramsey/composer-install@v2
         with:
           dependency-versions: locked
+          composer-options: '--ignore-platform-reqs'
       - name: Test
         run: |
           make test-all-coverage
