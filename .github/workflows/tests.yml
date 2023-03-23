@@ -40,4 +40,4 @@ jobs:
           make test-all
         env:
           TEST_ACCOUNT_KEY: ${{secrets.TEST_ACCOUNT_KEY}}
-          TEST_ACCOUNT_SECRET: ${{secrets.TRANSLOADIT_SECRET}}
+          TEST_ACCOUNT_SECRET: ${{secrets.TEST_ACCOUNT_SECRET}}
