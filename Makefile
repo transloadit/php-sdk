@@ -33,12 +33,11 @@ docs:
 
 .PHONY: lint
 lint:
-  vendor/bin/phpcs --standard=./phpcs.xml src/ tests/ plugins/ config/
+	@vendor/bin/phpcs --standard=./phpcs.xml lib/ examples/ test/ tool/
 
 .PHONY: fix
 fix:
-  vendor/bin/phpcbf --standard=./phpcs.xml src/ tests/ plugins/ config/
-
+	@vendor/bin/phpcbf --standard=./phpcs.xml lib/ examples/ test/ tool/
 
 .PHONY: docs-html
 docs-html: docs
