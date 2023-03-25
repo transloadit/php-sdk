@@ -260,7 +260,7 @@ For fully working examples take a look at [`examples/`](https://github.com/trans
 
 ## API
 
-### $Transloadit = new Transloadit($properties = array());
+### $Transloadit = new Transloadit($properties = []);
 
 Creates a new Transloadit instance and applies the given $properties.
 
@@ -272,7 +272,7 @@ The auth key of your Transloadit account.
 
 The auth secret of your Transloadit account.
 
-#### $Transloadit->request($options = array(), $execute = true);
+#### $Transloadit->request($options = [], $execute = true);
 
 Creates a new `TransloaditRequest` using the `$Transloadit->key` and
 `$Transloadit->secret` properties.
@@ -282,7 +282,7 @@ called and used as the return value.
 
 Otherwise the new `TransloaditRequest` instance is being returned.
 
-#### $Transloadit->createAssemblyForm($options = array());
+#### $Transloadit->createAssemblyForm($options = []);
 
 Creates a new Transloadit assembly form including the hidden 'params' and
 'signature' fields. A closing form tag is not included.
@@ -346,7 +346,7 @@ There are two kinds of notifications this method handles:
 If the current request does not seem to be invoked by Transloadit, this
 method returns `false`.
 
-### $TransloaditRequest = new TransloaditRequest($properties = array());
+### $TransloaditRequest = new TransloaditRequest($properties = []);
 
 Creates a new TransloaditRequest instance and applies the given $properties.
 
@@ -363,6 +363,15 @@ The auth secret of your Transloadit account.
 Inherited from `CurlRequest`. Can be used to set the type of request to be
 made.
 
+#### $TransloaditRequest->curlOptions = [];
+
+Inherited from `CurlRequest`. Can be used to tweak cURL behavior using [any cURL option that your PHP/cURL version supports](https://www.php.net/manual/en/function.curl-setopt.php).
+
+Here is an [example](examples/6-assembly-with-timeout.php) that illustrates
+using this option to change the timeout of a request (drastically, to `1ms`, just to prove you can make the SDK abort after a time of your choosing).
+
+The default timeouts and options depend on the cURL version on your system and can be verified by checking `phpinfo()` and the [curl_setopt](https://www.php.net/manual/en/function.curl-setopt.php) documentation.
+
 #### $TransloaditRequest->endpoint = 'https://api2.transloadit.com';
 
 The endpoint to send this request to.
@@ -376,12 +385,12 @@ The url path to request.
 Inherited from `CurlRequest`. Lets you overwrite the above endpoint / path
 properties with a fully custom url alltogether.
 
-#### $TransloaditRequest->fields = array();
+#### $TransloaditRequest->fields = [];
 
 A list of additional fields to send along with your request. Transloadit
 will include those in all assembly related notifications.
 
-#### $TransloaditRequest->files = array();
+#### $TransloaditRequest->files = [];
 
 An array of paths to local files you would like to upload. For example:
 
@@ -398,7 +407,7 @@ $TransloaditRequest->files = array('my_upload' => '/my/file.jpg');
 The first example would automatically give your file a field name of
 `'file_1'` when executing the request.
 
-#### $TransloaditRequest->params = array();
+#### $TransloaditRequest->params = [];
 
 An array representing the JSON params to be send to Transloadit. You
 do not have to include an `'auth'` key here, as this class handles that
@@ -410,7 +419,7 @@ If you have configured a '`$TransloaditRequest->secret`', this class will
 automatically sign your request. The expires property lets you configure
 the duration for which the signature is valid.
 
-#### $TransloaditRequest->headers = array();
+#### $TransloaditRequest->headers = [];
 
 Lets you send additional headers along with your request. You should not
 have to change this property.
@@ -420,7 +429,7 @@ have to change this property.
 Sends this request to Transloadit and returns a `TransloaditResponse`
 instance.
 
-### $TransloaditResponse = new TransloaditResponse($properties = array());
+### $TransloaditResponse = new TransloaditResponse($properties = []);
 
 Creates a new TransloaditResponse instance and applies the given $properties.
 
