@@ -7,8 +7,12 @@
          beStrictAboutOutputDuringTests="true"
          beStrictAboutTodoAnnotatedTests="true"
          convertDeprecationsToExceptions="true"
-         failOnRisky="true"
+         stopOnError="true"
+         stopOnFailure="true"
          failOnWarning="true"
+         failOnIncomplete="true"
+         failOnSkipped="true"
+         failOnRisky="true"
          verbose="true">
     <testsuites>
         <testsuite name="default">
