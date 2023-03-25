@@ -33,4 +33,6 @@ jobs:
         with:
           files: ./build/logs/clover.xml
           fail_ci_if_error: true
+          target: 92% # Desired coverage percentage
+          threshold: 1% # Allowed coverage percentage deviation
           verbose: true
