@@ -18,7 +18,7 @@ if [ -n "$(git status --porcelain)" ]; then
   exit 1
 fi
 
-git tag "v${VERSION}"
+git tag "${VERSION}"
 git push --tags
 curl \
   -X POST \
