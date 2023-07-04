@@ -13,7 +13,7 @@ if ! grep "${VERSION}" CHANGELOG.md > /dev/null 2>&1; then
   echo "First add '${VERSION}' to CHANGELOG.md please"
   exit 1
 fi
-if [ -n "$(git status --porcelain)" ]; then 
+if [ -n "$(git status --porcelain)" ]; then
   echo "Git working tree not clean. First commit all your work please."
   exit 1
 fi
