@@ -2,15 +2,21 @@
 
 ### [main](https://github.com/transloadit/php-sdk/tree/main)
 
-diff: https://github.com/transloadit/php-sdk/compare/3.0.5...main
+diff: https://github.com/transloadit/php-sdk/compare/3.1.0...main
+
+### [3.1.0](https://github.com/transloadit/php-sdk/tree/3.1.0)
+
+- Pass down `curlOptions` when `TransloaditRequest` reinstantiates itself for `waitForCompletion`
+
+diff: https://github.com/transloadit/php-sdk/compare/3.0.5...3.1.0
 
 ### [3.0.5](https://github.com/transloadit/php-sdk/tree/3.0.5)
 
 - Pass down `curlOptions` when `TransloaditRequest` reinstantiates itself for `waitForCompletion`
 
-diff: https://github.com/transloadit/php-sdk/compare/v3.0.4...3.0.5
+diff: https://github.com/transloadit/php-sdk/compare/3.0.4...3.0.5
 
-### [3.0.4](https://github.com/transloadit/php-sdk/tree/v3.0.4)
+### [3.0.4](https://github.com/transloadit/php-sdk/tree/3.0.4)
 
 - Ditch `v` prefix in versions as that's more idiomatic
 - Bring back the getAssembly() function

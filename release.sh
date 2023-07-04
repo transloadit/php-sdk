@@ -18,8 +18,8 @@ if [ -n "$(git status --porcelain)" ]; then
   exit 1
 fi
 
-git tag "${VERSION}"
-git push --tags
+git tag -f "${VERSION}"
+git push --tags -f
 curl \
   -X POST \
   -H 'Content-Type: application/json' \
