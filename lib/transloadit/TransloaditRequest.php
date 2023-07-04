@@ -95,6 +95,7 @@ class TransloaditRequest extends CurlRequest{
       $req = new TransloaditRequest();
       $req->endpoint = 'https://' . $parts['host'];
       $req->path = $parts['path'];
+      $req->curlOptions = $this->curlOptions;
       $response = $req->execute();
 
       if (isset($response->data['ok'])) {
