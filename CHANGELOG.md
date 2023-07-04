@@ -8,13 +8,13 @@ diff: https://github.com/transloadit/php-sdk/compare/3.1.0...main
 
 - Pass down `curlOptions` when `TransloaditRequest` reinstantiates itself for `waitForCompletion`
 
-diff: https://github.com/transloadit/php-sdk/compare/3.0.5...3.1.0
+diff: https://github.com/transloadit/php-sdk/compare/3.0.4-dev...3.1.0
 
-### [3.0.5](https://github.com/transloadit/php-sdk/tree/3.0.5)
+### [3.0.4-dev](https://github.com/transloadit/php-sdk/tree/3.0.4-dev)
 
 - Pass down `curlOptions` when `TransloaditRequest` reinstantiates itself for `waitForCompletion`
 
-diff: https://github.com/transloadit/php-sdk/compare/3.0.4...3.0.5
+diff: https://github.com/transloadit/php-sdk/compare/3.0.4...3.0.4-dev
 
 ### [3.0.4](https://github.com/transloadit/php-sdk/tree/3.0.4)
 
