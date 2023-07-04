@@ -481,7 +481,7 @@ For more information on SemVer, please visit http://semver.org/.
 # 1. update CHANGELOG.md
 # 2. update composer.json
 # 3. commit all your work
-source env.sh && VERSION=3.0.4 ./release.sh
+source env.sh && VERSION=3.0.5 ./release.sh
 ```
 
 ## License

@@ -1,22 +1,35 @@
 {
-    "name": "transloadit/php-sdk",
-    "type": "library",
-    "description": "Transloadit SDK",
-    "keywords": ["transloadit","video","encoding","thumbnails","image","resizing","audio", "waveform", "document","processing","file","uploading"],
-    "homepage": "https://github.com/transloadit/php-sdk",
-    "license": "MIT",
-    "version": "3.0.4",
-    "require": {
-        "php": ">=7.4.0"
-    },
-    "require-dev": {
-        "php-coveralls/php-coveralls": "^2.5",
-        "phpunit/phpunit": "^9.5",
-        "squizlabs/php_codesniffer": "^3.7"
-    },
-    "autoload": {
-        "psr-0": {
-            "transloadit": "lib"
-        }
+  "name": "transloadit/php-sdk",
+  "type": "library",
+  "description": "Transloadit SDK",
+  "keywords": [
+    "transloadit",
+    "video",
+    "encoding",
+    "thumbnails",
+    "image",
+    "resizing",
+    "audio",
+    "waveform",
+    "document",
+    "processing",
+    "file",
+    "uploading"
+  ],
+  "homepage": "https://github.com/transloadit/php-sdk",
+  "license": "MIT",
+  "version": "3.0.5",
+  "require": {
+    "php": ">=7.4.0"
+  },
+  "require-dev": {
+    "php-coveralls/php-coveralls": "^2.5",
+    "phpunit/phpunit": "^9.5",
+    "squizlabs/php_codesniffer": "^3.7"
+  },
+  "autoload": {
+    "psr-0": {
+      "transloadit": "lib"
     }
+  }
 }
