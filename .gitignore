@@ -6,3 +6,4 @@ vendor/
 bin/composer
 env.sh
 .phpunit.cache
+.aider*
