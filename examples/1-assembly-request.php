@@ -19,6 +19,8 @@ $transloadit = new Transloadit([
 ]);
 
 $response = $transloadit->createAssembly([
+  // Use dirname(__FILE__) to get the current directory, then append the relative path to the image
+  // You can replace this with an absolute path to any file on your server that PHP can access
   'files' => [dirname(__FILE__) . '/fixture/straw-apple.jpg'],
   'params' => [
     'steps' => [
