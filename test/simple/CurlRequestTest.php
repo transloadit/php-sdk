@@ -5,6 +5,8 @@ namespace transloadit\test\simple;
 use transloadit\CurlRequest;
 
 class CurlRequestTest extends \PHPUnit\Framework\TestCase {
+  protected $request;
+
   public function setUp(): void {
     $this->request = new CurlRequest();
   }
