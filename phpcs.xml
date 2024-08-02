@@ -21,9 +21,6 @@
 
     <!-- enforce short array syntax (we were already manually migrating to this as we touched files ourselves, so this is actually very nice to have automated now) -->
     <rule ref="Generic.Arrays.DisallowLongArraySyntax">
-        <properties>
-            <property name="syntax" value="short" />
-        </properties>
     </rule>
 
     <rule ref="Generic.WhiteSpace.ScopeIndent">
@@ -32,15 +29,10 @@
             <property name="exact" value="true" />
         </properties>
     </rule>
-    <rule ref="Generic.WhiteSpace.DisallowTabIndent">
-        <properties>
-            <property name="absolute" value="true" />
-        </properties>
-    </rule>
+    <rule ref="Generic.WhiteSpace.DisallowTabIndent" />
     <rule ref="Generic.Arrays.ArrayIndent">
         <properties>
             <property name="indent" value="2" />
-            <property name="exact" value="true" />
         </properties>
     </rule>
 
