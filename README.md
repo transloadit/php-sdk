@@ -5,13 +5,16 @@
 ![Packagist PHP Version Support][php_verison_badge]
 [![License][licence_badge]][licence_link]
 
-A **PHP** Integration for [Transloadit](https://transloadit.com)'s file uploading and encoding service
+## Introduction
 
-## Intro
+The Transloadit PHP SDK provides a simple and efficient way to interact with Transloadit's file processing service in your PHP applications. With this SDK, you can easily:
 
-[Transloadit](https://transloadit.com) is a service that helps you handle file uploads, resize, crop and watermark your images, make GIFs, transcode your videos, extract thumbnails, generate audio waveforms, and so much more. In short, [Transloadit](https://transloadit.com) is the Swiss Army Knife for your files.
+- Create and manage file upload assemblies
+- Use pre-defined templates for common file processing tasks
+- Handle notifications and retrieve assembly statuses
+- Integrate Transloadit's powerful file processing capabilities into your PHP projects
 
-This is a **PHP** SDK to make it easy to talk to the [Transloadit](https://transloadit.com) REST API.
+This SDK simplifies the process of working with Transloadit's REST API, allowing you to focus on building great applications without worrying about the complexities of file processing.
 
 ## Install
 
