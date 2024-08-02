@@ -154,7 +154,8 @@ To integrate Uppy with your PHP backend:
     .use(Uppy.Transloadit, {
       params: {
         auth: { key: 'YOUR_TRANSLOADIT_KEY' },
-        template_id: 'YOUR_TEMPLATE_ID'
+        template_id: 'YOUR_TEMPLATE_ID',
+        notify_url: 'https://your-site.com/transloadit_notify.php'
       }
     })
 
@@ -165,6 +166,8 @@ To integrate Uppy with your PHP backend:
 ```
 
 3. Handle the assembly status on your PHP backend:
+
+Create a new file named `transloadit_notify.php` in your project:
 
 ```php
 <?php
@@ -179,14 +182,32 @@ $transloadit = new Transloadit([
 
 $response = Transloadit::response();
 if ($response) {
-  echo '<h1>Assembly Status:</h1>';
-  echo '<pre>';
-  print_r($response);
-  echo '</pre>';
-  exit;
+  // Process the assembly result
+  $assemblyId = $response->data['assembly_id'];
+  $assemblyStatus = $response->data['ok'];
+  
+  // You can store the assembly information in your database
+  // or perform any other necessary actions here
+  
+  // Log the response for debugging
+  error_log('Transloadit Assembly Completed: ' . $assemblyId);
+  error_log('Assembly Status: ' . ($assemblyStatus ? 'Success' : 'Failed'));
+  
+  // Optionally, you can write the response to a file
+  file_put_contents('transloadit_response_' . $assemblyId . '.json', json_encode($response->data));
+  
+  // Send a 200 OK response to Transloadit
+  http_response_code(200);
+  echo 'OK';
+} else {
+  // If it's not a Transloadit notification, return a 400 Bad Request
+  http_response_code(400);
+  echo 'Bad Request';
 }
 ?>
 ```
+
+Make sure to replace `'https://your-site.com/transloadit_notify.php'` with the actual URL where you'll host this PHP script.
 
 For more detailed information on using Uppy with Transloadit, please refer to our [Uppy documentation](https://transloadit.com/docs/sdks/uppy/).
 
