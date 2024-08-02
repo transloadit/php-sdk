@@ -20,8 +20,8 @@ class CurlRequestTest extends \PHPUnit\Framework\TestCase {
   }
 
   public function testConstructor() {
-    $request = new CurlRequest(['foo' => 'bar']);
-    $this->assertEquals('bar', $request->foo);
+    $request = new CurlRequest(['url' => 'foobar']);
+    $this->assertEquals('foobar', $request->url);
   }
 
   public function testGetCurlOptions() {

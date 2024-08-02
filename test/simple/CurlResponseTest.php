@@ -5,6 +5,8 @@ namespace transloadit\test\simple;
 use transloadit\CurlResponse;
 
 class CurlResponseTest extends \PHPUnit\Framework\TestCase {
+  protected $response;
+
   public function setUp(): void {
     $this->response = new CurlResponse();
   }
@@ -17,8 +19,8 @@ class CurlResponseTest extends \PHPUnit\Framework\TestCase {
   }
 
   public function testConstructor() {
-    $transloadit = new CurlResponse(['foo' => 'bar']);
-    $this->assertEquals('bar', $transloadit->foo);
+    $transloadit = new CurlResponse(['data' => 'foobar']);
+    $this->assertEquals('foobar', $transloadit->data);
   }
 
   public function testParseJson() {

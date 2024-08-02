@@ -8,13 +8,14 @@ use transloadit\TransloaditResponse;
 date_default_timezone_set('UTC');
 
 class TransloaditTest extends \PHPUnit\Framework\TestCase {
+  protected $transloadit;
   public function setUp(): void {
     $this->transloadit = new Transloadit();
   }
 
   public function testConstructor() {
-    $transloadit = new Transloadit(['foo' => 'bar']);
-    $this->assertEquals('bar', $transloadit->foo);
+    $transloadit = new Transloadit(['endpoint' => 'foobar']);
+    $this->assertEquals('foobar', $transloadit->endpoint);
   }
 
   public function testAttributes() {
@@ -77,11 +78,11 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
   public function testRequest() {
     $this->transloadit->key = 'my-key';
     $this->transloadit->secret = 'my-secret';
-    $request = $this->transloadit->request(['foo' => 'bar'], false);
+    $request = $this->transloadit->request(['url' => 'foobar'], false);
 
     $this->assertEquals($this->transloadit->key, $request->key);
     $this->assertEquals($this->transloadit->secret, $request->secret);
-    $this->assertEquals('bar', $request->foo);
+    $this->assertEquals('foobar', $request->url);
 
     // Unfortunately we can't test the $execute parameter because PHP
     // is a little annoying. But that's ok for now.
