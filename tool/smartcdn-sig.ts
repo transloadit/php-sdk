@@ -82,6 +82,8 @@ function getSignedSmartCDNUrl(opts: SmartCDNUrlOptions): string {
   return signedUrl
 }
 
+// console.log('expiryAt Proposal: ', Date.now() + 60 * 60 * 1000)
+
 console.log(
   getSignedSmartCDNUrl({
     workspace: process.argv[3],
