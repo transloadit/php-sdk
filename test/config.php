@@ -8,7 +8,7 @@ if ($env) {
     }
     list($key, $value) = explode('=', $line, 2);
 
-    define(str_replace('export ', '', $key), str_replace('"', '', $value));
+    define(str_replace('export ', '', $key), str_replace('"', '', str_replace("'", '', $value)));
   }
 } else {
   if (getenv('TRANSLOADIT_KEY')) {
