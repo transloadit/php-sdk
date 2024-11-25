@@ -10,7 +10,7 @@ class TransloaditCreateAssemblyWaitForCompletionTest extends \PHPUnit\Framework\
   public function setUp(): void {
     if (!defined('TRANSLOADIT_KEY') || !defined('TRANSLOADIT_SECRET')) {
       $this->markTestSkipped(
-        'Have a look at test/config.php.template to get this test to run.'
+        'Have a look at test/config.php to get this test to run.'
       );
       return;
     }
