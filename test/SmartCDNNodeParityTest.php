@@ -37,6 +37,10 @@ class SmartCDNNodeParityTest extends TestCase {
 
   private function runNodeScript(array $params): string {
     $scriptPath = __DIR__ . '/../tool/node-smartcdn-sig.ts';
+
+    $params['auth_key'] = $this->transloadit->key;
+    $params['auth_secret'] = $this->transloadit->secret;
+
     $jsonInput = json_encode($params);
 
     $descriptorspec = [

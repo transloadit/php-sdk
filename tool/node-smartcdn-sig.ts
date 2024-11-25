@@ -25,14 +25,16 @@ function signSmartCDNUrl(params: SmartCDNParams): string {
     input,
     expire_at_ms,
     expire_in_ms,
-    auth_key = 'my-key',
-    auth_secret = 'my-secret',
+    auth_key,
+    auth_secret,
     url_params = {},
   } = params
 
   if (!workspace) throw new Error('workspace is required')
   if (!template) throw new Error('template is required')
   if (!input) throw new Error('input is required')
+  if (!auth_key) throw new Error('auth_key is required')
+  if (!auth_secret) throw new Error('auth_secret is required')
 
   const workspaceSlug = encodeURIComponent(workspace)
   const templateSlug = encodeURIComponent(template)
