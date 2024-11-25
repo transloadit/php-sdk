@@ -11,11 +11,11 @@ if ($env) {
     define(str_replace('export ', '', $key), str_replace('"', '', str_replace("'", '', $value)));
   }
 } else {
-  if (getenv('TRANSLOADIT_KEY') && getenv('TRANSLOADIT_SECRET')) {
-    define('TRANSLOADIT_KEY', getenv('TRANSLOADIT_KEY'));
-    define('TRANSLOADIT_SECRET', getenv('TRANSLOADIT_SECRET'));
-  } elseif (getenv('TEST_ACCOUNT_KEY') && getenv('TEST_ACCOUNT_SECRET')) {
+  if (getenv('TEST_ACCOUNT_KEY') && getenv('TEST_ACCOUNT_SECRET')) {
     define('TRANSLOADIT_KEY', getenv('TEST_ACCOUNT_KEY'));
     define('TRANSLOADIT_SECRET', getenv('TEST_ACCOUNT_SECRET'));
+  } elseif (getenv('TRANSLOADIT_KEY') && getenv('TRANSLOADIT_SECRET')) {
+    define('TRANSLOADIT_KEY', getenv('TRANSLOADIT_KEY'));
+    define('TRANSLOADIT_SECRET', getenv('TRANSLOADIT_SECRET'));
   }
 }
