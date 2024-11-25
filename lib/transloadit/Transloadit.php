@@ -153,46 +153,33 @@ class Transloadit {
       array $params = [],
       array $signProps = []
   ): string {
-    // URL encode all components
-    $workspaceSlug = urlencode($workspaceSlug);
-    $templateSlug = urlencode($templateSlug);
-    $inputField = $inputField ? urlencode($inputField) : '';
-
-    // Convert all params values to strings
-    $queryParams = [];
-    foreach ($params as $key => $value) {
-      $queryParams[$key] = (string)$value;
-    }
-
     // Add auth parameters
+    $queryParams = $params;
     $queryParams['auth_key'] = $signProps['authKey'] ?? $this->key;
+    $queryParams['exp'] = (string)($signProps['expiresAtMs'] ?? (time() * 1000 + 3600000)); // Default 1 hour
 
-    // Handle expiry time
-    if (isset($signProps['expiresAtMs'])) {
-      $queryParams['exp'] = (string)$signProps['expiresAtMs'];
-    } else {
-      $queryParams['exp'] = (string)(time() * 1000 + ($signProps['expiresInMs'] ?? 3600000)); // Default 1 hour
-    }
-
-    // Sort parameters
+    // Sort parameters alphabetically
     ksort($queryParams);
 
-    // Build query string
-    $query = http_build_query($queryParams, '', '&', PHP_QUERY_RFC3986);
-
-    // Create string to sign
-    $stringToSign = "{$workspaceSlug}/{$templateSlug}/{$inputField}?{$query}";
+    // Build the string to sign
+    $stringToSign = sprintf(
+      '%s/%s/%s?%s',
+      rawurlencode($workspaceSlug),
+      rawurlencode($templateSlug),
+      rawurlencode($inputField),
+      http_build_query($queryParams, '', '&', PHP_QUERY_RFC3986)
+    );
 
     // Generate signature
     $signature = hash_hmac('sha256', $stringToSign, $signProps['authSecret'] ?? $this->secret);
 
-    // Build final URL with properly encoded components
+    // Build final URL
     return sprintf(
       'https://%s.tlcdn.com/%s/%s?%s&sig=sha256:%s',
-      $workspaceSlug,
-      $templateSlug,
-      $inputField,
-      $query,
+      rawurlencode($workspaceSlug),
+      rawurlencode($templateSlug),
+      rawurlencode($inputField),
+      http_build_query($queryParams, '', '&', PHP_QUERY_RFC3986),
       $signature
     );
   }

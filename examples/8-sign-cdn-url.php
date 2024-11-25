@@ -39,11 +39,7 @@ try {
     $templateSlug,
     $inputField,
     [],
-    [
-      'authKey' => getenv('TRANSLOADIT_KEY'),
-      'authSecret' => getenv('TRANSLOADIT_SECRET'),
-      'expiresAtMs' => $expiresAt,
-    ]
+    ['expiresAtMs' => $expiresAt]
   );
   echo $signedUrl . "\n";
 } catch (Exception $e) {

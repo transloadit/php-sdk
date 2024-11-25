@@ -349,6 +349,41 @@ The tool will output a fully signed URL that you can use immediately. It support
 - Error handling for invalid inputs
 - Both HTTP and HTTPS input URLs
 
+### Smart CDN URLs
+
+The SDK provides a method to generate signed URLs for Transloadit's Smart CDN:
+
+```php
+$transloadit = new Transloadit([
+  'key' => 'YOUR_AUTH_KEY',
+  'secret' => 'YOUR_AUTH_SECRET'
+]);
+
+// Basic usage - uses instance credentials
+$signedUrl = $transloadit->signedSmartCDNUrl(
+  'my-workspace',
+  'my-template',
+  'inputs/image.jpg'
+);
+
+// Advanced usage - override credentials and expiry
+$signedUrl = $transloadit->signedSmartCDNUrl(
+  'my-workspace',
+  'my-template',
+  'inputs/image.jpg',
+  [
+    // Additional query parameters
+    'width' => 100,
+    'height' => 100,
+  ],
+  [
+    'authKey' => 'DIFFERENT_KEY',       // Optional: override instance key
+    'authSecret' => 'DIFFERENT_SECRET', // Optional: override instance secret
+    'expiresAtMs' => 1732550672867      // Optional: specific expiry timestamp
+  ]
+);
+```
+
 ## Example
 
 For fully working examples take a look at [`examples/`](https://github.com/transloadit/php-sdk/tree/HEAD/examples).

@@ -6,7 +6,7 @@ use transloadit\Transloadit;
 
 class TransloaditAssemblyCreateTest extends \PHPUnit\Framework\TestCase {
   public function setUp(): void {
-    if (!defined('TEST_ACCOUNT_KEY') || !defined('TEST_ACCOUNT_SECRET')) {
+    if (!defined('TRANSLOADIT_KEY') || !defined('TRANSLOADIT_SECRET')) {
       $this->markTestSkipped(
         'Have a look at test/config.php.template to get this test to run.'
       );
@@ -14,8 +14,8 @@ class TransloaditAssemblyCreateTest extends \PHPUnit\Framework\TestCase {
     }
 
     // @todo Load config from git excluded config file
-    $this->transloadit = new Transloadit(['key' => TEST_ACCOUNT_KEY,
-      'secret' => TEST_ACCOUNT_SECRET,
+    $this->transloadit = new Transloadit(['key' => TRANSLOADIT_KEY,
+      'secret' => TRANSLOADIT_SECRET,
     ]);
   }
   public function testRoot() {
