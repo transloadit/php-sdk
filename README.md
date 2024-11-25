@@ -575,7 +575,7 @@ npm install -g tsx
 2. Run the comparison test:
 
 ```bash
-TRANSLOADIT_RUN_NODE_COMPARE=1 make test
+TEST_NODE_PARITY=1 make test
 ```
 
 This test is automatically run in CI to ensure compatibility between PHP and Node.js implementations.

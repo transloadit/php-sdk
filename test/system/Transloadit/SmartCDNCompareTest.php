@@ -8,9 +8,9 @@ class SmartCDNCompareTest extends \PHPUnit\Framework\TestCase {
   private $transloadit;
 
   public function setUp(): void {
-    if (!getenv('TRANSLOADIT_RUN_NODE_COMPARE')) {
+    if (!getenv('TEST_NODE_PARITY')) {
       $this->markTestSkipped(
-        'Node comparison test is opt-in. Set TRANSLOADIT_RUN_NODE_COMPARE=1 to run.'
+        'Node comparison test is opt-in. Set TEST_NODE_PARITY=1 to run.'
       );
       return;
     }

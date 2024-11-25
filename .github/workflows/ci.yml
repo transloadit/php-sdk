@@ -29,7 +29,7 @@ jobs:
         env:
           TEST_ACCOUNT_KEY: ${{secrets.TEST_ACCOUNT_KEY}}
           TEST_ACCOUNT_SECRET: ${{secrets.TEST_ACCOUNT_SECRET}}
-          TRANSLOADIT_RUN_NODE_COMPARE: 1
+          TEST_NODE_PARITY: 1
       - uses: codecov/codecov-action@v2
         with:
           files: ./build/logs/clover.xml
