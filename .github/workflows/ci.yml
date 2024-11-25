@@ -32,8 +32,8 @@ jobs:
         run: |
           make test-all-coverage
         env:
-          TRANSLOADIT_KEY: ${{secrets.TRANSLOADIT_KEY}}
-          TRANSLOADIT_SECRET: ${{secrets.TRANSLOADIT_SECRET}}
+          TRANSLOADIT_KEY: ${{secrets.TEST_ACCOUNT_KEY}}
+          TRANSLOADIT_SECRET: ${{secrets.TEST_ACCOUNT_SECRET}}
           TEST_NODE_PARITY: 1
       - uses: codecov/codecov-action@v2
         with:
