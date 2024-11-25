@@ -3,7 +3,7 @@
 // And CLI tester to see if PHP implementation
 // matches Node's
 
-import { createHmac, randomUUID } from 'crypto'
+import { createHmac } from 'crypto'
 
 export interface SmartCDNUrlOptions {
   /**
