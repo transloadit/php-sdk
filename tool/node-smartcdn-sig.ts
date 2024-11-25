@@ -1,9 +1,11 @@
 #!/usr/bin/env tsx
-// Reference Smart CDN Signature implementation
-// And CLI tester to see if PHP implementation
+// Reference Smart CDN (https://transloadit.com/services/content-delivery/) Signature implementation
+// And CLI tester to see if Ruby implementation
 // matches Node's
 
-import { createHmac } from 'crypto'
+/// <reference types="node" />
+
+import { createHmac } from 'node:crypto'
 
 export interface SmartCDNUrlOptions {
   /**
@@ -37,7 +39,8 @@ export interface SmartCDNUrlOptions {
 }
 
 /**
- * Construct a signed Smart CDN URL. See https://transloadit.com/docs/topics/signature-authentication/#smart-cdn.
+ * Construct a signed Smart CDN URL.
+ * See https://transloadit.com/docs/topics/signature-authentication/#smart-cdn.
  */
 function getSignedSmartCDNUrl(opts: SmartCDNUrlOptions): string {
   if (opts.workspace == null || opts.workspace === '')

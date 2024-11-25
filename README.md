@@ -278,7 +278,7 @@ echo '</pre>';
 
 ### Signature Auth (Smart CDN)
 
-You can use the `signedSmartCDNUrl` method to generate signed URLs for Transloadit's Smart CDN:
+You can use the `signedSmartCDNUrl` method to generate signed URLs for Transloadit's [Smart CDN](https://transloadit.com/services/content-delivery/):
 
 ```php
 <?php

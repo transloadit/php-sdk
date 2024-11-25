@@ -39,7 +39,7 @@ class SmartCDNCompareTest extends \PHPUnit\Framework\TestCase {
 
   private function getNodeSignedUrl($expiryMs, $workspace, $template, $input) {
     $cmd = sprintf(
-      'TRANSLOADIT_KEY=%s TRANSLOADIT_SECRET=%s tsx tool/smartcdn-sig.ts %d %s %s %s',
+      'TRANSLOADIT_KEY=%s TRANSLOADIT_SECRET=%s tsx tool/node-smartcdn-sig.ts %d %s %s %s',
       escapeshellarg(getenv('TRANSLOADIT_KEY')),
       escapeshellarg(getenv('TRANSLOADIT_SECRET')),
       $expiryMs,

@@ -138,6 +138,7 @@ class Transloadit {
 
   /**
    * Generates a signed URL for Transloadit's Smart CDN
+   * https://transloadit.com/services/content-delivery/
    *
    * @param string $workspaceSlug The workspace slug
    * @param string $templateSlug The template slug
