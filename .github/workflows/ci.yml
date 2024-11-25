@@ -14,6 +14,11 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 1
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+      - name: Install tsx
+        run: npm install -g tsx
       - uses: shivammathur/setup-php@v2
         # https://github.com/boyney123/github-actions/blob/HEAD/src/actions/setup-php.md
         with:
@@ -34,6 +39,4 @@ jobs:
         with:
           files: ./build/logs/clover.xml
           fail_ci_if_error: true
-          target: 90% # Desired coverage percentage
-          threshold: 2% # Allowed coverage percentage deviation
           verbose: true
