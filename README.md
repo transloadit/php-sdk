@@ -597,23 +597,35 @@ Basic tests can be run with:
 make test
 ```
 
-#### Node Comparison Test
+### System Tests
 
-The SDK includes a system test that compares URL signing with the reference TypeScript implementation. This test is opt-in and requires additional setup:
-
-1. Install Node.js dependencies:
+System tests require valid Transloadit credentials:
 
 ```bash
-npm install -g tsx
+export TRANSLOADIT_KEY='your-auth-key'
+export TRANSLOADIT_SECRET='your-auth-secret'
+make test-all
 ```
 
-2. Run the comparison test:
+### Node.js Comparison Test
+
+The SDK includes a test that compares URL signing with our reference Node.js implementation. To run this test:
+
+1. Requirements:
+
+   - Node.js installed
+   - tsx installed globally (`npm install -g tsx`)
+   - Valid Transloadit credentials in environment
+
+2. Run the test:
 
 ```bash
-TEST_NODE_PARITY=1 make test
+export TRANSLOADIT_KEY='your-auth-key'
+export TRANSLOADIT_SECRET='your-auth-secret'
+TEST_NODE_PARITY=1 make test-all
 ```
 
-This test is automatically run in CI to ensure compatibility between PHP and Node.js implementations.
+This test is opt-in and not run by default locally. In CI, it runs automatically to ensure compatibility.
 
 ## Versioning
 

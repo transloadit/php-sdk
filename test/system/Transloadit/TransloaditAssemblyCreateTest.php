@@ -6,16 +6,16 @@ use transloadit\Transloadit;
 
 class TransloaditAssemblyCreateTest extends \PHPUnit\Framework\TestCase {
   public function setUp(): void {
-    if (!defined('TRANSLOADIT_KEY') || !defined('TRANSLOADIT_SECRET')) {
+    if (!getenv('TRANSLOADIT_KEY') || !getenv('TRANSLOADIT_SECRET')) {
       $this->markTestSkipped(
-        'Have a look at test/config.php.template to get this test to run.'
+        'TRANSLOADIT_KEY and TRANSLOADIT_SECRET environment variables are required.'
       );
       return;
     }
 
-    // @todo Load config from git excluded config file
-    $this->transloadit = new Transloadit(['key' => TRANSLOADIT_KEY,
-      'secret' => TRANSLOADIT_SECRET,
+    $this->transloadit = new Transloadit([
+      'key' => getenv('TRANSLOADIT_KEY'),
+      'secret' => getenv('TRANSLOADIT_SECRET'),
     ]);
   }
   public function testRoot() {

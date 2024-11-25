@@ -15,9 +15,9 @@ class SmartCDNCompareTest extends \PHPUnit\Framework\TestCase {
       return;
     }
 
-    if (!defined('TRANSLOADIT_KEY') || !defined('TRANSLOADIT_SECRET')) {
+    if (!getenv('TRANSLOADIT_KEY') || !getenv('TRANSLOADIT_SECRET')) {
       $this->markTestSkipped(
-        'Have a look at test/config.php.template to get this test to run.'
+        'TRANSLOADIT_KEY and TRANSLOADIT_SECRET environment variables are required.'
       );
       return;
     }
@@ -32,16 +32,16 @@ class SmartCDNCompareTest extends \PHPUnit\Framework\TestCase {
     }
 
     $this->transloadit = new Transloadit([
-      'key' => TRANSLOADIT_KEY,
-      'secret' => TRANSLOADIT_SECRET,
+      'key' => getenv('TRANSLOADIT_KEY'),
+      'secret' => getenv('TRANSLOADIT_SECRET'),
     ]);
   }
 
   private function getNodeSignedUrl($expiryMs, $workspace, $template, $input) {
     $cmd = sprintf(
       'TRANSLOADIT_KEY=%s TRANSLOADIT_SECRET=%s tsx tool/smartcdn-sig.ts %d %s %s %s',
-      escapeshellarg(TRANSLOADIT_KEY),
-      escapeshellarg(TRANSLOADIT_SECRET),
+      escapeshellarg(getenv('TRANSLOADIT_KEY')),
+      escapeshellarg(getenv('TRANSLOADIT_SECRET')),
       $expiryMs,
       escapeshellarg($workspace),
       escapeshellarg($template),
@@ -59,11 +59,7 @@ class SmartCDNCompareTest extends \PHPUnit\Framework\TestCase {
       $template,
       $input,
       [],
-      [
-        'authKey' => TRANSLOADIT_KEY,
-        'authSecret' => TRANSLOADIT_SECRET,
-        'expiresAtMs' => $expiryMs,
-      ]
+      ['expiresAtMs' => $expiryMs]
     );
   }
 
