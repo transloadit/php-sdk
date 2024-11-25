@@ -2,7 +2,7 @@ SHELL := /usr/bin/env bash
 
 export PATH := $(PATH):bin
 
-phpUnit = vendor/phpunit/phpunit/phpunit.php --colors --verbose --stderr --configuration phpunit.xml $(2) $(1)
+phpUnit = vendor/bin/phpunit --colors --verbose --stderr --configuration phpunit.xml $(2) $(1)
 
 .PHONY: install
 install:
