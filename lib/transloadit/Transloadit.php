@@ -143,7 +143,7 @@ class Transloadit {
    * @param string $templateSlug The template slug
    * @param string $inputField The input field (optional)
    * @param array $params Additional parameters (optional)
-   * @param array $signProps Array containing authKey, authSecret, expireInMs, and expireAtMs
+   * @param array $signProps Array containing authKey, authSecret, and expiresAtMs
    * @return string The signed URL
    */
   public function signedSmartCDNUrl(
@@ -153,6 +153,7 @@ class Transloadit {
       array $params = [],
       array $signProps = []
   ): string {
+    // URL encode all components
     $workspaceSlug = urlencode($workspaceSlug);
     $templateSlug = urlencode($templateSlug);
     $inputField = $inputField ? urlencode($inputField) : '';
@@ -163,20 +164,21 @@ class Transloadit {
       $queryParams[$key] = (string)$value;
     }
 
-    $expiresAt = time() * 1000 + ($signProps['expireInMs'] ?? 3600000); // Default 1 hour
-    if (isset($signProps['expireAtMs'])) {
-      $expiresAt = $signProps['expireAtMs'];
-    }
-
     // Add auth parameters
     $queryParams['auth_key'] = $signProps['authKey'] ?? $this->key;
-    $queryParams['exp'] = (string)$expiresAt;
+
+    // Handle expiry time
+    if (isset($signProps['expiresAtMs'])) {
+      $queryParams['exp'] = (string)$signProps['expiresAtMs'];
+    } else {
+      $queryParams['exp'] = (string)(time() * 1000 + ($signProps['expiresInMs'] ?? 3600000)); // Default 1 hour
+    }
 
     // Sort parameters
     ksort($queryParams);
 
     // Build query string
-    $query = http_build_query($queryParams);
+    $query = http_build_query($queryParams, '', '&', PHP_QUERY_RFC3986);
 
     // Create string to sign
     $stringToSign = "{$workspaceSlug}/{$templateSlug}/{$inputField}?{$query}";
@@ -184,7 +186,14 @@ class Transloadit {
     // Generate signature
     $signature = hash_hmac('sha256', $stringToSign, $signProps['authSecret'] ?? $this->secret);
 
-    // Build final URL
-    return "https://{$workspaceSlug}.tlcdn.com/{$templateSlug}/{$inputField}?{$query}&sig=sha256:{$signature}";
+    // Build final URL with properly encoded components
+    return sprintf(
+      'https://%s.tlcdn.com/%s/%s?%s&sig=sha256:%s',
+      $workspaceSlug,
+      $templateSlug,
+      $inputField,
+      $query,
+      $signature
+    );
   }
 }
