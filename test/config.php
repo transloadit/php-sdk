@@ -8,8 +8,6 @@ if ($env) {
     }
     list($key, $value) = explode('=', $line, 2);
 
-    echo $key . '=' . $value . "\n";
-
     define(str_replace('export ', '', $key), str_replace('"', '', $value));
   }
 } else {
