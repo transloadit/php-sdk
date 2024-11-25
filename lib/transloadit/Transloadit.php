@@ -135,4 +135,51 @@ class Transloadit {
       return $response;
     }
   }
+
+  /**
+   * Generates a signed URL for Transloadit's Smart CDN
+   *
+   * @param string $workspaceSlug The workspace slug
+   * @param string $templateSlug The template slug
+   * @param string $inputField The input field (optional)
+   * @param array $params Additional parameters (optional)
+   * @param array $signProps Array containing authKey, authSecret, and expiryMs
+   * @return string The signed URL
+   */
+  public function signedSmartCDNUrl(
+      string $workspaceSlug,
+      string $templateSlug,
+      string $inputField = '',
+      array $params = [],
+      array $signProps = []
+  ): string {
+    $workspaceSlug = urlencode($workspaceSlug);
+    $templateSlug = urlencode($templateSlug);
+    $inputField = $inputField ? urlencode($inputField) : '';
+
+    // Convert all params values to strings
+    $queryParams = [];
+    foreach ($params as $key => $value) {
+      $queryParams[$key] = (string)$value;
+    }
+
+    // Add auth parameters
+    $queryParams['auth_key'] = $signProps['authKey'] ?? $this->key;
+    $queryParams['exp'] = (string)(time() * 1000 + ($signProps['expiryMs'] ?? 3600000)); // Default 1 hour
+
+    // Sort parameters
+    ksort($queryParams);
+
+    // Build query string
+    $query = http_build_query($queryParams);
+
+    // Create string to sign
+    $stringToSign = "{$workspaceSlug}/{$templateSlug}/{$inputField}?{$query}";
+
+    // Generate signature
+    $signature = hash_hmac('sha256', $stringToSign, $signProps['authSecret'] ?? $this->secret);
+
+    // Build final URL
+    return "https://{$workspaceSlug}.tlcdn.com/{$templateSlug}/{$inputField}?{$query}&sig=sha256:{$signature}";
+  }
 }

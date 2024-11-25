@@ -145,4 +145,35 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
       $this->assertTrue(preg_match('/value="' . $val . '"/', $inputTag) !== false);
     }
   }
+
+  public function testSignedSmartCDNUrl() {
+    $transloadit = new Transloadit([
+      'key' => 'test-key',
+      'secret' => 'test-secret'
+    ]);
+
+    // Test basic URL generation
+    $url = $transloadit->signedSmartCDNUrl('workspace', 'template', '');
+    $this->assertStringStartsWith('https://workspace.tlcdn.com/template/', $url);
+    $this->assertStringContainsString('auth_key=test-key', $url);
+    $this->assertStringContainsString('sig=sha256:', $url);
+
+    // Test with input field
+    $url = $transloadit->signedSmartCDNUrl('workspace', 'template', 'input.jpg');
+    $this->assertStringStartsWith('https://workspace.tlcdn.com/template/input.jpg', $url);
+
+    // Test with additional params
+    $url = $transloadit->signedSmartCDNUrl('workspace', 'template', '', ['width' => 100]);
+    $this->assertStringContainsString('width=100', $url);
+
+    // Test with custom sign props
+    $url = $transloadit->signedSmartCDNUrl(
+      'workspace',
+      'template',
+      '',
+      [],
+      ['authKey' => 'custom-key', 'authSecret' => 'custom-secret', 'expiryMs' => 60000]
+    );
+    $this->assertStringContainsString('auth_key=custom-key', $url);
+  }
 }

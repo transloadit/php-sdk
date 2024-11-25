@@ -139,7 +139,10 @@ To integrate Uppy with your PHP backend:
 1. Include Uppy in your HTML:
 
 ```html
-<link href="https://releases.transloadit.com/uppy/v3.3.1/uppy.min.css" rel="stylesheet">
+<link
+  href="https://releases.transloadit.com/uppy/v3.3.1/uppy.min.css"
+  rel="stylesheet"
+/>
 <script src="https://releases.transloadit.com/uppy/v3.3.1/uppy.min.js"></script>
 ```
 
@@ -188,17 +191,17 @@ if ($response) {
   // Process the assembly result
   $assemblyId = $response->data['assembly_id'];
   $assemblyStatus = $response->data['ok'];
-  
+
   // You can store the assembly information in your database
   // or perform any other necessary actions here
-  
+
   // Log the response for debugging
   error_log('Transloadit Assembly Completed: ' . $assemblyId);
   error_log('Assembly Status: ' . ($assemblyStatus ? 'Success' : 'Failed'));
-  
+
   // Optionally, you can write the response to a file
   file_put_contents('transloadit_response_' . $assemblyId . '.json', json_encode($response->data));
-  
+
   // Send a 200 OK response to Transloadit
   http_response_code(200);
   echo 'OK';
@@ -269,11 +272,62 @@ echo '</pre>';
 
 ```
 
-<!-- End of generated doc section -->
-
-### Signature Auth
+### Signature Auth (Assemblies)
 
 <dfn>Signature Authentication</dfn> is done by the PHP SDK by default internally so you do not need to worry about this :)
+
+### Signature Auth (Smart CDN)
+
+You can use the `signedSmartCDNUrl` method to generate signed URLs for Transloadit's Smart CDN:
+
+```php
+<?php
+require 'vendor/autoload.php';
+
+use transloadit\Transloadit;
+
+$transloadit = new Transloadit([
+  'key'    => 'YOUR_TRANSLOADIT_KEY',
+  'secret' => 'YOUR_TRANSLOADIT_SECRET',
+]);
+
+// Basic usage
+$url = $transloadit->signedSmartCDNUrl(
+  'your-workspace-slug',
+  'your-template-slug',
+  'input.jpg'
+);
+
+// Advanced usage with custom parameters and expiry
+$url = $transloadit->signedSmartCDNUrl(
+  'your-workspace-slug',
+  'your-template-slug',
+  'input.jpg',
+  ['width' => 100, 'height' => 100],  // Additional parameters
+  [
+    'authKey' => 'custom-key',        // Optional: override default key
+    'authSecret' => 'custom-secret',  // Optional: override default secret
+    'expiryMs' => 3600000,           // Optional: set custom expiry (default: 1 hour)
+  ]
+);
+
+echo $url;
+```
+
+The generated URL will be in the format:
+
+```
+https://{workspace-slug}.tlcdn.com/{template-slug}/{input-field}?{query-params}&sig=sha256:{signature}
+```
+
+Note that:
+
+- The URL will expire after the specified time (default: 1 hour)
+- All parameters are properly encoded
+- The signature is generated using HMAC SHA-256
+- Query parameters are sorted alphabetically before signing
+
+<!-- End of generated doc section -->
 
 ## Example
 
