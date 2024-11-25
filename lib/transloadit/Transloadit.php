@@ -155,19 +155,39 @@ class Transloadit {
       array $signProps = []
   ): string {
     // Add auth parameters
-    $queryParams = array_filter($params, function ($value) {
+    $queryParams = [];
+
+    // Process params to match Node.js behavior
+    foreach ($params as $key => $value) {
       if (is_array($value)) {
-        return !empty(array_filter($value, function ($v) {
-          return $v !== null && $v !== '';
-        }));
+        foreach ($value as $val) {
+          if ($val !== null && $val !== '') {
+            $queryParams[$key][] = $val;
+          }
+        }
+      } elseif ($value !== null && $value !== '') {
+        $queryParams[$key] = $value;
       }
-      return $value !== null && $value !== '';
-    });
+    }
+
     $queryParams['auth_key'] = $signProps['authKey'] ?? $this->key;
     $queryParams['exp'] = (string)($signProps['expireAtMs'] ?? (time() * 1000 + 3600000)); // Default 1 hour
 
     // Sort parameters alphabetically
     ksort($queryParams);
+
+    // Build query string manually to match Node.js behavior
+    $queryParts = [];
+    foreach ($queryParams as $key => $value) {
+      if (is_array($value)) {
+        foreach ($value as $val) {
+          $queryParts[] = rawurlencode($key) . '=' . rawurlencode($val);
+        }
+      } else {
+        $queryParts[] = rawurlencode($key) . '=' . rawurlencode($value);
+      }
+    }
+    $queryString = implode('&', $queryParts);
 
     // Build the string to sign
     $stringToSign = sprintf(
@@ -175,14 +195,14 @@ class Transloadit {
       rawurlencode($workspaceSlug),
       rawurlencode($templateSlug),
       rawurlencode($inputField),
-      http_build_query($queryParams, '', '&', PHP_QUERY_RFC3986)
+      $queryString
     );
 
     // Generate signature
     $signature = hash_hmac('sha256', $stringToSign, $signProps['authSecret'] ?? $this->secret);
 
-    // Add signature to query parameters
-    $queryParams['sig'] = 'sha256:' . $signature;
+    // Add signature to query string
+    $finalQueryString = $queryString . '&sig=' . rawurlencode('sha256:' . $signature);
 
     // Build final URL
     return sprintf(
@@ -190,7 +210,7 @@ class Transloadit {
       rawurlencode($workspaceSlug),
       rawurlencode($templateSlug),
       rawurlencode($inputField),
-      http_build_query($queryParams, '', '&', PHP_QUERY_RFC3986)
+      $finalQueryString
     );
   }
 }
