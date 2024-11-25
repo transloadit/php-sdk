@@ -1,9 +1,9 @@
 <?php
 
-namespace Transloadit\Test;
+namespace transloadit\Test;
 
 use PHPUnit\Framework\TestCase;
-use Transloadit\Transloadit;
+use transloadit\Transloadit;
 
 class SmartCDNNodeParityTest extends TestCase {
   private Transloadit $transloadit;
