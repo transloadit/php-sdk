@@ -77,7 +77,13 @@ class SmartCDNNodeParityTest extends TestCase {
       'expire_at_ms' => $this->expireAt
     ];
 
-    $url = $this->transloadit->signedSmartCDNUrl($params);
+    $url = $this->transloadit->signedSmartCDNUrl(
+      $params['workspace'],
+      $params['template'],
+      $params['input'],
+      [],
+      ['expireAtMs' => $params['expire_at_ms']]
+    );
     $nodeUrl = $this->runNodeScript($params);
 
     $this->assertEquals($nodeUrl, $url, 'Generated URLs should match node implementation');
@@ -95,7 +101,13 @@ class SmartCDNNodeParityTest extends TestCase {
       ]
     ];
 
-    $url = $this->transloadit->signedSmartCDNUrl($params);
+    $url = $this->transloadit->signedSmartCDNUrl(
+      $params['workspace'],
+      $params['template'],
+      $params['input'],
+      $params['url_params'],
+      ['expireAtMs' => $params['expire_at_ms']]
+    );
     $nodeUrl = $this->runNodeScript($params);
 
     $this->assertEquals($nodeUrl, $url, 'URL parameters should be handled the same as node');
@@ -113,7 +125,13 @@ class SmartCDNNodeParityTest extends TestCase {
       ]
     ];
 
-    $url = $this->transloadit->signedSmartCDNUrl($params);
+    $url = $this->transloadit->signedSmartCDNUrl(
+      $params['workspace'],
+      $params['template'],
+      $params['input'],
+      $params['url_params'],
+      ['expireAtMs' => $params['expire_at_ms']]
+    );
     $nodeUrl = $this->runNodeScript($params);
 
     $this->assertEquals($nodeUrl, $url, 'Null values in parameters should be handled the same as node');
@@ -131,7 +149,13 @@ class SmartCDNNodeParityTest extends TestCase {
       ]
     ];
 
-    $url = $this->transloadit->signedSmartCDNUrl($params);
+    $url = $this->transloadit->signedSmartCDNUrl(
+      $params['workspace'],
+      $params['template'],
+      $params['input'],
+      $params['url_params'],
+      ['expireAtMs' => $params['expire_at_ms']]
+    );
     $nodeUrl = $this->runNodeScript($params);
 
     $this->assertEquals($nodeUrl, $url, 'Empty string values in parameters should be handled the same as node');
@@ -149,7 +173,13 @@ class SmartCDNNodeParityTest extends TestCase {
       ]
     ];
 
-    $url = $this->transloadit->signedSmartCDNUrl($params);
+    $url = $this->transloadit->signedSmartCDNUrl(
+      $params['workspace'],
+      $params['template'],
+      $params['input'],
+      $params['url_params'],
+      ['expireAtMs' => $params['expire_at_ms']]
+    );
     $nodeUrl = $this->runNodeScript($params);
 
     $this->assertEquals($nodeUrl, $url, 'Array values in parameters should be handled the same as node');
@@ -163,7 +193,13 @@ class SmartCDNNodeParityTest extends TestCase {
       'expire_at_ms' => $this->expireAt
     ];
 
-    $url = $this->transloadit->signedSmartCDNUrl($params);
+    $url = $this->transloadit->signedSmartCDNUrl(
+      $params['workspace'],
+      $params['template'],
+      $params['input'],
+      [],
+      ['expireAtMs' => $params['expire_at_ms']]
+    );
     $nodeUrl = $this->runNodeScript($params);
 
     $this->assertEquals($nodeUrl, $url, 'URLs with spaces and special characters should match node implementation');
@@ -177,7 +213,13 @@ class SmartCDNNodeParityTest extends TestCase {
       'expire_at_ms' => $this->expireAt
     ];
 
-    $url = $this->transloadit->signedSmartCDNUrl($params);
+    $url = $this->transloadit->signedSmartCDNUrl(
+      $params['workspace'],
+      $params['template'],
+      $params['input'],
+      [],
+      ['expireAtMs' => $params['expire_at_ms']]
+    );
     $nodeUrl = $this->runNodeScript($params);
 
     $this->assertEquals($nodeUrl, $url, 'Empty input field should be handled the same as node');

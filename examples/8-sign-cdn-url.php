@@ -39,7 +39,7 @@ try {
     $templateSlug,
     $inputField,
     [],
-    ['expiresAtMs' => $expiresAt]
+    ['expireAtMs' => $expiresAt]
   );
   echo $signedUrl . "\n";
 } catch (Exception $e) {

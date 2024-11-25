@@ -379,7 +379,7 @@ $signedUrl = $transloadit->signedSmartCDNUrl(
   [
     'authKey' => 'DIFFERENT_KEY',       // Optional: override instance key
     'authSecret' => 'DIFFERENT_SECRET', // Optional: override instance secret
-    'expiresAtMs' => 1732550672867      // Optional: specific expiry timestamp
+    'expireAtMs' => 1732550672867      // Optional: specific expiry timestamp
   ]
 );
 ```
