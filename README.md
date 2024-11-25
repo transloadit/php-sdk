@@ -341,14 +341,14 @@ $transloadit = new Transloadit([
 $signedUrl = $transloadit->signedSmartCDNUrl(
   'my-workspace',
   'my-template',
-  'inputs/image.jpg'
+  'avatars/jane.jpg'
 );
 
 // Advanced usage - override credentials and expiry
 $signedUrl = $transloadit->signedSmartCDNUrl(
   'my-workspace',
   'my-template',
-  'inputs/image.jpg',
+  'avatars/jane.jpg',
   [
     // Additional query parameters
     'width' => 100,
