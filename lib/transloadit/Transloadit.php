@@ -143,7 +143,7 @@ class Transloadit {
    * @param string $templateSlug The template slug
    * @param string $inputField The input field (optional)
    * @param array $params Additional parameters (optional)
-   * @param array $signProps Array containing authKey, authSecret, and expiryMs
+   * @param array $signProps Array containing authKey, authSecret, expireInMs, and expireAtMs
    * @return string The signed URL
    */
   public function signedSmartCDNUrl(
@@ -163,9 +163,14 @@ class Transloadit {
       $queryParams[$key] = (string)$value;
     }
 
+    $expiresAt = time() * 1000 + ($signProps['expireInMs'] ?? 3600000); // Default 1 hour
+    if (isset($signProps['expireAtMs'])) {
+      $expiresAt = $signProps['expireAtMs'];
+    }
+
     // Add auth parameters
     $queryParams['auth_key'] = $signProps['authKey'] ?? $this->key;
-    $queryParams['exp'] = (string)(time() * 1000 + ($signProps['expiryMs'] ?? 3600000)); // Default 1 hour
+    $queryParams['exp'] = (string)$expiresAt;
 
     // Sort parameters
     ksort($queryParams);

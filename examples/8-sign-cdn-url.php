@@ -14,14 +14,15 @@ foreach ($requiredEnvVars as $var) {
 }
 
 // Validate CLI arguments
-if ($argc !== 2) {
-  fwrite(STDERR, "Usage: php " . basename(__FILE__) . " <unsigned-url>\n");
-  fwrite(STDERR, "Example: php " . basename(__FILE__) . " workspace-name.tlcdn.com/template-name/image.jpg\n");
+if ($argc !== 3) {
+  fwrite(STDERR, "Usage: php " . basename(__FILE__) . " <expires-at-ms> <unsigned-url>\n");
+  fwrite(STDERR, "Example: php " . basename(__FILE__) . " 3600000 workspace-name.tlcdn.com/template-name/image.jpg\n");
   exit(1);
 }
 
 // Parse the unsigned URL
-$unsignedUrl = $argv[1];
+$expiresAt = $argv[1];
+$unsignedUrl = $argv[2];
 if (!preg_match('#^(?:https?://)?([^/]+)/([^/]+)(?:/([^/?]*))?#', $unsignedUrl, $matches)) {
   fwrite(STDERR, "Error: Invalid URL format. Expected: domain/template[/input]\n");
   exit(1);
@@ -44,7 +45,13 @@ try {
   $signedUrl = $transloadit->signedSmartCDNUrl(
     $workspaceSlug,
     $templateSlug,
-    $inputField
+    $inputField,
+    [],
+    [
+      'authKey' => getenv('TRANSLOADIT_KEY'),
+      'authSecret' => getenv('TRANSLOADIT_SECRET'),
+      'expiresAtMs' => $expiresAt,
+    ]
   );
   echo $signedUrl . "\n";
 } catch (Exception $e) {

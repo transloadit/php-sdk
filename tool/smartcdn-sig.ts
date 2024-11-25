@@ -1,4 +1,8 @@
 #!/usr/bin/env tsx
+// Reference Smart CDN Signature implementation
+// And CLI tester to see if PHP implementation
+// matches Node's
+
 import { createHmac, randomUUID } from 'crypto'
 
 export interface SmartCDNUrlOptions {
