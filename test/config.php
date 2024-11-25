@@ -7,7 +7,10 @@ if ($env) {
       continue;
     }
     list($key, $value) = explode('=', $line, 2);
-    define($key, $value);
+
+    echo $key . '=' . $value . "\n";
+
+    define(str_replace('export ', '', $key), str_replace('"', '', $value));
   }
 } else {
   if (getenv('TRANSLOADIT_KEY')) {
