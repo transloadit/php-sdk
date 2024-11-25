@@ -155,7 +155,14 @@ class Transloadit {
       array $signProps = []
   ): string {
     // Add auth parameters
-    $queryParams = $params;
+    $queryParams = array_filter($params, function ($value) {
+      if (is_array($value)) {
+        return !empty(array_filter($value, function ($v) {
+          return $v !== null && $v !== '';
+        }));
+      }
+      return $value !== null && $value !== '';
+    });
     $queryParams['auth_key'] = $signProps['authKey'] ?? $this->key;
     $queryParams['exp'] = (string)($signProps['expireAtMs'] ?? (time() * 1000 + 3600000)); // Default 1 hour
 
