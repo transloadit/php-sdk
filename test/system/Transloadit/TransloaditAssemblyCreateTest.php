@@ -5,6 +5,8 @@ namespace transloadit\test\system\Transloadit;
 use transloadit\Transloadit;
 
 class TransloaditAssemblyCreateTest extends \PHPUnit\Framework\TestCase {
+  private Transloadit $transloadit;
+
   public function setUp(): void {
     if (!getenv('TRANSLOADIT_KEY') || !getenv('TRANSLOADIT_SECRET')) {
       $this->markTestSkipped(
@@ -18,6 +20,7 @@ class TransloaditAssemblyCreateTest extends \PHPUnit\Framework\TestCase {
       'secret' => getenv('TRANSLOADIT_SECRET'),
     ]);
   }
+
   public function testRoot() {
     $response = $this->transloadit->createAssembly([
       'files' => [TEST_FIXTURE_DIR . '/image-resize-robot.jpg'],

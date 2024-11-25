@@ -589,9 +589,9 @@ Feel free to fork this project. We will happily merge bug fixes or other small
 improvements. For bigger changes you should probably get in touch with us
 before you start to avoid not seeing them merged.
 
-### Running Tests
+## Testing
 
-Basic tests can be run with:
+### Basic Tests
 
 ```bash
 make test
@@ -599,11 +599,18 @@ make test
 
 ### System Tests
 
-System tests require valid Transloadit credentials:
+System tests require:
+
+1. Valid Transloadit credentials in environment:
 
 ```bash
 export TRANSLOADIT_KEY='your-auth-key'
 export TRANSLOADIT_SECRET='your-auth-secret'
+```
+
+Then run:
+
+```bash
 make test-all
 ```
 
@@ -617,7 +624,13 @@ The SDK includes a test that compares URL signing with our reference Node.js imp
    - tsx installed globally (`npm install -g tsx`)
    - Valid Transloadit credentials in environment
 
-2. Run the test:
+2. Install dependencies:
+
+```bash
+npm install -g tsx
+```
+
+3. Run the test:
 
 ```bash
 export TRANSLOADIT_KEY='your-auth-key'
@@ -625,7 +638,7 @@ export TRANSLOADIT_SECRET='your-auth-secret'
 TEST_NODE_PARITY=1 make test-all
 ```
 
-This test is opt-in and not run by default locally. In CI, it runs automatically to ensure compatibility.
+This test is opt-in and not run by default locally. In CI this is opted-into.
 
 ## Versioning
 

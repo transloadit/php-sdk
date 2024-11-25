@@ -2,7 +2,13 @@
 
 ### [main](https://github.com/transloadit/php-sdk/tree/main)
 
-diff: https://github.com/transloadit/php-sdk/compare/3.1.0...main
+diff: https://github.com/transloadit/php-sdk/compare/3.2.0...main
+
+### [3.2.0](https://github.com/transloadit/php-sdk/tree/3.2.0)
+
+- Implement `signedSmartCDNUrl`
+
+diff: https://github.com/transloadit/php-sdk/compare/3.1.0...3.2.0
 
 ### [3.1.0](https://github.com/transloadit/php-sdk/tree/3.1.0)
 
