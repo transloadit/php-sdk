@@ -174,15 +174,16 @@ class Transloadit {
     // Generate signature
     $signature = hash_hmac('sha256', $stringToSign, $signProps['authSecret'] ?? $this->secret);
 
+    // Add signature to query parameters
+    $queryParams['sig'] = 'sha256:' . $signature;
+
     // Build final URL
     return sprintf(
-      'https://%s.tlcdn.com/%s/%s?%s&sig=sha256%s%s',
+      'https://%s.tlcdn.com/%s/%s?%s',
       rawurlencode($workspaceSlug),
       rawurlencode($templateSlug),
       rawurlencode($inputField),
-      http_build_query($queryParams, '', '&', PHP_QUERY_RFC3986),
-      '%3A',  // URL encoded colon
-      $signature
+      http_build_query($queryParams, '', '&', PHP_QUERY_RFC3986)
     );
   }
 }
