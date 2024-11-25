@@ -1,105 +1,95 @@
 #!/usr/bin/env tsx
 // Reference Smart CDN (https://transloadit.com/services/content-delivery/) Signature implementation
-// And CLI tester to see if Ruby implementation
+// And CLI tester to see if PHP implementation
 // matches Node's
 
 /// <reference types="node" />
 
-import { createHmac } from 'node:crypto'
+import { createHash, createHmac } from 'crypto'
 
-export interface SmartCDNUrlOptions {
-  /**
-   * Workspace slug
-   */
+interface SmartCDNParams {
   workspace: string
-  /**
-   * Template slug or template ID
-   */
   template: string
-  /**
-   * Input value that is provided as `${fields.input}` in the template
-   */
   input: string
-  /**
-   * Additional parameters for the URL query string
-   */
-  urlParams?: Record<
-    string,
-    boolean | number | string | (boolean | number | string)[]
-  >
-  /**
-   * Expiration time of the signature in milliseconds. Defaults to 1 hour.
-   */
-  signProps: {
-    authKey: string
-    authSecret: string
-    expireInMs?: number
-    expireAtMs?: number
-  }
+  expire_at_ms?: number
+  expire_in_ms?: number
+  auth_key?: string
+  auth_secret?: string
+  url_params?: Record<string, any>
 }
 
-/**
- * Construct a signed Smart CDN URL.
- * See https://transloadit.com/docs/topics/signature-authentication/#smart-cdn.
- */
-function getSignedSmartCDNUrl(opts: SmartCDNUrlOptions): string {
-  if (opts.workspace == null || opts.workspace === '')
-    throw new TypeError('workspace is required')
-  if (opts.template == null || opts.template === '')
-    throw new TypeError('template is required')
-  if (opts.input == null) throw new TypeError('input is required') // `input` can be an empty string.
+function signSmartCDNUrl(params: SmartCDNParams): string {
+  const {
+    workspace,
+    template,
+    input,
+    expire_at_ms,
+    expire_in_ms,
+    auth_key = 'my-key',
+    auth_secret = 'my-secret',
+    url_params = {},
+  } = params
 
-  const workspaceSlug = encodeURIComponent(opts.workspace)
-  const templateSlug = encodeURIComponent(opts.template)
-  const inputField = encodeURIComponent(opts.input)
+  if (!workspace) throw new Error('workspace is required')
+  if (!template) throw new Error('template is required')
+  if (!input) throw new Error('input is required')
 
-  let expireAt = Date.now() + 1 * 60 * 60 * 1000 // 1 hour
-  if (opts.signProps.expireAtMs) {
-    expireAt = opts.signProps.expireAtMs
-  } else if (opts.signProps.expireInMs) {
-    expireAt = Date.now() + opts.signProps.expireInMs
-  }
+  const workspaceSlug = encodeURIComponent(workspace)
+  const templateSlug = encodeURIComponent(template)
+  const inputField = encodeURIComponent(input)
 
-  const queryParams = new URLSearchParams()
-  for (const [key, value] of Object.entries(opts.urlParams || {})) {
+  const expireAt =
+    expire_at_ms ??
+    (expire_in_ms ? Date.now() + expire_in_ms : Date.now() + 60 * 60 * 1000) // 1 hour default
+
+  const queryParams: Record<string, string[]> = {}
+
+  // Handle url_params
+  Object.entries(url_params).forEach(([key, value]) => {
+    if (value === null || value === undefined) return
     if (Array.isArray(value)) {
-      for (const val of value) {
-        queryParams.append(key, `${val}`)
-      }
+      value.forEach((val) => {
+        if (val === null || val === undefined) return
+        ;(queryParams[key] ||= []).push(String(val))
+      })
     } else {
-      queryParams.append(key, `${value}`)
+      queryParams[key] = [String(value)]
     }
-  }
+  })
 
-  queryParams.set('auth_key', opts.signProps.authKey)
-  queryParams.set('exp', String(expireAt))
-  // The signature changes depending on the order of the query parameters. We therefore sort them on the client-
-  // and server-side to ensure that we do not get mismatching signatures if a proxy changes the order of query
-  // parameters or implementations handle query parameters ordering differently.
-  queryParams.sort()
+  queryParams.auth_key = [auth_key]
+  queryParams.exp = [String(expireAt)]
 
-  const stringToSign = `${workspaceSlug}/${templateSlug}/${inputField}?${queryParams}`
-  const algorithm = 'sha256'
-  const signature = createHmac(algorithm, opts.signProps.authSecret)
+  // Sort parameters to ensure consistent ordering
+  const sortedParams = Object.entries(queryParams)
+    .sort()
+    .map(([key, values]) =>
+      values
+        .filter(Boolean)
+        .map((v) => `${encodeURIComponent(key)}=${encodeURIComponent(v)}`)
+    )
+    .flat()
+    .filter(Boolean)
+    .join('&')
+
+  const stringToSign = `${workspaceSlug}/${templateSlug}/${inputField}?${sortedParams}`
+  const signature = createHmac('sha256', auth_secret)
     .update(stringToSign)
     .digest('hex')
 
-  queryParams.set('sig', `sha256:${signature}`)
-  const signedUrl = `https://${workspaceSlug}.tlcdn.com/${templateSlug}/${inputField}?${queryParams}`
-  return signedUrl
+  const finalParams = `${sortedParams}&sig=${encodeURIComponent(
+    `sha256:${signature}`
+  )}`
+  return `https://${workspaceSlug}.tlcdn.com/${templateSlug}/${inputField}?${finalParams}`
 }
 
-// console.log('expiryAt Proposal: ', Date.now() + 60 * 60 * 1000)
+// Read JSON from stdin
+let jsonInput = ''
+process.stdin.on('data', (chunk) => {
+  jsonInput += chunk
+})
 
-console.log(
-  getSignedSmartCDNUrl({
-    workspace: process.argv[3],
-    template: process.argv[4],
-    input: process.argv[5],
-    signProps: {
-      authKey: process.env.TRANSLOADIT_KEY || '',
-      authSecret: process.env.TRANSLOADIT_SECRET || '',
-      expireAtMs: Number(process.argv[2]),
-    },
-  })
-)
+process.stdin.on('end', () => {
+  const params = JSON.parse(jsonInput)
+  console.log(signSmartCDNUrl(params))
+})
