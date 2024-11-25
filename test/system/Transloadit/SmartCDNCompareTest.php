@@ -8,9 +8,25 @@ class SmartCDNCompareTest extends \PHPUnit\Framework\TestCase {
   private $transloadit;
 
   public function setUp(): void {
+    if (!getenv('TRANSLOADIT_RUN_NODE_COMPARE')) {
+      $this->markTestSkipped(
+        'Node comparison test is opt-in. Set TRANSLOADIT_RUN_NODE_COMPARE=1 to run.'
+      );
+      return;
+    }
+
     if (!defined('TEST_ACCOUNT_KEY') || !defined('TEST_ACCOUNT_SECRET')) {
       $this->markTestSkipped(
         'Have a look at test/config.php.template to get this test to run.'
+      );
+      return;
+    }
+
+    // Check if tsx is available
+    exec('which tsx', $output, $returnCode);
+    if ($returnCode !== 0) {
+      $this->markTestSkipped(
+        'tsx not found. Install with: npm install -g tsx'
       );
       return;
     }

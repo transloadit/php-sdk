@@ -349,8 +349,6 @@ The tool will output a fully signed URL that you can use immediately. It support
 - Error handling for invalid inputs
 - Both HTTP and HTTPS input URLs
 
-<!-- End of generated doc section -->
-
 ## Example
 
 For fully working examples take a look at [`examples/`](https://github.com/transloadit/php-sdk/tree/HEAD/examples).
@@ -555,6 +553,32 @@ All of the following will cause an error string to be returned:
 Feel free to fork this project. We will happily merge bug fixes or other small
 improvements. For bigger changes you should probably get in touch with us
 before you start to avoid not seeing them merged.
+
+### Running Tests
+
+Basic tests can be run with:
+
+```bash
+make test
+```
+
+#### Node Comparison Test
+
+The SDK includes a system test that compares URL signing with the reference TypeScript implementation. This test is opt-in and requires additional setup:
+
+1. Install Node.js dependencies:
+
+```bash
+npm install -g tsx
+```
+
+2. Run the comparison test:
+
+```bash
+TRANSLOADIT_RUN_NODE_COMPARE=1 make test
+```
+
+This test is automatically run in CI to ensure compatibility between PHP and Node.js implementations.
 
 ## Versioning
 
