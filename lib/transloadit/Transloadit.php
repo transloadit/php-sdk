@@ -176,11 +176,12 @@ class Transloadit {
 
     // Build final URL
     return sprintf(
-      'https://%s.tlcdn.com/%s/%s?%s&sig=sha256:%s',
+      'https://%s.tlcdn.com/%s/%s?%s&sig=sha256%s%s',
       rawurlencode($workspaceSlug),
       rawurlencode($templateSlug),
       rawurlencode($inputField),
       http_build_query($queryParams, '', '&', PHP_QUERY_RFC3986),
+      '%3A',  // URL encoded colon
       $signature
     );
   }

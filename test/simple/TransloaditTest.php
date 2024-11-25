@@ -156,7 +156,7 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
     $url = $transloadit->signedSmartCDNUrl('workspace', 'template', '');
     $this->assertStringStartsWith('https://workspace.tlcdn.com/template/', $url);
     $this->assertStringContainsString('auth_key=test-key', $url);
-    $this->assertStringContainsString('sig=sha256:', $url);
+    $this->assertStringContainsString('sig=sha256%3A', $url);
 
     // Test with input field
     $url = $transloadit->signedSmartCDNUrl('workspace', 'template', 'input.jpg');
