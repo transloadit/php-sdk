@@ -154,6 +154,17 @@ class Transloadit {
       array $params = [],
       array $signProps = []
   ): string {
+    // Validate required fields
+    if (!$workspaceSlug) {
+      throw new \InvalidArgumentException('workspace is required');
+    }
+    if (!$templateSlug) {
+      throw new \InvalidArgumentException('template is required');
+    }
+    if (!$inputField) {
+      throw new \InvalidArgumentException('input is required');
+    }
+
     // Add auth parameters
     $queryParams = [];
 
