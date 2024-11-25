@@ -327,28 +327,6 @@ Note that:
 - The signature is generated using HMAC SHA-256
 - Query parameters are sorted alphabetically before signing
 
-#### Command Line URL Signing Tool
-
-The SDK includes a command-line tool for quickly generating and testing signed URLs. You can find it in `examples/8-sign-cdn-url.php`.
-
-Usage:
-
-```bash
-# Set your Transloadit credentials as environment variables
-export TRANSLOADIT_KEY='your-auth-key'
-export TRANSLOADIT_SECRET='your-auth-secret'
-
-# Generate a signed URL
-php examples/8-sign-cdn-url.php workspace-name.tlcdn.com/template-name/image.jpg
-```
-
-The tool will output a fully signed URL that you can use immediately. It supports:
-
-- Environment variables for authentication
-- URL parsing to extract workspace, template, and input field
-- Error handling for invalid inputs
-- Both HTTP and HTTPS input URLs
-
 ### Smart CDN URLs
 
 The SDK provides a method to generate signed URLs for Transloadit's Smart CDN:
