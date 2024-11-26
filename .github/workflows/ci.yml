@@ -35,10 +35,10 @@ jobs:
           TRANSLOADIT_KEY: ${{secrets.TEST_ACCOUNT_KEY}}
           TRANSLOADIT_SECRET: ${{secrets.TEST_ACCOUNT_SECRET}}
           TEST_NODE_PARITY: 1
-      - uses: codecov/codecov-action@v5
+      - name: Publish Coverage Report
+        if: github.event_name == 'pull_request'
+        uses: lucassabreu/comment-coverage-clover@v0.13.0
         with:
-          files: ./build/logs/clover.xml
-          fail_ci_if_error: true
-          target: 90% # Desired coverage percentage
-          threshold: 2% # Allowed coverage percentage deviation
-          verbose: true
+          file: ./build/logs/clover.xml
+          with-table: true
+          with-chart: false
