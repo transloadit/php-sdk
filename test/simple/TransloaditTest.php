@@ -197,6 +197,12 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
     }
   }
 
+  private function debugUrls(string $phpUrl, string $nodeUrl, string $message = ''): void {
+    echo "\n\nDebug $message:\n";
+    echo "PHP URL:  $phpUrl\n";
+    echo "Node URL: $nodeUrl\n\n";
+  }
+
   public function testSignedSmartCDNUrl() {
     $transloadit = new Transloadit([
       'key' => 'test-key',
@@ -222,8 +228,10 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
       [],
       $expireAtMs
     );
-    $expectedUrl = $this->getExpectedUrl($params);
-    $this->assertEquals($expectedUrl, $url);
+    $nodeUrl = $this->getExpectedUrl($params);
+    $expectedUrl = 'https://workspace.tlcdn.com/template/file.jpg?auth_key=test-key&exp=1732550672867&sig=sha256%3Ad994b8a737db1c43d6e04a07018dc33e8e28b23b27854bd6383d828a212cfffb';
+    $this->assertEquals($expectedUrl, $url, 'PHP URL should match expected');
+    $this->assertEquals($expectedUrl, $nodeUrl, 'Node.js URL should match expected');
 
     // Test with input field
     $params['input'] = 'input.jpg';
@@ -234,8 +242,10 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
       [],
       $expireAtMs
     );
-    $expectedUrl = $this->getExpectedUrl($params);
-    $this->assertEquals($expectedUrl, $url);
+    $nodeUrl = $this->getExpectedUrl($params);
+    $expectedUrl = 'https://workspace.tlcdn.com/template/input.jpg?auth_key=test-key&exp=1732550672867&sig=sha256%3A75991f02828d194792c9c99f8fea65761bcc4c62dbb287a84f642033128297c0';
+    $this->assertEquals($expectedUrl, $url, 'PHP URL should match expected');
+    $this->assertEquals($expectedUrl, $nodeUrl, 'Node.js URL should match expected');
 
     // Test with additional params
     $params['input'] = 'file.jpg';
@@ -247,8 +257,10 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
       $params['url_params'],
       $expireAtMs
     );
-    $expectedUrl = $this->getExpectedUrl($params);
-    $this->assertEquals($expectedUrl, $url);
+    $nodeUrl = $this->getExpectedUrl($params);
+    $expectedUrl = 'https://workspace.tlcdn.com/template/file.jpg?auth_key=test-key&exp=1732550672867&width=100&sig=sha256%3Ae5271d8fb6482d9351ebe4285b6fc75539c4d311ff125c4d76d690ad71c258ef';
+    $this->assertEquals($expectedUrl, $url, 'PHP URL should match expected');
+    $this->assertEquals($expectedUrl, $nodeUrl, 'Node.js URL should match expected');
 
     // Test with empty param string
     $params['url_params'] = ['width' => '', 'height' => '200'];
@@ -259,8 +271,10 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
       $params['url_params'],
       $expireAtMs
     );
-    $expectedUrl = $this->getExpectedUrl($params);
-    $this->assertEquals($expectedUrl, $url);
+    $nodeUrl = $this->getExpectedUrl($params);
+    $expectedUrl = 'https://workspace.tlcdn.com/template/file.jpg?auth_key=test-key&exp=1732550672867&height=200&width=&sig=sha256%3A1a26733c859f070bc3d83eb3174650d7a0155642e44a5ac448a43bc728bc0f85';
+    $this->assertEquals($expectedUrl, $url, 'PHP URL should match expected');
+    $this->assertEquals($expectedUrl, $nodeUrl, 'Node.js URL should match expected');
 
     // Test with null width parameter (should be excluded)
     $params['url_params'] = ['width' => null, 'height' => '200'];
@@ -271,8 +285,10 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
       $params['url_params'],
       $expireAtMs
     );
-    $expectedUrl = $this->getExpectedUrl($params);
-    $this->assertEquals($expectedUrl, $url);
+    $nodeUrl = $this->getExpectedUrl($params);
+    $expectedUrl = 'https://workspace.tlcdn.com/template/file.jpg?auth_key=test-key&exp=1732550672867&height=200&sig=sha256%3Adb740ebdfad6e766ebf6516ed5ff6543174709f8916a254f8d069c1701cef517';
+    $this->assertEquals($expectedUrl, $url, 'PHP URL should match expected');
+    $this->assertEquals($expectedUrl, $nodeUrl, 'Node.js URL should match expected');
 
     // Test with only empty width parameter
     $params['url_params'] = ['width' => ''];
@@ -283,8 +299,10 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
       $params['url_params'],
       $expireAtMs
     );
-    $expectedUrl = $this->getExpectedUrl($params);
-    $this->assertEquals($expectedUrl, $url);
+    $nodeUrl = $this->getExpectedUrl($params);
+    $expectedUrl = 'https://workspace.tlcdn.com/template/file.jpg?auth_key=test-key&exp=1732550672867&width=&sig=sha256%3A840426f9ac72dde02fd080f09b2304d659fdd41e630b1036927ec1336c312e9d';
+    $this->assertEquals($expectedUrl, $url, 'PHP URL should match expected');
+    $this->assertEquals($expectedUrl, $nodeUrl, 'Node.js URL should match expected');
   }
 
   public function testTsxRequiredForParityTesting(): void {
