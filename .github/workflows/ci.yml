@@ -8,7 +8,7 @@ on:
       - opened
       - synchronize
 jobs:
-  tests:
+  ci:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
