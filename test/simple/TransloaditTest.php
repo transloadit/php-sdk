@@ -154,22 +154,45 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
 
     // Test basic URL generation
     $url = $transloadit->signedSmartCDNUrl('workspace', 'template', 'file.jpg');
-    $this->assertStringStartsWith('https://workspace.tlcdn.com/template/file.jpg', $url);
-    $this->assertStringContainsString('auth_key=test-key', $url);
-    $this->assertStringContainsString('sig=sha256%3A', $url);
+    $this->assertMatchesRegularExpression(
+      '#^https://workspace\.tlcdn\.com/template/file\.jpg\?auth_key=test-key&exp=\d+&sig=sha256(?:%3A|:)[a-f0-9]+$#',
+      $url
+    );
 
     // Test with input field
     $url = $transloadit->signedSmartCDNUrl('workspace', 'template', 'input.jpg');
-    $this->assertStringStartsWith('https://workspace.tlcdn.com/template/input.jpg', $url);
+    $this->assertMatchesRegularExpression(
+      '#^https://workspace\.tlcdn\.com/template/input\.jpg\?auth_key=test-key&exp=\d+&sig=sha256(?:%3A|:)[a-f0-9]+$#',
+      $url
+    );
 
     // Test with additional params
     $url = $transloadit->signedSmartCDNUrl('workspace', 'template', 'file.jpg', ['width' => 100]);
-    $this->assertStringContainsString('width=100', $url);
+    $this->assertMatchesRegularExpression(
+      '#^https://workspace\.tlcdn\.com/template/file\.jpg\?auth_key=test-key&exp=\d+&width=100&sig=sha256(?:%3A|:)[a-f0-9]+$#',
+      $url
+    );
 
     // Test with empty param string
     $url = $transloadit->signedSmartCDNUrl('workspace', 'template', 'file.jpg', ['width' => '', 'height' => '200']);
-    $this->assertStringNotContainsString('width=', $url, 'Empty parameter should be excluded from URL');
-    $this->assertStringContainsString('height=200', $url);
+    $this->assertMatchesRegularExpression(
+      '#^https://workspace\.tlcdn\.com/template/file\.jpg\?auth_key=test-key&exp=\d+&height=200&width=&sig=sha256(?:%3A|:)[a-f0-9]+$#',
+      $url
+    );
+
+    // Test with null width parameter (should be excluded)
+    $url = $transloadit->signedSmartCDNUrl('workspace', 'template', 'file.jpg', ['width' => null, 'height' => '200']);
+    $this->assertMatchesRegularExpression(
+      '#^https://workspace\.tlcdn\.com/template/file\.jpg\?auth_key=test-key&exp=\d+&height=200&sig=sha256(?:%3A|:)[a-f0-9]+$#',
+      $url
+    );
+
+    // Test with only empty width parameter
+    $url = $transloadit->signedSmartCDNUrl('workspace', 'template', 'file.jpg', ['width' => '']);
+    $this->assertMatchesRegularExpression(
+      '#^https://workspace\.tlcdn\.com/template/file\.jpg\?auth_key=test-key&exp=\d+&width=&sig=sha256(?:%3A|:)[a-f0-9]+$#',
+      $url
+    );
 
     // Test with custom sign props
     $url = $transloadit->signedSmartCDNUrl(
@@ -177,8 +200,11 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
       'template',
       'file.jpg',
       [],
-      ['authKey' => 'custom-key', 'authSecret' => 'custom-secret', 'expiryMs' => 60000]
+      ['authKey' => 'custom-key', 'authSecret' => 'custom-secret', 'expireAtMs' => 60000]
     );
-    $this->assertStringContainsString('auth_key=custom-key', $url);
+    $this->assertMatchesRegularExpression(
+      '#^https://workspace\.tlcdn\.com/template/file\.jpg\?auth_key=custom-key&exp=60000&sig=sha256(?:%3A|:)[a-f0-9]+$#',
+      $url
+    );
   }
 }

@@ -1,6 +1,6 @@
 #!/usr/bin/env tsx
 // Reference Smart CDN (https://transloadit.com/services/content-delivery/) Signature implementation
-// And CLI tester to see if PHP implementation
+// And CLI tester to see if our SDK's implementation
 // matches Node's
 
 /// <reference types="node" />
@@ -67,12 +67,9 @@ function signSmartCDNUrl(params: SmartCDNParams): string {
   const sortedParams = Object.entries(queryParams)
     .sort()
     .map(([key, values]) =>
-      values
-        .filter(Boolean)
-        .map((v) => `${encodeURIComponent(key)}=${encodeURIComponent(v)}`)
+      values.map((v) => `${encodeURIComponent(key)}=${encodeURIComponent(v)}`)
     )
     .flat()
-    .filter(Boolean)
     .join('&')
 
   const stringToSign = `${workspaceSlug}/${templateSlug}/${inputField}?${sortedParams}`
