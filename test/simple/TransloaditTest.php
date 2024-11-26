@@ -220,7 +220,7 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
       $params['template'],
       $params['input'],
       [],
-      ['expireAtMs' => $params['expire_at_ms']]
+      $params['expire_at_ms']
     );
     $this->assertMatchesRegularExpression(
       '#^https://workspace\.tlcdn\.com/template/file\.jpg\?auth_key=test-key&exp=\d+&sig=sha256(?:%3A|:)[a-f0-9]+$#',
@@ -235,7 +235,7 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
       $params['template'],
       $params['input'],
       [],
-      ['expireAtMs' => $params['expire_at_ms']]
+      $params['expire_at_ms']
     );
     $this->assertMatchesRegularExpression(
       '#^https://workspace\.tlcdn\.com/template/input\.jpg\?auth_key=test-key&exp=\d+&sig=sha256(?:%3A|:)[a-f0-9]+$#',
@@ -251,7 +251,7 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
       $params['template'],
       $params['input'],
       $params['url_params'],
-      ['expireAtMs' => $params['expire_at_ms']]
+      $params['expire_at_ms']
     );
     $this->assertMatchesRegularExpression(
       '#^https://workspace\.tlcdn\.com/template/file\.jpg\?auth_key=test-key&exp=\d+&width=100&sig=sha256(?:%3A|:)[a-f0-9]+$#',
@@ -266,7 +266,7 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
       $params['template'],
       $params['input'],
       $params['url_params'],
-      ['expireAtMs' => $params['expire_at_ms']]
+      $params['expire_at_ms']
     );
     $this->assertMatchesRegularExpression(
       '#^https://workspace\.tlcdn\.com/template/file\.jpg\?auth_key=test-key&exp=\d+&height=200&width=&sig=sha256(?:%3A|:)[a-f0-9]+$#',
@@ -281,7 +281,7 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
       $params['template'],
       $params['input'],
       $params['url_params'],
-      ['expireAtMs' => $params['expire_at_ms']]
+      $params['expire_at_ms']
     );
     $this->assertMatchesRegularExpression(
       '#^https://workspace\.tlcdn\.com/template/file\.jpg\?auth_key=test-key&exp=\d+&height=200&sig=sha256(?:%3A|:)[a-f0-9]+$#',
@@ -296,32 +296,10 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
       $params['template'],
       $params['input'],
       $params['url_params'],
-      ['expireAtMs' => $params['expire_at_ms']]
+      $params['expire_at_ms']
     );
     $this->assertMatchesRegularExpression(
       '#^https://workspace\.tlcdn\.com/template/file\.jpg\?auth_key=test-key&exp=\d+&width=&sig=sha256(?:%3A|:)[a-f0-9]+$#',
-      $url
-    );
-    $this->assertParityWithNode($url, $params);
-
-    // Test with custom sign props
-    $params['auth_key'] = 'custom-key';
-    $params['auth_secret'] = 'custom-secret';
-    $params['expire_at_ms'] = 60000;
-    $params['url_params'] = [];
-    $url = $transloadit->signedSmartCDNUrl(
-      $params['workspace'],
-      $params['template'],
-      $params['input'],
-      $params['url_params'],
-      [
-        'authKey' => $params['auth_key'],
-        'authSecret' => $params['auth_secret'],
-        'expireAtMs' => $params['expire_at_ms']
-      ]
-    );
-    $this->assertMatchesRegularExpression(
-      '#^https://workspace\.tlcdn\.com/template/file\.jpg\?auth_key=custom-key&exp=60000&sig=sha256(?:%3A|:)[a-f0-9]+$#',
       $url
     );
     $this->assertParityWithNode($url, $params);
@@ -377,7 +355,7 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
       $params['template'],
       $params['input'],
       [],
-      ['expireAtMs' => $params['expire_at_ms']]
+      $params['expire_at_ms']
     );
 
     $this->assertStringContainsString("exp=$expireAtMs", $url);

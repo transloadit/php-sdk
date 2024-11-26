@@ -45,8 +45,8 @@ require 'vendor/autoload.php';
 use transloadit\Transloadit;
 
 $transloadit = new Transloadit([
-  'key'    => 'YOUR_TRANSLOADIT_KEY',
-  'secret' => 'YOUR_TRANSLOADIT_SECRET',
+  'key'    => 'MY_TRANSLOADIT_KEY',
+  'secret' => 'MY_TRANSLOADIT_SECRET',
 ]);
 
 $response = $transloadit->createAssembly([
@@ -90,8 +90,8 @@ require 'vendor/autoload.php';
 use transloadit\Transloadit;
 
 $transloadit = new Transloadit([
-  'key'    => 'YOUR_TRANSLOADIT_KEY',
-  'secret' => 'YOUR_TRANSLOADIT_SECRET',
+  'key'    => 'MY_TRANSLOADIT_KEY',
+  'secret' => 'MY_TRANSLOADIT_SECRET',
 ]);
 
 // Check if this request is a Transloadit redirect_url notification.
@@ -159,8 +159,8 @@ To integrate Uppy with your PHP backend:
     })
     .use(Uppy.Transloadit, {
       params: {
-        auth: { key: 'YOUR_TRANSLOADIT_KEY' },
-        template_id: 'YOUR_TEMPLATE_ID',
+        auth: { key: 'MY_TRANSLOADIT_KEY' },
+        template_id: 'MY_TEMPLATE_ID',
         notify_url: 'https://your-site.com/transloadit_notify.php'
       }
     })
@@ -182,8 +182,8 @@ require 'vendor/autoload.php';
 use transloadit\Transloadit;
 
 $transloadit = new Transloadit([
-  'key'    => 'YOUR_TRANSLOADIT_KEY',
-  'secret' => 'YOUR_TRANSLOADIT_SECRET',
+  'key'    => 'MY_TRANSLOADIT_KEY',
+  'secret' => 'MY_TRANSLOADIT_SECRET',
 ]);
 
 $response = Transloadit::response();
@@ -224,11 +224,11 @@ You can use the `getAssembly` method to get the <dfn>Assembly</dfn> Status.
 ```php
 <?php
 require 'vendor/autoload.php';
-$assemblyId = 'YOUR_ASSEMBLY_ID';
+$assemblyId = 'MY_ASSEMBLY_ID';
 
 $transloadit = new Transloadit([
-  'key'    => 'YOUR_TRANSLOADIT_KEY',
-  'secret' => 'YOUR_TRANSLOADIT_SECRET',
+  'key'    => 'MY_TRANSLOADIT_KEY',
+  'secret' => 'MY_TRANSLOADIT_SECRET',
 ]);
 
 $response = $transloadit->getAssembly($assemblyId);
@@ -254,14 +254,14 @@ require 'vendor/autoload.php';
 use transloadit\Transloadit;
 
 $transloadit = new Transloadit([
-  'key'    => 'YOUR_TRANSLOADIT_KEY',
-  'secret' => 'YOUR_TRANSLOADIT_SECRET',
+  'key'    => 'MY_TRANSLOADIT_KEY',
+  'secret' => 'MY_TRANSLOADIT_SECRET',
 ]);
 
 $response = $transloadit->createAssembly([
   'files' => ['/PATH/TO/FILE.jpg'],
   'params' => [
-    'template_id' => 'YOUR_TEMPLATE_ID',
+    'template_id' => 'MY_TEMPLATE_ID',
   ],
 ]);
 
@@ -287,28 +287,24 @@ require 'vendor/autoload.php';
 use transloadit\Transloadit;
 
 $transloadit = new Transloadit([
-  'key'    => 'YOUR_TRANSLOADIT_KEY',
-  'secret' => 'YOUR_TRANSLOADIT_SECRET',
+  'key'    => 'MY_TRANSLOADIT_KEY',
+  'secret' => 'MY_TRANSLOADIT_SECRET',
 ]);
 
 // Basic usage
 $url = $transloadit->signedSmartCDNUrl(
   'your-workspace-slug',
   'your-template-slug',
-  'input.jpg'
+  'avatars/jane.jpg'
 );
 
 // Advanced usage with custom parameters and expiry
 $url = $transloadit->signedSmartCDNUrl(
   'your-workspace-slug',
   'your-template-slug',
-  'input.jpg',
+  'avatars/jane.jpg',
   ['width' => 100, 'height' => 100],  // Additional parameters
-  [
-    'authKey' => 'custom-key',        // Optional: override default key
-    'authSecret' => 'custom-secret',  // Optional: override default secret
-    'expiryMs' => 3600000,           // Optional: set custom expiry (default: 1 hour)
-  ]
+  1732550672867,                      // Expiry date in milliseconds since epoch
 );
 
 echo $url;
@@ -326,41 +322,6 @@ Note that:
 - All parameters are properly encoded
 - The signature is generated using HMAC SHA-256
 - Query parameters are sorted alphabetically before signing
-
-### Smart CDN URLs
-
-The SDK provides a method to generate signed URLs for Transloadit's Smart CDN:
-
-```php
-$transloadit = new Transloadit([
-  'key' => 'YOUR_AUTH_KEY',
-  'secret' => 'YOUR_AUTH_SECRET'
-]);
-
-// Basic usage - uses instance credentials
-$signedUrl = $transloadit->signedSmartCDNUrl(
-  'my-workspace',
-  'my-template',
-  'avatars/jane.jpg'
-);
-
-// Advanced usage - override credentials and expiry
-$signedUrl = $transloadit->signedSmartCDNUrl(
-  'my-workspace',
-  'my-template',
-  'avatars/jane.jpg',
-  [
-    // Additional query parameters
-    'width' => 100,
-    'height' => 100,
-  ],
-  [
-    'authKey' => 'DIFFERENT_KEY',       // Optional: override instance key
-    'authSecret' => 'DIFFERENT_SECRET', // Optional: override instance secret
-    'expireAtMs' => 1732550672867      // Optional: specific expiry timestamp
-  ]
-);
-```
 
 ## Example
 

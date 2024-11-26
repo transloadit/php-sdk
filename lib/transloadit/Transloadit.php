@@ -144,7 +144,7 @@ class Transloadit {
    * @param string $templateSlug The template slug
    * @param string $inputField The input field (optional)
    * @param array $params Additional parameters (optional)
-   * @param array $signProps Array containing authKey, authSecret, and expireAtMs
+   * @param int $expireAtMs Number of milliseconds since epoch at which the URL expires
    * @return string The signed URL
    */
   public function signedSmartCDNUrl(
@@ -152,7 +152,7 @@ class Transloadit {
       string $templateSlug,
       string $inputField = '',
       array $params = [],
-      array $signProps = []
+      int $expireAtMs = null
   ): string {
     // Validate required fields
     if (!$workspaceSlug) {
@@ -181,8 +181,8 @@ class Transloadit {
       }
     }
 
-    $queryParams['auth_key'] = $signProps['authKey'] ?? $this->key;
-    $queryParams['exp'] = (string)($signProps['expireAtMs'] ?? (time() * 1000 + 3600000)); // Default 1 hour
+    $queryParams['auth_key'] = $this->key;
+    $queryParams['exp'] = (string)($expireAtMs ?? (time() * 1000 + 3600000)); // Default 1 hour
 
     // Sort parameters alphabetically
     ksort($queryParams);
@@ -210,7 +210,7 @@ class Transloadit {
     );
 
     // Generate signature
-    $signature = hash_hmac('sha256', $stringToSign, $signProps['authSecret'] ?? $this->secret);
+    $signature = hash_hmac('sha256', $stringToSign, $this->secret);
 
     // Add signature to query string
     $finalQueryString = $queryString . '&sig=' . rawurlencode('sha256:' . $signature);
