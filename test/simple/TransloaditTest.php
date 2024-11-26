@@ -146,65 +146,146 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
     }
   }
 
+  private function getExpectedUrl(array $params): string {
+    $scriptPath = __DIR__ . '/../../tool/node-smartcdn-sig.ts';
+    $jsonInput = json_encode($params);
+
+    $descriptorspec = [
+      0 => ["pipe", "r"],  // stdin
+      1 => ["pipe", "w"],  // stdout
+      2 => ["pipe", "w"]   // stderr
+    ];
+
+    $process = proc_open("tsx $scriptPath", $descriptorspec, $pipes);
+
+    if (!is_resource($process)) {
+      throw new \RuntimeException('Failed to start Node script');
+    }
+
+    fwrite($pipes[0], $jsonInput);
+    fclose($pipes[0]);
+
+    $output = stream_get_contents($pipes[1]);
+    $error = stream_get_contents($pipes[2]);
+
+    fclose($pipes[1]);
+    fclose($pipes[2]);
+
+    $exitCode = proc_close($process);
+
+    if ($exitCode !== 0) {
+      throw new \RuntimeException("Node script failed: $error");
+    }
+
+    return trim($output);
+  }
+
   public function testSignedSmartCDNUrl() {
     $transloadit = new Transloadit([
       'key' => 'test-key',
       'secret' => 'test-secret'
     ]);
 
+    // Use fixed timestamp for all tests
+    $expireAtMs = 1732550672867;
+
     // Test basic URL generation
-    $url = $transloadit->signedSmartCDNUrl('workspace', 'template', 'file.jpg');
-    $this->assertMatchesRegularExpression(
-      '#^https://workspace\.tlcdn\.com/template/file\.jpg\?auth_key=test-key&exp=\d+&sig=sha256(?:%3A|:)[a-f0-9]+$#',
-      $url
+    $params = [
+      'workspace' => 'workspace',
+      'template' => 'template',
+      'input' => 'file.jpg',
+      'auth_key' => 'test-key',
+      'auth_secret' => 'test-secret',
+      'expire_at_ms' => $expireAtMs
+    ];
+    $url = $transloadit->signedSmartCDNUrl(
+      $params['workspace'],
+      $params['template'],
+      $params['input'],
+      [],
+      ['expireAtMs' => $params['expire_at_ms']]
     );
+    $expectedUrl = $this->getExpectedUrl($params);
+    $this->assertEquals($expectedUrl, $url);
 
     // Test with input field
-    $url = $transloadit->signedSmartCDNUrl('workspace', 'template', 'input.jpg');
-    $this->assertMatchesRegularExpression(
-      '#^https://workspace\.tlcdn\.com/template/input\.jpg\?auth_key=test-key&exp=\d+&sig=sha256(?:%3A|:)[a-f0-9]+$#',
-      $url
+    $params['input'] = 'input.jpg';
+    $url = $transloadit->signedSmartCDNUrl(
+      $params['workspace'],
+      $params['template'],
+      $params['input'],
+      [],
+      ['expireAtMs' => $params['expire_at_ms']]
     );
+    $expectedUrl = $this->getExpectedUrl($params);
+    $this->assertEquals($expectedUrl, $url);
 
     // Test with additional params
-    $url = $transloadit->signedSmartCDNUrl('workspace', 'template', 'file.jpg', ['width' => 100]);
-    $this->assertMatchesRegularExpression(
-      '#^https://workspace\.tlcdn\.com/template/file\.jpg\?auth_key=test-key&exp=\d+&width=100&sig=sha256(?:%3A|:)[a-f0-9]+$#',
-      $url
+    $params['input'] = 'file.jpg';
+    $params['url_params'] = ['width' => 100];
+    $url = $transloadit->signedSmartCDNUrl(
+      $params['workspace'],
+      $params['template'],
+      $params['input'],
+      $params['url_params'],
+      ['expireAtMs' => $params['expire_at_ms']]
     );
+    $expectedUrl = $this->getExpectedUrl($params);
+    $this->assertEquals($expectedUrl, $url);
 
     // Test with empty param string
-    $url = $transloadit->signedSmartCDNUrl('workspace', 'template', 'file.jpg', ['width' => '', 'height' => '200']);
-    $this->assertMatchesRegularExpression(
-      '#^https://workspace\.tlcdn\.com/template/file\.jpg\?auth_key=test-key&exp=\d+&height=200&width=&sig=sha256(?:%3A|:)[a-f0-9]+$#',
-      $url
+    $params['url_params'] = ['width' => '', 'height' => '200'];
+    $url = $transloadit->signedSmartCDNUrl(
+      $params['workspace'],
+      $params['template'],
+      $params['input'],
+      $params['url_params'],
+      ['expireAtMs' => $params['expire_at_ms']]
     );
+    $expectedUrl = $this->getExpectedUrl($params);
+    $this->assertEquals($expectedUrl, $url);
 
     // Test with null width parameter (should be excluded)
-    $url = $transloadit->signedSmartCDNUrl('workspace', 'template', 'file.jpg', ['width' => null, 'height' => '200']);
-    $this->assertMatchesRegularExpression(
-      '#^https://workspace\.tlcdn\.com/template/file\.jpg\?auth_key=test-key&exp=\d+&height=200&sig=sha256(?:%3A|:)[a-f0-9]+$#',
-      $url
+    $params['url_params'] = ['width' => null, 'height' => '200'];
+    $url = $transloadit->signedSmartCDNUrl(
+      $params['workspace'],
+      $params['template'],
+      $params['input'],
+      $params['url_params'],
+      ['expireAtMs' => $params['expire_at_ms']]
     );
+    $expectedUrl = $this->getExpectedUrl($params);
+    $this->assertEquals($expectedUrl, $url);
 
     // Test with only empty width parameter
-    $url = $transloadit->signedSmartCDNUrl('workspace', 'template', 'file.jpg', ['width' => '']);
-    $this->assertMatchesRegularExpression(
-      '#^https://workspace\.tlcdn\.com/template/file\.jpg\?auth_key=test-key&exp=\d+&width=&sig=sha256(?:%3A|:)[a-f0-9]+$#',
-      $url
+    $params['url_params'] = ['width' => ''];
+    $url = $transloadit->signedSmartCDNUrl(
+      $params['workspace'],
+      $params['template'],
+      $params['input'],
+      $params['url_params'],
+      ['expireAtMs' => $params['expire_at_ms']]
     );
+    $expectedUrl = $this->getExpectedUrl($params);
+    $this->assertEquals($expectedUrl, $url);
 
     // Test with custom sign props
+    $params['auth_key'] = 'custom-key';
+    $params['auth_secret'] = 'custom-secret';
+    $params['expire_at_ms'] = 60000;
+    $params['url_params'] = [];
     $url = $transloadit->signedSmartCDNUrl(
-      'workspace',
-      'template',
-      'file.jpg',
-      [],
-      ['authKey' => 'custom-key', 'authSecret' => 'custom-secret', 'expireAtMs' => 60000]
+      $params['workspace'],
+      $params['template'],
+      $params['input'],
+      $params['url_params'],
+      [
+        'authKey' => $params['auth_key'],
+        'authSecret' => $params['auth_secret'],
+        'expireAtMs' => $params['expire_at_ms']
+      ]
     );
-    $this->assertMatchesRegularExpression(
-      '#^https://workspace\.tlcdn\.com/template/file\.jpg\?auth_key=custom-key&exp=60000&sig=sha256(?:%3A|:)[a-f0-9]+$#',
-      $url
-    );
+    $expectedUrl = $this->getExpectedUrl($params);
+    $this->assertEquals($expectedUrl, $url);
   }
 }
