@@ -172,11 +172,11 @@ class Transloadit {
     foreach ($params as $key => $value) {
       if (is_array($value)) {
         foreach ($value as $val) {
-          if ($val !== null && $val !== '') {
+          if ($val !== null) {
             $queryParams[$key][] = $val;
           }
         }
-      } elseif ($value !== null && $value !== '') {
+      } elseif ($value !== null) {
         $queryParams[$key] = $value;
       }
     }
