@@ -11,10 +11,10 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 1
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
       - name: Install tsx
@@ -24,7 +24,7 @@ jobs:
         with:
           php-version: '8.1'
           tools: php-cs-fixer, phpunit
-      - uses: ramsey/composer-install@v2
+      - uses: ramsey/composer-install@v3
         with:
           dependency-versions: locked
           composer-options: '--ignore-platform-reqs'
@@ -35,7 +35,7 @@ jobs:
           TRANSLOADIT_KEY: ${{secrets.TEST_ACCOUNT_KEY}}
           TRANSLOADIT_SECRET: ${{secrets.TEST_ACCOUNT_SECRET}}
           TEST_NODE_PARITY: 1
-      - uses: codecov/codecov-action@v2
+      - uses: codecov/codecov-action@v5
         with:
           files: ./build/logs/clover.xml
           fail_ci_if_error: true
