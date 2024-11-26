@@ -32,7 +32,8 @@ function signSmartCDNUrl(params: SmartCDNParams): string {
 
   if (!workspace) throw new Error('workspace is required')
   if (!template) throw new Error('template is required')
-  if (!input) throw new Error('input is required')
+  if (input === null || input === undefined)
+    throw new Error('input must be a string')
   if (!auth_key) throw new Error('auth_key is required')
   if (!auth_secret) throw new Error('auth_secret is required')
 

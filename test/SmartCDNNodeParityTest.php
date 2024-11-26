@@ -242,4 +242,27 @@ class SmartCDNNodeParityTest extends TestCase {
 
     $this->assertEquals($nodeUrl, $url, 'Unset input field should be handled the same as node');
   }
+
+  public function testEmptyStringInput(): void {
+    $params = [
+      'workspace' => $this->workspace,
+      'template' => $this->template,
+      'input' => '',
+      'expire_at_ms' => $this->expireAt,
+      'url_params' => [
+        'width' => '100'
+      ]
+    ];
+
+    $url = $this->transloadit->signedSmartCDNUrl(
+      $params['workspace'],
+      $params['template'],
+      $params['input'],
+      $params['url_params'],
+      ['expireAtMs' => $params['expire_at_ms']]
+    );
+    $nodeUrl = $this->runNodeScript($params);
+
+    $this->assertEquals($nodeUrl, $url, 'Empty string input should be handled the same as node');
+  }
 }

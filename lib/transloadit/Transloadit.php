@@ -161,6 +161,9 @@ class Transloadit {
     if (!$templateSlug) {
       throw new \InvalidArgumentException('template is required');
     }
+    if ($inputField === null) {
+      throw new \InvalidArgumentException('input must be a string');
+    }
 
     // Add auth parameters
     $queryParams = [];
