@@ -146,7 +146,15 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
     }
   }
 
-  private function getExpectedUrl(array $params): string {
+  private function getExpectedUrl(array $params): ?string {
+    if (getenv('TEST_NODE_PARITY') !== '1') {
+      return null;
+    }
+
+    if (system('which tsx > /dev/null 2>&1') === false) {
+      throw new \RuntimeException('tsx not found. Please install it with: npm install -g tsx');
+    }
+
     $scriptPath = __DIR__ . '/../../tool/node-smartcdn-sig.ts';
     $jsonInput = json_encode($params);
 
@@ -180,6 +188,13 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
     return trim($output);
   }
 
+  private function assertParityWithNode(string $url, array $params, string $message = ''): void {
+    $expectedUrl = $this->getExpectedUrl($params);
+    if ($expectedUrl !== null) {
+      $this->assertEquals($expectedUrl, $url, $message ?: 'URL should match Node.js reference implementation');
+    }
+  }
+
   public function testSignedSmartCDNUrl() {
     $transloadit = new Transloadit([
       'key' => 'test-key',
@@ -205,8 +220,11 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
       [],
       ['expireAtMs' => $params['expire_at_ms']]
     );
-    $expectedUrl = $this->getExpectedUrl($params);
-    $this->assertEquals($expectedUrl, $url);
+    $this->assertMatchesRegularExpression(
+      '#^https://workspace\.tlcdn\.com/template/file\.jpg\?auth_key=test-key&exp=\d+&sig=sha256(?:%3A|:)[a-f0-9]+$#',
+      $url
+    );
+    $this->assertParityWithNode($url, $params);
 
     // Test with input field
     $params['input'] = 'input.jpg';
@@ -217,8 +235,11 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
       [],
       ['expireAtMs' => $params['expire_at_ms']]
     );
-    $expectedUrl = $this->getExpectedUrl($params);
-    $this->assertEquals($expectedUrl, $url);
+    $this->assertMatchesRegularExpression(
+      '#^https://workspace\.tlcdn\.com/template/input\.jpg\?auth_key=test-key&exp=\d+&sig=sha256(?:%3A|:)[a-f0-9]+$#',
+      $url
+    );
+    $this->assertParityWithNode($url, $params);
 
     // Test with additional params
     $params['input'] = 'file.jpg';
@@ -230,8 +251,11 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
       $params['url_params'],
       ['expireAtMs' => $params['expire_at_ms']]
     );
-    $expectedUrl = $this->getExpectedUrl($params);
-    $this->assertEquals($expectedUrl, $url);
+    $this->assertMatchesRegularExpression(
+      '#^https://workspace\.tlcdn\.com/template/file\.jpg\?auth_key=test-key&exp=\d+&width=100&sig=sha256(?:%3A|:)[a-f0-9]+$#',
+      $url
+    );
+    $this->assertParityWithNode($url, $params);
 
     // Test with empty param string
     $params['url_params'] = ['width' => '', 'height' => '200'];
@@ -242,8 +266,11 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
       $params['url_params'],
       ['expireAtMs' => $params['expire_at_ms']]
     );
-    $expectedUrl = $this->getExpectedUrl($params);
-    $this->assertEquals($expectedUrl, $url);
+    $this->assertMatchesRegularExpression(
+      '#^https://workspace\.tlcdn\.com/template/file\.jpg\?auth_key=test-key&exp=\d+&height=200&width=&sig=sha256(?:%3A|:)[a-f0-9]+$#',
+      $url
+    );
+    $this->assertParityWithNode($url, $params);
 
     // Test with null width parameter (should be excluded)
     $params['url_params'] = ['width' => null, 'height' => '200'];
@@ -254,8 +281,11 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
       $params['url_params'],
       ['expireAtMs' => $params['expire_at_ms']]
     );
-    $expectedUrl = $this->getExpectedUrl($params);
-    $this->assertEquals($expectedUrl, $url);
+    $this->assertMatchesRegularExpression(
+      '#^https://workspace\.tlcdn\.com/template/file\.jpg\?auth_key=test-key&exp=\d+&height=200&sig=sha256(?:%3A|:)[a-f0-9]+$#',
+      $url
+    );
+    $this->assertParityWithNode($url, $params);
 
     // Test with only empty width parameter
     $params['url_params'] = ['width' => ''];
@@ -266,8 +296,11 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
       $params['url_params'],
       ['expireAtMs' => $params['expire_at_ms']]
     );
-    $expectedUrl = $this->getExpectedUrl($params);
-    $this->assertEquals($expectedUrl, $url);
+    $this->assertMatchesRegularExpression(
+      '#^https://workspace\.tlcdn\.com/template/file\.jpg\?auth_key=test-key&exp=\d+&width=&sig=sha256(?:%3A|:)[a-f0-9]+$#',
+      $url
+    );
+    $this->assertParityWithNode($url, $params);
 
     // Test with custom sign props
     $params['auth_key'] = 'custom-key';
@@ -285,7 +318,10 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
         'expireAtMs' => $params['expire_at_ms']
       ]
     );
-    $expectedUrl = $this->getExpectedUrl($params);
-    $this->assertEquals($expectedUrl, $url);
+    $this->assertMatchesRegularExpression(
+      '#^https://workspace\.tlcdn\.com/template/file\.jpg\?auth_key=custom-key&exp=60000&sig=sha256(?:%3A|:)[a-f0-9]+$#',
+      $url
+    );
+    $this->assertParityWithNode($url, $params);
   }
 }
