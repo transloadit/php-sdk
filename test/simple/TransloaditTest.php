@@ -166,6 +166,11 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
     $url = $transloadit->signedSmartCDNUrl('workspace', 'template', 'file.jpg', ['width' => 100]);
     $this->assertStringContainsString('width=100', $url);
 
+    // Test with empty param string
+    $url = $transloadit->signedSmartCDNUrl('workspace', 'template', 'file.jpg', ['width' => '', 'height' => '200']);
+    $this->assertStringNotContainsString('width=', $url, 'Empty parameter should be excluded from URL');
+    $this->assertStringContainsString('height=200', $url);
+
     // Test with custom sign props
     $url = $transloadit->signedSmartCDNUrl(
       'workspace',
