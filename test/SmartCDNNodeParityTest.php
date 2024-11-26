@@ -1,5 +1,9 @@
 <?php
 
+// This file merely tests the output URL against our reference Node.js SDK implementation.
+// This ensures as we make changes to this client, it's still going to be compatible with our Node.js based server.
+// There are also regular unit tests for the SmartCDN signing logic, but those reside in `test/simple/TransloaditTest.php`
+
 namespace transloadit\Test;
 
 use PHPUnit\Framework\TestCase;
@@ -288,8 +292,6 @@ class SmartCDNNodeParityTest extends TestCase {
     $nodeUrl = $this->runNodeScript($params);
 
     $this->assertEquals($nodeUrl, $url, 'Empty parameter string should be handled the same as node');
-    $this->assertStringContainsString('width=', $url, 'Empty parameter should be included in URL');
-    $this->assertStringContainsString('height=200', $url, 'Non-empty parameter should be included in URL');
   }
 
   public function testEmptyWidthParamString(): void {
@@ -313,7 +315,6 @@ class SmartCDNNodeParityTest extends TestCase {
     $nodeUrl = $this->runNodeScript($params);
 
     $this->assertEquals($nodeUrl, $url, 'Empty width parameter should be handled the same as node');
-    $this->assertStringContainsString('width=', $url, 'Empty width parameter should be included in URL');
   }
 
   public function testNullVsEmptyWidth(): void {
@@ -339,8 +340,6 @@ class SmartCDNNodeParityTest extends TestCase {
     $nodeUrl = $this->runNodeScript($params);
 
     $this->assertEquals($nodeUrl, $url, 'Null width parameter should be handled the same as node');
-    $this->assertStringNotContainsString('width=', $url, 'Null width parameter should be excluded from URL');
-    $this->assertStringContainsString('height=200', $url, 'Non-null parameter should be included in URL');
 
     // Test empty string width (should appear in URL)
     $params['url_params']['width'] = '';
@@ -355,7 +354,5 @@ class SmartCDNNodeParityTest extends TestCase {
     $nodeUrl = $this->runNodeScript($params);
 
     $this->assertEquals($nodeUrl, $url, 'Empty string width parameter should be handled the same as node');
-    $this->assertStringContainsString('width=', $url, 'Empty string width parameter should be included in URL');
-    $this->assertStringContainsString('height=200', $url, 'Other parameters should be included in URL');
   }
 }
