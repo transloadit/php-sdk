@@ -151,8 +151,10 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
       return null;
     }
 
-    if (system('which tsx > /dev/null 2>&1') === false) {
-      throw new \RuntimeException('tsx not found. Please install it with: npm install -g tsx');
+    // Check for tsx before trying to use it
+    exec('which tsx 2>/dev/null', $output, $returnVar);
+    if ($returnVar !== 0) {
+      throw new \RuntimeException('tsx command not found. Please install it with: npm install -g tsx');
     }
 
     $scriptPath = __DIR__ . '/../../tool/node-smartcdn-sig.ts';
@@ -323,5 +325,33 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
       $url
     );
     $this->assertParityWithNode($url, $params);
+  }
+
+  public function testTsxRequiredForParityTesting(): void {
+    if (getenv('TEST_NODE_PARITY') !== '1') {
+      $this->markTestSkipped('Parity testing not enabled');
+    }
+
+    // Temporarily override PATH to simulate missing tsx
+    $originalPath = getenv('PATH');
+    putenv('PATH=/usr/bin:/bin');
+
+    try {
+      $params = [
+        'workspace' => 'test',
+        'template' => 'test',
+        'input' => 'test.jpg',
+        'auth_key' => 'test',
+        'auth_secret' => 'test'
+      ];
+      $this->getExpectedUrl($params);
+      $this->fail('Expected RuntimeException when tsx is not available');
+    } catch (\RuntimeException $e) {
+      $this->assertStringContainsString('tsx command not found', $e->getMessage());
+      $this->assertStringContainsString('npm install -g tsx', $e->getMessage());
+    } finally {
+      // Restore original PATH
+      putenv("PATH=$originalPath");
+    }
   }
 }
