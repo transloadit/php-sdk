@@ -354,4 +354,57 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
       putenv("PATH=$originalPath");
     }
   }
+
+  public function testExpireAtMs(): void {
+    $transloadit = new Transloadit([
+      'key' => 'test-key',
+      'secret' => 'test-secret'
+    ]);
+
+    // Test with explicit expireAtMs
+    $expireAtMs = 1732550672867;
+    $params = [
+      'workspace' => 'workspace',
+      'template' => 'template',
+      'input' => 'file.jpg',
+      'auth_key' => 'test-key',
+      'auth_secret' => 'test-secret',
+      'expire_at_ms' => $expireAtMs
+    ];
+
+    $url = $transloadit->signedSmartCDNUrl(
+      $params['workspace'],
+      $params['template'],
+      $params['input'],
+      [],
+      ['expireAtMs' => $params['expire_at_ms']]
+    );
+
+    $this->assertStringContainsString("exp=$expireAtMs", $url);
+    $this->assertParityWithNode($url, $params);
+
+    // Test default expiry (should be about 1 hour from now)
+    unset($params['expire_at_ms']);
+    $url = $transloadit->signedSmartCDNUrl(
+      $params['workspace'],
+      $params['template'],
+      $params['input']
+    );
+
+    $matches = [];
+    preg_match('/exp=(\d+)/', $url, $matches);
+    $this->assertNotEmpty($matches[1], 'URL should contain expiry timestamp');
+
+    $expiry = (int)$matches[1];
+    $now = time() * 1000;
+    $oneHour = 60 * 60 * 1000;
+
+    $this->assertGreaterThan($now, $expiry, 'Expiry should be in the future');
+    $this->assertLessThan($now + $oneHour + 5000, $expiry, 'Expiry should be about 1 hour from now');
+    $this->assertGreaterThan($now + $oneHour - 5000, $expiry, 'Expiry should be about 1 hour from now');
+
+    // For parity test, set the exact expiry time to match Node.js
+    $params['expire_at_ms'] = $expiry;
+    $this->assertParityWithNode($url, $params);
+  }
 }

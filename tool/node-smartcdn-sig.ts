@@ -12,7 +12,6 @@ interface SmartCDNParams {
   template: string
   input: string
   expire_at_ms?: number
-  expire_in_ms?: number
   auth_key?: string
   auth_secret?: string
   url_params?: Record<string, any>
@@ -24,7 +23,6 @@ function signSmartCDNUrl(params: SmartCDNParams): string {
     template,
     input,
     expire_at_ms,
-    expire_in_ms,
     auth_key,
     auth_secret,
     url_params = {},
@@ -41,9 +39,7 @@ function signSmartCDNUrl(params: SmartCDNParams): string {
   const templateSlug = encodeURIComponent(template)
   const inputField = encodeURIComponent(input)
 
-  const expireAt =
-    expire_at_ms ??
-    (expire_in_ms ? Date.now() + expire_in_ms : Date.now() + 60 * 60 * 1000) // 1 hour default
+  const expireAt = expire_at_ms ?? Date.now() + 60 * 60 * 1000 // 1 hour default
 
   const queryParams: Record<string, string[]> = {}
 
