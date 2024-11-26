@@ -213,7 +213,7 @@ class SmartCDNNodeParityTest extends TestCase {
     $params = [
       'workspace' => 'workspace',
       'template' => 'template',
-      'input' => 'minimal.jpg',
+      'input' => '',  // Empty input
       'expire_at_ms' => $this->expireAt
     ];
 
@@ -226,6 +226,20 @@ class SmartCDNNodeParityTest extends TestCase {
     );
     $nodeUrl = $this->runNodeScript($params);
 
-    $this->assertEquals($nodeUrl, $url, 'Minimal input field should be handled the same as node');
+    $this->assertEquals($nodeUrl, $url, 'Empty input field should be handled the same as node');
+
+    // Test with unset input field
+    $url = $this->transloadit->signedSmartCDNUrl(
+      'workspace',
+      'template',
+      null,
+      [],
+      ['expireAtMs' => $this->expireAt]
+    );
+
+    $params['input'] = null;
+    $nodeUrl = $this->runNodeScript($params);
+
+    $this->assertEquals($nodeUrl, $url, 'Unset input field should be handled the same as node');
   }
 }
