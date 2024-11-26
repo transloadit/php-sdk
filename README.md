@@ -528,15 +528,15 @@ Feel free to fork this project. We will happily merge bug fixes or other small
 improvements. For bigger changes you should probably get in touch with us
 before you start to avoid not seeing them merged.
 
-## Testing
+### Testing
 
-### Basic Tests
+#### Basic Tests
 
 ```bash
 make test
 ```
 
-### System Tests
+#### System Tests
 
 System tests require:
 
@@ -553,15 +553,14 @@ Then run:
 make test-all
 ```
 
-### Node.js Comparison Test
+#### Node.js Reference Implementation Parity Assertions
 
-The SDK includes a test that compares URL signing with our reference Node.js implementation. To run this test:
+The SDK includes assertions that compare URL signing with our reference Node.js implementation. To run these tests:
 
 1. Requirements:
 
    - Node.js installed
    - tsx installed globally (`npm install -g tsx`)
-   - Valid Transloadit credentials in environment
 
 2. Install dependencies:
 
@@ -577,9 +576,9 @@ export TRANSLOADIT_SECRET='your-auth-secret'
 TEST_NODE_PARITY=1 make test-all
 ```
 
-This test is opt-in and not run by default locally. In CI this is opted-into.
+CI opts-into `TEST_NODE_PARITY=1`, and you can optionally do this locally as well.
 
-## Versioning
+### Versioning
 
 This project implements the Semantic Versioning guidelines.
 
@@ -595,7 +594,7 @@ And constructed with the following guidelines:
 
 For more information on SemVer, please visit http://semver.org/.
 
-## Releasing a new version
+### Releasing a new version
 
 ```bash
 # 1. update CHANGELOG.md
