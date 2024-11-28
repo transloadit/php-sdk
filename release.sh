@@ -5,6 +5,11 @@ set -o nounset
 set -o pipefail
 # set -o xtrace
 
+if [[ -z "${PACKAGIST_TOKEN:-}" ]]; then
+  echo "PACKAGIST_TOKEN is not set"
+  exit 1
+fi
+
 if ! grep "${VERSION}" composer.json > /dev/null 2>&1; then
   echo "First add '${VERSION}' to composer.json please"
   exit 1
@@ -25,4 +30,3 @@ curl \
   -H 'Content-Type: application/json' \
   -d '{"repository":{"url":"https://github.com/transloadit/php-sdk"}}' \
   "https://packagist.org/api/update-package?username=kvz&apiToken=${PACKAGIST_TOKEN}"
-
