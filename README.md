@@ -578,30 +578,17 @@ TEST_NODE_PARITY=1 make test-all
 
 CI opts-into `TEST_NODE_PARITY=1`, and you can optionally do this locally as well.
 
-### Versioning
-
-This project implements the Semantic Versioning guidelines.
-
-Releases will be numbered with the following format:
-
-`<major>.<minor>.<patch>`
-
-And constructed with the following guidelines:
-
-- Breaking backward compatibility bumps the major (and resets the minor and patch)
-- New additions without breaking backward compatibility bumps the minor (and resets the patch)
-- Bug fixes and misc changes bumps the patch
-
-For more information on SemVer, please visit http://semver.org/.
-
 ### Releasing a new version
 
-```bash
-# 1. update CHANGELOG.md
-# 2. update composer.json
-# 3. commit all your work
-source env.sh && VERSION=3.1.0 ./release.sh
-```
+To release, say `3.2.0` [Packagist](https://packagist.org/packages/transloadit/php-sdk), follow these steps:
+
+1. Make sure `PACKAGIST_TOKEN` is set in your `.env` file
+1. Make sure you are in main: `git checkout main`
+1. Update `CHANGELOG.md` and `composer.json`
+1. Commit: `git add CHANGELOG.md composer.json && git commit -m "Release 3.2.0"`
+1. Tag, push, and release: `source env.sh && VERSION=3.2.0 ./release.sh`
+
+This project implements the [Semantic Versioning](http://semver.org/) guidelines.
 
 ## License
 
