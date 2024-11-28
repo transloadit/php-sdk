@@ -18,7 +18,7 @@
   ],
   "homepage": "https://github.com/transloadit/php-sdk",
   "license": "MIT",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "require": {
     "php": ">=7.4.0"
   },

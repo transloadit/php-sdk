@@ -4,6 +4,12 @@
 
 diff: https://github.com/transloadit/php-sdk/compare/3.1.0...main
 
+### [3.2.0](https://github.com/transloadit/php-sdk/tree/3.2.0)
+
+- Add Smart CDN Signature Auth helper by @kvz
+
+diff: https://github.com/transloadit/php-sdk/compare/3.1.0...3.2.0
+
 ### [3.1.0](https://github.com/transloadit/php-sdk/tree/3.1.0)
 
 - Pass down `curlOptions` when `TransloaditRequest` reinstantiates itself for `waitForCompletion`
