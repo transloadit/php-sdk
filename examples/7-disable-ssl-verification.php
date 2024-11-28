@@ -9,8 +9,8 @@ require __DIR__ . '/common/loader.php';
 use transloadit\Transloadit;
 
 $transloadit = new Transloadit([
-  'key'    => getenv('YOUR_TRANSLOADIT_KEY'),
-  'secret' => getenv('YOUR_TRANSLOADIT_SECRET'),
+  'key'    => getenv('MY_TRANSLOADIT_KEY'),
+  'secret' => getenv('MY_TRANSLOADIT_SECRET'),
 ]);
 
 $response = $transloadit->createAssembly([

@@ -7,13 +7,12 @@ if ($env) {
       continue;
     }
     list($key, $value) = explode('=', $line, 2);
-    define($key, $value);
+
+    define(str_replace('export ', '', $key), str_replace('"', '', str_replace("'", '', $value)));
   }
 } else {
-  if (getenv('TEST_ACCOUNT_KEY')) {
-    define('TEST_ACCOUNT_KEY', getenv('TEST_ACCOUNT_KEY'));
-  }
-  if (getenv('TEST_ACCOUNT_SECRET')) {
-    define('TEST_ACCOUNT_SECRET', getenv('TEST_ACCOUNT_SECRET'));
+  if (getenv('TRANSLOADIT_KEY') && getenv('TRANSLOADIT_SECRET')) {
+    define('TRANSLOADIT_KEY', getenv('TRANSLOADIT_KEY'));
+    define('TRANSLOADIT_SECRET', getenv('TRANSLOADIT_SECRET'));
   }
 }

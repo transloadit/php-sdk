@@ -45,8 +45,8 @@ require 'vendor/autoload.php';
 use transloadit\Transloadit;
 
 $transloadit = new Transloadit([
-  'key'    => 'YOUR_TRANSLOADIT_KEY',
-  'secret' => 'YOUR_TRANSLOADIT_SECRET',
+  'key'    => 'MY_TRANSLOADIT_KEY',
+  'secret' => 'MY_TRANSLOADIT_SECRET',
 ]);
 
 $response = $transloadit->createAssembly([
@@ -90,8 +90,8 @@ require 'vendor/autoload.php';
 use transloadit\Transloadit;
 
 $transloadit = new Transloadit([
-  'key'    => 'YOUR_TRANSLOADIT_KEY',
-  'secret' => 'YOUR_TRANSLOADIT_SECRET',
+  'key'    => 'MY_TRANSLOADIT_KEY',
+  'secret' => 'MY_TRANSLOADIT_SECRET',
 ]);
 
 // Check if this request is a Transloadit redirect_url notification.
@@ -139,7 +139,10 @@ To integrate Uppy with your PHP backend:
 1. Include Uppy in your HTML:
 
 ```html
-<link href="https://releases.transloadit.com/uppy/v3.3.1/uppy.min.css" rel="stylesheet">
+<link
+  href="https://releases.transloadit.com/uppy/v3.3.1/uppy.min.css"
+  rel="stylesheet"
+/>
 <script src="https://releases.transloadit.com/uppy/v3.3.1/uppy.min.js"></script>
 ```
 
@@ -156,8 +159,8 @@ To integrate Uppy with your PHP backend:
     })
     .use(Uppy.Transloadit, {
       params: {
-        auth: { key: 'YOUR_TRANSLOADIT_KEY' },
-        template_id: 'YOUR_TEMPLATE_ID',
+        auth: { key: 'MY_TRANSLOADIT_KEY' },
+        template_id: 'MY_TEMPLATE_ID',
         notify_url: 'https://your-site.com/transloadit_notify.php'
       }
     })
@@ -179,8 +182,8 @@ require 'vendor/autoload.php';
 use transloadit\Transloadit;
 
 $transloadit = new Transloadit([
-  'key'    => 'YOUR_TRANSLOADIT_KEY',
-  'secret' => 'YOUR_TRANSLOADIT_SECRET',
+  'key'    => 'MY_TRANSLOADIT_KEY',
+  'secret' => 'MY_TRANSLOADIT_SECRET',
 ]);
 
 $response = Transloadit::response();
@@ -188,17 +191,17 @@ if ($response) {
   // Process the assembly result
   $assemblyId = $response->data['assembly_id'];
   $assemblyStatus = $response->data['ok'];
-  
+
   // You can store the assembly information in your database
   // or perform any other necessary actions here
-  
+
   // Log the response for debugging
   error_log('Transloadit Assembly Completed: ' . $assemblyId);
   error_log('Assembly Status: ' . ($assemblyStatus ? 'Success' : 'Failed'));
-  
+
   // Optionally, you can write the response to a file
   file_put_contents('transloadit_response_' . $assemblyId . '.json', json_encode($response->data));
-  
+
   // Send a 200 OK response to Transloadit
   http_response_code(200);
   echo 'OK';
@@ -221,11 +224,11 @@ You can use the `getAssembly` method to get the <dfn>Assembly</dfn> Status.
 ```php
 <?php
 require 'vendor/autoload.php';
-$assemblyId = 'YOUR_ASSEMBLY_ID';
+$assemblyId = 'MY_ASSEMBLY_ID';
 
 $transloadit = new Transloadit([
-  'key'    => 'YOUR_TRANSLOADIT_KEY',
-  'secret' => 'YOUR_TRANSLOADIT_SECRET',
+  'key'    => 'MY_TRANSLOADIT_KEY',
+  'secret' => 'MY_TRANSLOADIT_SECRET',
 ]);
 
 $response = $transloadit->getAssembly($assemblyId);
@@ -251,14 +254,14 @@ require 'vendor/autoload.php';
 use transloadit\Transloadit;
 
 $transloadit = new Transloadit([
-  'key'    => 'YOUR_TRANSLOADIT_KEY',
-  'secret' => 'YOUR_TRANSLOADIT_SECRET',
+  'key'    => 'MY_TRANSLOADIT_KEY',
+  'secret' => 'MY_TRANSLOADIT_SECRET',
 ]);
 
 $response = $transloadit->createAssembly([
   'files' => ['/PATH/TO/FILE.jpg'],
   'params' => [
-    'template_id' => 'YOUR_TEMPLATE_ID',
+    'template_id' => 'MY_TEMPLATE_ID',
   ],
 ]);
 
@@ -269,11 +272,56 @@ echo '</pre>';
 
 ```
 
-<!-- End of generated doc section -->
-
-### Signature Auth
+### Signature Auth (Assemblies)
 
 <dfn>Signature Authentication</dfn> is done by the PHP SDK by default internally so you do not need to worry about this :)
+
+### Signature Auth (Smart CDN)
+
+You can use the `signedSmartCDNUrl` method to generate signed URLs for Transloadit's [Smart CDN](https://transloadit.com/services/content-delivery/):
+
+```php
+<?php
+require 'vendor/autoload.php';
+
+use transloadit\Transloadit;
+
+$transloadit = new Transloadit([
+  'key'    => 'MY_TRANSLOADIT_KEY',
+  'secret' => 'MY_TRANSLOADIT_SECRET',
+]);
+
+// Basic usage
+$url = $transloadit->signedSmartCDNUrl(
+  'your-workspace-slug',
+  'your-template-slug',
+  'avatars/jane.jpg'
+);
+
+// Advanced usage with custom parameters and expiry
+$url = $transloadit->signedSmartCDNUrl(
+  'your-workspace-slug',
+  'your-template-slug',
+  'avatars/jane.jpg',
+  ['width' => 100, 'height' => 100],  // Additional parameters
+  1732550672867,                      // Expiry date in milliseconds since epoch
+);
+
+echo $url;
+```
+
+The generated URL will be in the format:
+
+```
+https://{workspace-slug}.tlcdn.com/{template-slug}/{input-field}?{query-params}&sig=sha256:{signature}
+```
+
+Note that:
+
+- The URL will expire after the specified time (default: 1 hour)
+- All parameters are properly encoded
+- The signature is generated using HMAC SHA-256
+- Query parameters are sorted alphabetically before signing
 
 ## Example
 
@@ -480,7 +528,57 @@ Feel free to fork this project. We will happily merge bug fixes or other small
 improvements. For bigger changes you should probably get in touch with us
 before you start to avoid not seeing them merged.
 
-## Versioning
+### Testing
+
+#### Basic Tests
+
+```bash
+make test
+```
+
+#### System Tests
+
+System tests require:
+
+1. Valid Transloadit credentials in environment:
+
+```bash
+export TRANSLOADIT_KEY='your-auth-key'
+export TRANSLOADIT_SECRET='your-auth-secret'
+```
+
+Then run:
+
+```bash
+make test-all
+```
+
+#### Node.js Reference Implementation Parity Assertions
+
+The SDK includes assertions that compare URL signing with our reference Node.js implementation. To run these tests:
+
+1. Requirements:
+
+   - Node.js installed
+   - tsx installed globally (`npm install -g tsx`)
+
+2. Install dependencies:
+
+```bash
+npm install -g tsx
+```
+
+3. Run the test:
+
+```bash
+export TRANSLOADIT_KEY='your-auth-key'
+export TRANSLOADIT_SECRET='your-auth-secret'
+TEST_NODE_PARITY=1 make test-all
+```
+
+CI opts-into `TEST_NODE_PARITY=1`, and you can optionally do this locally as well.
+
+### Versioning
 
 This project implements the Semantic Versioning guidelines.
 
@@ -496,7 +594,7 @@ And constructed with the following guidelines:
 
 For more information on SemVer, please visit http://semver.org/.
 
-## Releasing a new version
+### Releasing a new version
 
 ```bash
 # 1. update CHANGELOG.md

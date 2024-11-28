@@ -20,8 +20,8 @@ this <dfn>Assembly</dfn> is shown using `Transloadit::response()`.
 use transloadit\Transloadit;
 
 $transloadit = new Transloadit([
-  'key'    => 'YOUR_TRANSLOADIT_KEY',
-  'secret' => 'YOUR_TRANSLOADIT_SECRET',
+  'key'    => 'MY_TRANSLOADIT_KEY',
+  'secret' => 'MY_TRANSLOADIT_SECRET',
 ]);
 
 // Check if this request is a Transloadit redirect_url notification.

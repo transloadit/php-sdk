@@ -13,8 +13,8 @@ Alternatively, check out [Uppy](https://transloadit.com/docs/sdks/uppy/), our ne
 use transloadit\Transloadit;
 
 $transloadit = new Transloadit([
-  'key'    => 'YOUR_TRANSLOADIT_KEY',
-  'secret' => 'YOUR_TRANSLOADIT_SECRET',
+  'key'    => 'MY_TRANSLOADIT_KEY',
+  'secret' => 'MY_TRANSLOADIT_SECRET',
 ]);
 
 $response = Transloadit::response();

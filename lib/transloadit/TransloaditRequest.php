@@ -5,6 +5,7 @@ namespace transloadit;
 class TransloaditRequest extends CurlRequest {
   public $key      = null;
   public $secret   = null;
+  public $protocol = 'https';
 
   public $endpoint = 'https://api2.transloadit.com';
   public $path     = null;
@@ -88,7 +89,12 @@ class TransloaditRequest extends CurlRequest {
   }
 
   private function _waitForCompletion($response) {
-    $assemblyUrl = $response->data['assembly_ssl_url'];
+    // Try assembly_ssl_url first, fall back to assembly_url
+    $assemblyUrl = $response->data['assembly_ssl_url'] ?? $response->data['assembly_url'] ?? null;
+    if (!$assemblyUrl) {
+      throw new \RuntimeException('No assembly URL found in response. Response data: ' . json_encode($response->data));
+    }
+
     $parts = parse_url($assemblyUrl);
 
     while (true) {

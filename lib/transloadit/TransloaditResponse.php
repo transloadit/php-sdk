@@ -3,6 +3,10 @@
 namespace transloadit;
 
 class TransloaditResponse extends CurlResponse {
+  public $method;
+  public $url;
+  public $fields;
+
   public function error() {
     $error = parent::error();
     if ($error) {

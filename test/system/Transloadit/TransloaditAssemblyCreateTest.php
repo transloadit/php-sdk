@@ -5,19 +5,22 @@ namespace transloadit\test\system\Transloadit;
 use transloadit\Transloadit;
 
 class TransloaditAssemblyCreateTest extends \PHPUnit\Framework\TestCase {
+  private Transloadit $transloadit;
+
   public function setUp(): void {
-    if (!defined('TEST_ACCOUNT_KEY') || !defined('TEST_ACCOUNT_SECRET')) {
+    if (!getenv('TRANSLOADIT_KEY') || !getenv('TRANSLOADIT_SECRET')) {
       $this->markTestSkipped(
-        'Have a look at test/config.php.template to get this test to run.'
+        'TRANSLOADIT_KEY and TRANSLOADIT_SECRET environment variables are required.'
       );
       return;
     }
 
-    // @todo Load config from git excluded config file
-    $this->transloadit = new Transloadit(['key' => TEST_ACCOUNT_KEY,
-      'secret' => TEST_ACCOUNT_SECRET,
+    $this->transloadit = new Transloadit([
+      'key' => getenv('TRANSLOADIT_KEY'),
+      'secret' => getenv('TRANSLOADIT_SECRET'),
     ]);
   }
+
   public function testRoot() {
     $response = $this->transloadit->createAssembly([
       'files' => [TEST_FIXTURE_DIR . '/image-resize-robot.jpg'],

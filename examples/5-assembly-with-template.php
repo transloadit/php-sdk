@@ -14,14 +14,14 @@ and add the <dfn>Template</dfn> ID here.
 use transloadit\Transloadit;
 
 $transloadit = new Transloadit([
-  'key'    => 'YOUR_TRANSLOADIT_KEY',
-  'secret' => 'YOUR_TRANSLOADIT_SECRET',
+  'key'    => 'MY_TRANSLOADIT_KEY',
+  'secret' => 'MY_TRANSLOADIT_SECRET',
 ]);
 
 $response = $transloadit->createAssembly([
   'files' => [dirname(__FILE__) . '/fixture/straw-apple.jpg'],
   'params' => [
-    'template_id' => 'YOUR_TEMPLATE_ID',
+    'template_id' => 'MY_TEMPLATE_ID',
   ],
 ]);
 

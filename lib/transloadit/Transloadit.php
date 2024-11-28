@@ -135,4 +135,93 @@ class Transloadit {
       return $response;
     }
   }
+
+  /**
+   * Generates a signed URL for Transloadit's Smart CDN
+   * https://transloadit.com/services/content-delivery/
+   *
+   * @param string $workspaceSlug The workspace slug
+   * @param string $templateSlug The template slug
+   * @param string $inputField The input field (optional)
+   * @param array $params Additional parameters (optional)
+   * @param int $expireAtMs Number of milliseconds since epoch at which the URL expires
+   * @return string The signed URL
+   */
+  public function signedSmartCDNUrl(
+      string $workspaceSlug,
+      string $templateSlug,
+      string $inputField = '',
+      array $params = [],
+      int $expireAtMs = null
+  ): string {
+    // Validate required fields
+    if (!$workspaceSlug) {
+      throw new \InvalidArgumentException('workspace is required');
+    }
+    if (!$templateSlug) {
+      throw new \InvalidArgumentException('template is required');
+    }
+    if ($inputField === null) {
+      throw new \InvalidArgumentException('input must be a string');
+    }
+
+    // Add auth parameters
+    $queryParams = [];
+
+    // Process params to match Node.js behavior
+    foreach ($params as $key => $value) {
+      if (is_array($value)) {
+        foreach ($value as $val) {
+          if ($val !== null) {
+            $queryParams[$key][] = $val;
+          }
+        }
+      } elseif ($value !== null) {
+        $queryParams[$key] = $value;
+      }
+    }
+
+    $queryParams['auth_key'] = $this->key;
+    $queryParams['exp'] = (string)($expireAtMs ?? (time() * 1000 + 3600000)); // Default 1 hour
+
+    // Sort parameters alphabetically
+    ksort($queryParams);
+
+    // Build query string manually to match Node.js behavior
+    $queryParts = [];
+    foreach ($queryParams as $key => $value) {
+      if (is_array($value)) {
+        foreach ($value as $val) {
+          $queryParts[] = rawurlencode($key) . '=' . rawurlencode($val);
+        }
+      } else {
+        $queryParts[] = rawurlencode($key) . '=' . rawurlencode($value);
+      }
+    }
+    $queryString = implode('&', $queryParts);
+
+    // Build the string to sign
+    $stringToSign = sprintf(
+      '%s/%s/%s?%s',
+      rawurlencode($workspaceSlug),
+      rawurlencode($templateSlug),
+      rawurlencode($inputField),
+      $queryString
+    );
+
+    // Generate signature
+    $signature = hash_hmac('sha256', $stringToSign, $this->secret);
+
+    // Add signature to query string
+    $finalQueryString = $queryString . '&sig=' . rawurlencode('sha256:' . $signature);
+
+    // Build final URL
+    return sprintf(
+      'https://%s.tlcdn.com/%s/%s?%s',
+      rawurlencode($workspaceSlug),
+      rawurlencode($templateSlug),
+      rawurlencode($inputField),
+      $finalQueryString
+    );
+  }
 }

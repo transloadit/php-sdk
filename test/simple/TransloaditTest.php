@@ -145,4 +145,244 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
       $this->assertTrue(preg_match('/value="' . $val . '"/', $inputTag) !== false);
     }
   }
+
+  private function getExpectedUrl(array $params): ?string {
+    if (getenv('TEST_NODE_PARITY') !== '1') {
+      return null;
+    }
+
+    // Check for tsx before trying to use it
+    exec('which tsx 2>/dev/null', $output, $returnVar);
+    if ($returnVar !== 0) {
+      throw new \RuntimeException('tsx command not found. Please install it with: npm install -g tsx');
+    }
+
+    $scriptPath = __DIR__ . '/../../tool/node-smartcdn-sig.ts';
+    $jsonInput = json_encode($params);
+
+    $descriptorspec = [
+      0 => ["pipe", "r"],  // stdin
+      1 => ["pipe", "w"],  // stdout
+      2 => ["pipe", "w"]   // stderr
+    ];
+
+    $process = proc_open("tsx $scriptPath", $descriptorspec, $pipes);
+
+    if (!is_resource($process)) {
+      throw new \RuntimeException('Failed to start Node script');
+    }
+
+    fwrite($pipes[0], $jsonInput);
+    fclose($pipes[0]);
+
+    $output = stream_get_contents($pipes[1]);
+    $error = stream_get_contents($pipes[2]);
+
+    fclose($pipes[1]);
+    fclose($pipes[2]);
+
+    $exitCode = proc_close($process);
+
+    if ($exitCode !== 0) {
+      throw new \RuntimeException("Node script failed: $error");
+    }
+
+    return trim($output);
+  }
+
+  private function assertParityWithNode(string $url, array $params, string $message = ''): void {
+    $expectedUrl = $this->getExpectedUrl($params);
+    if ($expectedUrl !== null) {
+      $this->assertEquals($expectedUrl, $url, $message ?: 'URL should match Node.js reference implementation');
+    }
+  }
+
+  private function debugUrls(string $phpUrl, string $nodeUrl, string $message = ''): void {
+    echo "\n\nDebug $message:\n";
+    echo "PHP URL:  $phpUrl\n";
+    echo "Node URL: $nodeUrl\n\n";
+  }
+
+  public function testSignedSmartCDNUrl() {
+    $transloadit = new Transloadit([
+      'key' => 'test-key',
+      'secret' => 'test-secret'
+    ]);
+
+    // Use fixed timestamp for all tests
+    $expireAtMs = 1732550672867;
+
+    // Test basic URL generation
+    $params = [
+      'workspace' => 'workspace',
+      'template' => 'template',
+      'input' => 'file.jpg',
+      'auth_key' => 'test-key',
+      'auth_secret' => 'test-secret',
+      'expire_at_ms' => $expireAtMs
+    ];
+    $url = $transloadit->signedSmartCDNUrl(
+      $params['workspace'],
+      $params['template'],
+      $params['input'],
+      [],
+      $expireAtMs
+    );
+    $nodeUrl = $this->getExpectedUrl($params);
+    $expectedUrl = 'https://workspace.tlcdn.com/template/file.jpg?auth_key=test-key&exp=1732550672867&sig=sha256%3Ad994b8a737db1c43d6e04a07018dc33e8e28b23b27854bd6383d828a212cfffb';
+    $this->assertEquals($expectedUrl, $url, 'PHP URL should match expected');
+    $this->assertEquals($expectedUrl, $nodeUrl, 'Node.js URL should match expected');
+
+    // Test with input field
+    $params['input'] = 'input.jpg';
+    $url = $transloadit->signedSmartCDNUrl(
+      $params['workspace'],
+      $params['template'],
+      $params['input'],
+      [],
+      $expireAtMs
+    );
+    $nodeUrl = $this->getExpectedUrl($params);
+    $expectedUrl = 'https://workspace.tlcdn.com/template/input.jpg?auth_key=test-key&exp=1732550672867&sig=sha256%3A75991f02828d194792c9c99f8fea65761bcc4c62dbb287a84f642033128297c0';
+    $this->assertEquals($expectedUrl, $url, 'PHP URL should match expected');
+    $this->assertEquals($expectedUrl, $nodeUrl, 'Node.js URL should match expected');
+
+    // Test with additional params
+    $params['input'] = 'file.jpg';
+    $params['url_params'] = ['width' => 100];
+    $url = $transloadit->signedSmartCDNUrl(
+      $params['workspace'],
+      $params['template'],
+      $params['input'],
+      $params['url_params'],
+      $expireAtMs
+    );
+    $nodeUrl = $this->getExpectedUrl($params);
+    $expectedUrl = 'https://workspace.tlcdn.com/template/file.jpg?auth_key=test-key&exp=1732550672867&width=100&sig=sha256%3Ae5271d8fb6482d9351ebe4285b6fc75539c4d311ff125c4d76d690ad71c258ef';
+    $this->assertEquals($expectedUrl, $url, 'PHP URL should match expected');
+    $this->assertEquals($expectedUrl, $nodeUrl, 'Node.js URL should match expected');
+
+    // Test with empty param string
+    $params['url_params'] = ['width' => '', 'height' => '200'];
+    $url = $transloadit->signedSmartCDNUrl(
+      $params['workspace'],
+      $params['template'],
+      $params['input'],
+      $params['url_params'],
+      $expireAtMs
+    );
+    $nodeUrl = $this->getExpectedUrl($params);
+    $expectedUrl = 'https://workspace.tlcdn.com/template/file.jpg?auth_key=test-key&exp=1732550672867&height=200&width=&sig=sha256%3A1a26733c859f070bc3d83eb3174650d7a0155642e44a5ac448a43bc728bc0f85';
+    $this->assertEquals($expectedUrl, $url, 'PHP URL should match expected');
+    $this->assertEquals($expectedUrl, $nodeUrl, 'Node.js URL should match expected');
+
+    // Test with null width parameter (should be excluded)
+    $params['url_params'] = ['width' => null, 'height' => '200'];
+    $url = $transloadit->signedSmartCDNUrl(
+      $params['workspace'],
+      $params['template'],
+      $params['input'],
+      $params['url_params'],
+      $expireAtMs
+    );
+    $nodeUrl = $this->getExpectedUrl($params);
+    $expectedUrl = 'https://workspace.tlcdn.com/template/file.jpg?auth_key=test-key&exp=1732550672867&height=200&sig=sha256%3Adb740ebdfad6e766ebf6516ed5ff6543174709f8916a254f8d069c1701cef517';
+    $this->assertEquals($expectedUrl, $url, 'PHP URL should match expected');
+    $this->assertEquals($expectedUrl, $nodeUrl, 'Node.js URL should match expected');
+
+    // Test with only empty width parameter
+    $params['url_params'] = ['width' => ''];
+    $url = $transloadit->signedSmartCDNUrl(
+      $params['workspace'],
+      $params['template'],
+      $params['input'],
+      $params['url_params'],
+      $expireAtMs
+    );
+    $nodeUrl = $this->getExpectedUrl($params);
+    $expectedUrl = 'https://workspace.tlcdn.com/template/file.jpg?auth_key=test-key&exp=1732550672867&width=&sig=sha256%3A840426f9ac72dde02fd080f09b2304d659fdd41e630b1036927ec1336c312e9d';
+    $this->assertEquals($expectedUrl, $url, 'PHP URL should match expected');
+    $this->assertEquals($expectedUrl, $nodeUrl, 'Node.js URL should match expected');
+  }
+
+  public function testTsxRequiredForParityTesting(): void {
+    if (getenv('TEST_NODE_PARITY') !== '1') {
+      $this->markTestSkipped('Parity testing not enabled');
+    }
+
+    // Temporarily override PATH to simulate missing tsx
+    $originalPath = getenv('PATH');
+    putenv('PATH=/usr/bin:/bin');
+
+    try {
+      $params = [
+        'workspace' => 'test',
+        'template' => 'test',
+        'input' => 'test.jpg',
+        'auth_key' => 'test',
+        'auth_secret' => 'test'
+      ];
+      $this->getExpectedUrl($params);
+      $this->fail('Expected RuntimeException when tsx is not available');
+    } catch (\RuntimeException $e) {
+      $this->assertStringContainsString('tsx command not found', $e->getMessage());
+      $this->assertStringContainsString('npm install -g tsx', $e->getMessage());
+    } finally {
+      // Restore original PATH
+      putenv("PATH=$originalPath");
+    }
+  }
+
+  public function testExpireAtMs(): void {
+    $transloadit = new Transloadit([
+      'key' => 'test-key',
+      'secret' => 'test-secret'
+    ]);
+
+    // Test with explicit expireAtMs
+    $expireAtMs = 1732550672867;
+    $params = [
+      'workspace' => 'workspace',
+      'template' => 'template',
+      'input' => 'file.jpg',
+      'auth_key' => 'test-key',
+      'auth_secret' => 'test-secret',
+      'expire_at_ms' => $expireAtMs
+    ];
+
+    $url = $transloadit->signedSmartCDNUrl(
+      $params['workspace'],
+      $params['template'],
+      $params['input'],
+      [],
+      $params['expire_at_ms']
+    );
+
+    $this->assertStringContainsString("exp=$expireAtMs", $url);
+    $this->assertParityWithNode($url, $params);
+
+    // Test default expiry (should be about 1 hour from now)
+    unset($params['expire_at_ms']);
+    $url = $transloadit->signedSmartCDNUrl(
+      $params['workspace'],
+      $params['template'],
+      $params['input']
+    );
+
+    $matches = [];
+    preg_match('/exp=(\d+)/', $url, $matches);
+    $this->assertNotEmpty($matches[1], 'URL should contain expiry timestamp');
+
+    $expiry = (int)$matches[1];
+    $now = time() * 1000;
+    $oneHour = 60 * 60 * 1000;
+
+    $this->assertGreaterThan($now, $expiry, 'Expiry should be in the future');
+    $this->assertLessThan($now + $oneHour + 5000, $expiry, 'Expiry should be about 1 hour from now');
+    $this->assertGreaterThan($now + $oneHour - 5000, $expiry, 'Expiry should be about 1 hour from now');
+
+    // For parity test, set the exact expiry time to match Node.js
+    $params['expire_at_ms'] = $expiry;
+    $this->assertParityWithNode($url, $params);
+  }
 }
