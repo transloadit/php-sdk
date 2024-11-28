@@ -5,6 +5,11 @@ set -o nounset
 set -o pipefail
 # set -o xtrace
 
+if [[ -z "${PACKAGIST_TOKEN}" ]]; then
+  echo "PACKAGIST_TOKEN is not set"
+  exit 1
+fi
+
 if ! grep "${VERSION}" composer.json > /dev/null 2>&1; then
   echo "First add '${VERSION}' to composer.json please"
   exit 1

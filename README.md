@@ -139,7 +139,10 @@ To integrate Uppy with your PHP backend:
 1. Include Uppy in your HTML:
 
 ```html
-<link href="https://releases.transloadit.com/uppy/v3.3.1/uppy.min.css" rel="stylesheet">
+<link
+  href="https://releases.transloadit.com/uppy/v3.3.1/uppy.min.css"
+  rel="stylesheet"
+/>
 <script src="https://releases.transloadit.com/uppy/v3.3.1/uppy.min.js"></script>
 ```
 
@@ -188,17 +191,17 @@ if ($response) {
   // Process the assembly result
   $assemblyId = $response->data['assembly_id'];
   $assemblyStatus = $response->data['ok'];
-  
+
   // You can store the assembly information in your database
   // or perform any other necessary actions here
-  
+
   // Log the response for debugging
   error_log('Transloadit Assembly Completed: ' . $assemblyId);
   error_log('Assembly Status: ' . ($assemblyStatus ? 'Success' : 'Failed'));
-  
+
   // Optionally, you can write the response to a file
   file_put_contents('transloadit_response_' . $assemblyId . '.json', json_encode($response->data));
-  
+
   // Send a 200 OK response to Transloadit
   http_response_code(200);
   echo 'OK';
@@ -480,30 +483,17 @@ Feel free to fork this project. We will happily merge bug fixes or other small
 improvements. For bigger changes you should probably get in touch with us
 before you start to avoid not seeing them merged.
 
-## Versioning
+### Releasing a new version
 
-This project implements the Semantic Versioning guidelines.
+To release, say `3.2.0` [Packagist](https://packagist.org/packages/transloadit/php-sdk), follow these steps:
 
-Releases will be numbered with the following format:
+1. Make sure `PACKAGIST_TOKEN` is set in your `.env` file
+1. Make sure you are in main: `git checkout main`
+1. Update `CHANGELOG.md` and `composer.json`
+1. Commit: `git add CHANGELOG.md composer.json && git commit -m "Release 3.2.0"`
+1. Tag, push, and release: `source .env && VERSION=3.2.0 ./release.sh`
 
-`<major>.<minor>.<patch>`
-
-And constructed with the following guidelines:
-
-- Breaking backward compatibility bumps the major (and resets the minor and patch)
-- New additions without breaking backward compatibility bumps the minor (and resets the patch)
-- Bug fixes and misc changes bumps the patch
-
-For more information on SemVer, please visit http://semver.org/.
-
-## Releasing a new version
-
-```bash
-# 1. update CHANGELOG.md
-# 2. update composer.json
-# 3. commit all your work
-source env.sh && VERSION=3.1.0 ./release.sh
-```
+This project implements the [Semantic Versioning](http://semver.org/) guidelines.
 
 ## License
 
