@@ -594,8 +594,8 @@ This project implements the [Semantic Versioning](http://semver.org/) guidelines
 
 [MIT Licensed](LICENSE)
 
-[test_badge]: https://github.com/transloadit/php-sdk/actions/workflows/tests.yml/badge.svg
-[test_link]: https://github.com/transloadit/php-sdk/actions/workflows/tests.yml
+[test_badge]: https://github.com/transloadit/php-sdk/actions/workflows/ci.yml/badge.svg
+[test_link]: https://github.com/transloadit/php-sdk/actions/workflows/ci.yml
 [codecov_badge]: https://codecov.io/gh/transloadit/php-sdk/branch/main/graph/badge.svg
 [codecov_link]: https://codecov.io/gh/transloadit/php-sdk
 [php_verison_badge]: https://img.shields.io/packagist/php-v/transloadit/php-sdk

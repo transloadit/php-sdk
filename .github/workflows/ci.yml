@@ -1,4 +1,4 @@
-name: Transloadit PHP SDK CI
+name: CI
 on:
   push:
     branches:
