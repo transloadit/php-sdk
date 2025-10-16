@@ -151,43 +151,99 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
       return null;
     }
 
-    // Check for tsx before trying to use it
-    exec('which tsx 2>/dev/null', $output, $returnVar);
+    exec('command -v npm 2>/dev/null', $output, $returnVar);
     if ($returnVar !== 0) {
-      throw new \RuntimeException('tsx command not found. Please install it with: npm install -g tsx');
+      throw new \RuntimeException('npm command not found. Please install Node.js (which includes npm).');
     }
 
-    $scriptPath = __DIR__ . '/../../tool/node-smartcdn-sig.ts';
-    $jsonInput = json_encode($params);
+    if (!isset($params['auth_key']) || !isset($params['auth_secret'])) {
+      throw new \InvalidArgumentException('auth_key and auth_secret are required for parity testing');
+    }
+
+    try {
+      $cliParams = [
+        'workspace' => $params['workspace'],
+        'template' => $params['template'],
+        'input' => $params['input'],
+      ];
+      if (array_key_exists('url_params', $params)) {
+        $cliParams['url_params'] = $params['url_params'];
+      }
+      if (array_key_exists('expire_at_ms', $params)) {
+        $cliParams['expire_at_ms'] = $params['expire_at_ms'];
+      }
+      $jsonInput = json_encode($cliParams, JSON_THROW_ON_ERROR);
+    } catch (\JsonException $e) {
+      throw new \RuntimeException('Failed to encode parameters for Node parity test: ' . $e->getMessage(), 0, $e);
+    }
+
+    $command = 'npm exec --yes --package transloadit@4.0.5 -- transloadit smart_sig';
 
     $descriptorspec = [
       0 => ["pipe", "r"],  // stdin
       1 => ["pipe", "w"],  // stdout
-      2 => ["pipe", "w"]   // stderr
+      2 => ["pipe", "w"],  // stderr
     ];
 
-    $process = proc_open("tsx $scriptPath", $descriptorspec, $pipes);
+    $originalKey = getenv('TRANSLOADIT_KEY');
+    $originalSecret = getenv('TRANSLOADIT_SECRET');
+    $originalAuthKey = getenv('TRANSLOADIT_AUTH_KEY');
+    $originalAuthSecret = getenv('TRANSLOADIT_AUTH_SECRET');
 
-    if (!is_resource($process)) {
-      throw new \RuntimeException('Failed to start Node script');
+    putenv('TRANSLOADIT_KEY=' . $params['auth_key']);
+    putenv('TRANSLOADIT_SECRET=' . $params['auth_secret']);
+    putenv('TRANSLOADIT_AUTH_KEY=' . $params['auth_key']);
+    putenv('TRANSLOADIT_AUTH_SECRET=' . $params['auth_secret']);
+
+    try {
+      $process = proc_open($command, $descriptorspec, $pipes);
+
+      if (!is_resource($process)) {
+        throw new \RuntimeException('Failed to start transloadit CLI parity command');
+      }
+
+      fwrite($pipes[0], $jsonInput);
+      fclose($pipes[0]);
+
+      $stdout = stream_get_contents($pipes[1]);
+      $stderr = stream_get_contents($pipes[2]);
+
+      fclose($pipes[1]);
+      fclose($pipes[2]);
+
+      $exitCode = proc_close($process);
+
+      if ($exitCode !== 0) {
+        $message = trim($stderr) !== '' ? trim($stderr) : 'Command exited with status ' . $exitCode;
+        throw new \RuntimeException('transloadit CLI parity command failed: ' . $message);
+      }
+
+      return trim($stdout);
+    } finally {
+      if ($originalKey !== false) {
+        putenv('TRANSLOADIT_KEY=' . $originalKey);
+      } else {
+        putenv('TRANSLOADIT_KEY');
+      }
+
+      if ($originalSecret !== false) {
+        putenv('TRANSLOADIT_SECRET=' . $originalSecret);
+      } else {
+        putenv('TRANSLOADIT_SECRET');
+      }
+
+      if ($originalAuthKey !== false) {
+        putenv('TRANSLOADIT_AUTH_KEY=' . $originalAuthKey);
+      } else {
+        putenv('TRANSLOADIT_AUTH_KEY');
+      }
+
+      if ($originalAuthSecret !== false) {
+        putenv('TRANSLOADIT_AUTH_SECRET=' . $originalAuthSecret);
+      } else {
+        putenv('TRANSLOADIT_AUTH_SECRET');
+      }
     }
-
-    fwrite($pipes[0], $jsonInput);
-    fclose($pipes[0]);
-
-    $output = stream_get_contents($pipes[1]);
-    $error = stream_get_contents($pipes[2]);
-
-    fclose($pipes[1]);
-    fclose($pipes[2]);
-
-    $exitCode = proc_close($process);
-
-    if ($exitCode !== 0) {
-      throw new \RuntimeException("Node script failed: $error");
-    }
-
-    return trim($output);
   }
 
   private function assertParityWithNode(string $url, array $params, string $message = ''): void {
@@ -305,14 +361,14 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
     $this->assertEquals($expectedUrl, $nodeUrl, 'Node.js URL should match expected');
   }
 
-  public function testTsxRequiredForParityTesting(): void {
+  public function testTransloaditCliRequiredForParityTesting(): void {
     if (getenv('TEST_NODE_PARITY') !== '1') {
       $this->markTestSkipped('Parity testing not enabled');
     }
 
-    // Temporarily override PATH to simulate missing tsx
+    // Temporarily override PATH to simulate missing npm
     $originalPath = getenv('PATH');
-    putenv('PATH=/usr/bin:/bin');
+    putenv('PATH=');
 
     try {
       $params = [
@@ -323,10 +379,9 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
         'auth_secret' => 'test'
       ];
       $this->getExpectedUrl($params);
-      $this->fail('Expected RuntimeException when tsx is not available');
+      $this->fail('Expected RuntimeException when npm is not available');
     } catch (\RuntimeException $e) {
-      $this->assertStringContainsString('tsx command not found', $e->getMessage());
-      $this->assertStringContainsString('npm install -g tsx', $e->getMessage());
+      $this->assertStringContainsString('npm command not found', $e->getMessage());
     } finally {
       // Restore original PATH
       putenv("PATH=$originalPath");

@@ -8,3 +8,4 @@ env.sh
 .phpunit.cache
 .aider*
 .env
+.docker-cache/

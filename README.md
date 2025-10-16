@@ -555,20 +555,15 @@ make test-all
 
 #### Node.js Reference Implementation Parity Assertions
 
-The SDK includes assertions that compare URL signing with our reference Node.js implementation. To run these tests:
+The SDK includes assertions that compare Smart CDN URL signatures and regular request signatures with our reference Node.js implementation. To run these tests:
 
 1. Requirements:
 
-   - Node.js installed
-   - tsx installed globally (`npm install -g tsx`)
+   - Node.js 20+ with npm
+   - Ability to execute `npx transloadit smart_sig` (the CLI is downloaded on demand)
+   - Ability to execute `npx transloadit sig` (the CLI is downloaded on demand)
 
-2. Install dependencies:
-
-```bash
-npm install -g tsx
-```
-
-3. Run the test:
+2. Run the tests:
 
 ```bash
 export TRANSLOADIT_KEY='your-auth-key'
@@ -576,7 +571,40 @@ export TRANSLOADIT_SECRET='your-auth-secret'
 TEST_NODE_PARITY=1 make test-all
 ```
 
-CI opts-into `TEST_NODE_PARITY=1`, and you can optionally do this locally as well.
+If you want to warm the CLI cache ahead of time you can run:
+
+```bash
+npx --yes transloadit smart_sig --help
+```
+
+For regular request signatures, you can also prime the CLI by running:
+
+```bash
+TRANSLOADIT_KEY=... TRANSLOADIT_SECRET=... \
+  npx --yes transloadit sig --algorithm sha1 --help
+```
+
+CI opts into `TEST_NODE_PARITY=1`, and you can optionally do this locally as well.
+
+#### Run Tests in Docker
+
+Use `scripts/test-in-docker.sh` for a reproducible environment:
+
+```bash
+./scripts/test-in-docker.sh
+```
+
+This builds the local image, runs `composer install`, and executes `make test-all` (unit + integration tests). Pass a custom command to run something else (composer install still runs first):
+
+```bash
+./scripts/test-in-docker.sh vendor/bin/phpunit --filter signedSmartCDNUrl
+```
+
+Environment variables such as `TEST_NODE_PARITY` or the credentials in `.env` are forwarded, so you can combine parity checks and integration tests with Docker:
+
+```bash
+TEST_NODE_PARITY=1 ./scripts/test-in-docker.sh
+```
 
 ### Releasing a new version
 
