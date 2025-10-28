@@ -1,0 +1,7 @@
+.git
+.gitignore
+.docker-cache
+.env
+vendor
+node_modules
+transloadit-*.tgz

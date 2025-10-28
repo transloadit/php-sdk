@@ -276,6 +276,23 @@ echo '</pre>';
 
 <dfn>Signature Authentication</dfn> is done by the PHP SDK by default internally so you do not need to worry about this :)
 
+If you script the same request payload multiple times in quick succession (for example inside a health check or tight integration test loop), add a random nonce to keep each signature unique:
+
+```php
+$params = [
+  'auth' => [
+    'key'     => 'MY_TRANSLOADIT_KEY',
+    'expires' => gmdate('Y/m/d H:i:s+00:00', strtotime('+2 hours')),
+    'nonce'   => bin2hex(random_bytes(16)),
+  ],
+  'steps' => [
+    // …
+  ],
+];
+```
+
+The nonce is optional for regular usage, but including it in heavily scripted flows prevents Transloadit from rejecting repeated identical signatures.
+
 ### Signature Auth (Smart CDN)
 
 You can use the `signedSmartCDNUrl` method to generate signed URLs for Transloadit's [Smart CDN](https://transloadit.com/services/content-delivery/):
@@ -521,74 +538,6 @@ All of the following will cause an error string to be returned:
 - A malformed response was received
 
 **_Note_**: You will need to set waitForCompletion = True in the $Transloadit->createAssembly($options) function call.
-
-## Contributing
-
-Feel free to fork this project. We will happily merge bug fixes or other small
-improvements. For bigger changes you should probably get in touch with us
-before you start to avoid not seeing them merged.
-
-### Testing
-
-#### Basic Tests
-
-```bash
-make test
-```
-
-#### System Tests
-
-System tests require:
-
-1. Valid Transloadit credentials in environment:
-
-```bash
-export TRANSLOADIT_KEY='your-auth-key'
-export TRANSLOADIT_SECRET='your-auth-secret'
-```
-
-Then run:
-
-```bash
-make test-all
-```
-
-#### Node.js Reference Implementation Parity Assertions
-
-The SDK includes assertions that compare URL signing with our reference Node.js implementation. To run these tests:
-
-1. Requirements:
-
-   - Node.js installed
-   - tsx installed globally (`npm install -g tsx`)
-
-2. Install dependencies:
-
-```bash
-npm install -g tsx
-```
-
-3. Run the test:
-
-```bash
-export TRANSLOADIT_KEY='your-auth-key'
-export TRANSLOADIT_SECRET='your-auth-secret'
-TEST_NODE_PARITY=1 make test-all
-```
-
-CI opts-into `TEST_NODE_PARITY=1`, and you can optionally do this locally as well.
-
-### Releasing a new version
-
-To release, say `3.2.0` [Packagist](https://packagist.org/packages/transloadit/php-sdk), follow these steps:
-
-1. Make sure `PACKAGIST_TOKEN` is set in your `.env` file
-1. Make sure you are in main: `git checkout main`
-1. Update `CHANGELOG.md` and `composer.json`
-1. Commit: `git add CHANGELOG.md composer.json && git commit -m "Release 3.2.0"`
-1. Tag, push, and release: `source env.sh && VERSION=3.2.0 ./release.sh`
-
-This project implements the [Semantic Versioning](http://semver.org/) guidelines.
 
 ## License
 
