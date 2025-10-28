@@ -84,12 +84,12 @@ TEST_NODE_PARITY=1 ./scripts/test-in-docker.sh
 
 ## Releasing a new version
 
-To release, say `3.2.0` [Packagist](https://packagist.org/packages/transloadit/php-sdk), follow these steps:
+To release, say `3.3.0` [Packagist](https://packagist.org/packages/transloadit/php-sdk), follow these steps:
 
 1. Make sure `PACKAGIST_TOKEN` is set in your `.env` file
 1. Make sure you are in main: `git checkout main`
 1. Update `CHANGELOG.md` and `composer.json`
-1. Commit: `git add CHANGELOG.md composer.json && git commit -m "Release 3.2.0"`
-1. Tag, push, and release: `source .env && VERSION=3.2.0 ./release.sh`
+1. Commit: `git add CHANGELOG.md composer.json && git commit -m "Release 3.3.0"`
+1. Tag, push, and release: `source .env && VERSION=3.3.0 ./release.sh`
 
 This project implements the [Semantic Versioning](http://semver.org/) guidelines.
