@@ -25,6 +25,13 @@ abstract class SystemTestCase extends \PHPUnit\Framework\TestCase {
       'key' => TRANSLOADIT_KEY,
       'secret' => TRANSLOADIT_SECRET,
     ]);
+
+    try {
+      $nonce = bin2hex(random_bytes(16));
+    } catch (\Exception $e) {
+      $nonce = uniqid('php-sdk-', true);
+    }
+    $this->request->params['auth']['nonce'] = $nonce;
   }
 }
 

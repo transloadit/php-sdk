@@ -276,6 +276,23 @@ echo '</pre>';
 
 <dfn>Signature Authentication</dfn> is done by the PHP SDK by default internally so you do not need to worry about this :)
 
+If you script the same request payload multiple times in quick succession (for example inside a health check or tight integration test loop), add a random nonce to keep each signature unique:
+
+```php
+$params = [
+  'auth' => [
+    'key'     => 'MY_TRANSLOADIT_KEY',
+    'expires' => gmdate('Y/m/d H:i:s+00:00', strtotime('+2 hours')),
+    'nonce'   => bin2hex(random_bytes(16)),
+  ],
+  'steps' => [
+    // …
+  ],
+];
+```
+
+The nonce is optional for regular usage, but including it in heavily scripted flows prevents Transloadit from rejecting repeated identical signatures.
+
 ### Signature Auth (Smart CDN)
 
 You can use the `signedSmartCDNUrl` method to generate signed URLs for Transloadit's [Smart CDN](https://transloadit.com/services/content-delivery/):
