@@ -631,7 +631,7 @@ To release, say `3.2.0` [Packagist](https://packagist.org/packages/transloadit/p
 1. Make sure you are in main: `git checkout main`
 1. Update `CHANGELOG.md` and `composer.json`
 1. Commit: `git add CHANGELOG.md composer.json && git commit -m "Release 3.2.0"`
-1. Tag, push, and release: `source env.sh && VERSION=3.2.0 ./release.sh`
+1. Tag, push, and release: `source .env && VERSION=3.2.0 ./release.sh`
 
 This project implements the [Semantic Versioning](http://semver.org/) guidelines.
 
