@@ -6,8 +6,15 @@ set -o pipefail
 # set -o xtrace
 
 if [[ -z "${PACKAGIST_TOKEN:-}" ]]; then
-  echo "PACKAGIST_TOKEN is not set"
-  exit 1
+  # shellcheck disable=SC1091
+  source .env || {
+    echo "Failed to source .env"
+    exit 1
+  }
+  if [[ -z "${PACKAGIST_TOKEN:-}" ]]; then
+    echo "PACKAGIST_TOKEN is not set"
+    exit 1
+  fi
 fi
 
 if ! grep "${VERSION}" composer.json > /dev/null 2>&1; then
@@ -23,8 +30,6 @@ if [ -n "$(git status --porcelain)" ]; then
   exit 1
 fi
 
-git tag -f "${VERSION}"
-git push --tags -f
 curl \
   -X POST \
   -H 'Content-Type: application/json' \
