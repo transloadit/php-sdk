@@ -92,7 +92,9 @@ To release, say `3.3.0` [Packagist](https://packagist.org/packages/transloadit/p
 1. Commit: `git add CHANGELOG.md composer.json && git commit -m "Release v3.3.0"`
 1. Tag: `git tag v3.3.0`
 1. Push: `git push --tags`
-1. Notify Packagist: `source .env && ./scripts/notify-packagist.sh`
+1. Notify Packagist (runs via Docker): `VERSION=3.3.0 ./scripts/notify-registry.sh`
 1. Publish a GitHub release (include the changelog). This triggers the release workflow. (via the GitHub UI, `gh release creates v3.3.0 --title "v3.3.0" --notes-file <(cat CHANGELOG.md section)`)
+
+The notify script reuses the same Docker image as `./scripts/test-in-docker.sh`, so Docker is the only requirement on your workstation.
 
 This project implements the [Semantic Versioning](http://semver.org/) guidelines.
