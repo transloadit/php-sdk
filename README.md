@@ -358,6 +358,12 @@ The auth key of your Transloadit account.
 
 The auth secret of your Transloadit account.
 
+#### $Transloadit->signatureAlgorithm = 'sha384';
+
+Controls which HMAC algorithm is used for Assembly request signing.
+The default is `'sha384'` (recommended). If you need compatibility with a legacy key,
+you can set this to `'sha1'`.
+
 #### $Transloadit->request($options = [], $execute = true);
 
 Creates a new `TransloaditRequest` using the `$Transloadit->key` and
@@ -443,6 +449,12 @@ The auth key of your Transloadit account.
 #### $TransloaditRequest->secret = null;
 
 The auth secret of your Transloadit account.
+
+#### $TransloaditRequest->signatureAlgorithm = 'sha384';
+
+Controls which HMAC algorithm is used when preparing the Assembly request signature.
+The generated `signature` field uses the `<algorithm>:<digest>` format, for example:
+`sha384:...`.
 
 #### $TransloaditRequest->method = 'GET';
 

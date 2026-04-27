@@ -4,6 +4,10 @@
 
 diff: https://github.com/transloadit/php-sdk/compare/3.3.0...main
 
+- Default Assembly signatures to `sha384` and include the algorithm prefix (`sha384:...`)
+- Add request/client-level `signatureAlgorithm` configuration for legacy `sha1` compatibility
+- Extend tests to cover default `sha384` signing, legacy override, and Node CLI parity
+
 ## [3.3.0](https://github.com/transloadit/php-sdk/tree/3.3.0)
 
 - Replace the custom Node parity helper with the official `transloadit` CLI for Smart CDN signatures

@@ -23,6 +23,7 @@ class TransloaditRequestTest extends \PHPUnit\Framework\TestCase {
     $this->assertEquals($this->request->secret, null);
     $this->assertEquals($this->request->params, []);
     $this->assertEquals($this->request->expires, '+2 hours');
+    $this->assertEquals($this->request->signatureAlgorithm, 'sha384');
     $this->assertEquals('Expect:', $this->request->headers[0]);
     $this->assertContains('Transloadit-Client: php-sdk:%s', $this->request->headers);
   }
@@ -99,13 +100,28 @@ class TransloaditRequestTest extends \PHPUnit\Framework\TestCase {
     // No secret, no signature
     $this->assertEquals(null, $this->request->signString('foo'));
 
-    // Verify the test vector given in the documentation, see: http://transloadit.com/docs/authentication
+    // Verify the test vector (default sha384 + algorithm prefix)
     $this->request->secret = 'd805593620e689465d7da6b8caf2ac7384fdb7e9';
-    $expectedSignature = 'fec703ccbe36b942c90d17f64b71268ed4f5f512';
+    $expectedSignature = 'sha384:69b74f954488cbb571cace210ae9039d18d84ec57edc784d19fd364f4295c99c93c14f0fed7f245b480d5856f12effc2';
 
     $params = '{"auth":{"expires":"2010\/10\/19 09:01:20+00:00","key":"2b0c45611f6440dfb64611e872ec3211"},"steps":{"encode":{"robot":"\/video\/encode"}}}';
     $signature = $this->request->signString($params);
     $this->assertEquals($expectedSignature, $signature);
+
+    // Explicit algorithm override for legacy keys
+    $legacySignature = $this->request->signString($params, 'sha1');
+    $this->assertEquals('sha1:fec703ccbe36b942c90d17f64b71268ed4f5f512', $legacySignature);
+
+    // Request-level override should affect default signing behavior
+    $this->request->signatureAlgorithm = 'sha1';
+    $this->assertEquals('sha1:fec703ccbe36b942c90d17f64b71268ed4f5f512', $this->request->signString($params));
+  }
+
+  public function testSignStringWithInvalidAlgorithmThrowsInvalidArgumentException() {
+    $this->request->secret = 'secret';
+    $this->expectException(\InvalidArgumentException::class);
+    $this->expectExceptionMessage('Unsupported signature algorithm: definitely-not-a-real-algorithm');
+    $this->request->signString('payload', 'definitely-not-a-real-algorithm');
   }
 
   public function testGetParamsString() {
@@ -146,7 +162,7 @@ class TransloaditRequestTest extends \PHPUnit\Framework\TestCase {
           'width' => 320,
         ],
       ],
-    ], 'cli-key', 'cli-secret', 'sha1');
+    ], 'cli-key', 'cli-secret', 'sha384');
 
     $this->assertNotNull($cliResult);
     $this->assertArrayHasKey('signature', $cliResult);
@@ -166,8 +182,9 @@ class TransloaditRequestTest extends \PHPUnit\Framework\TestCase {
       $cliParams['steps']['resize']['width']
     );
 
-    $expectedSignature = hash_hmac('sha1', $cliResult['params'], 'cli-secret');
-    $this->assertEquals('sha1:' . $expectedSignature, $cliResult['signature']);
+    $expectedSignature = hash_hmac('sha384', $cliResult['params'], 'cli-secret');
+    $this->assertEquals('sha384:' . $expectedSignature, $cliResult['signature']);
+    $this->assertEquals($cliResult['signature'], $request->signString($cliResult['params']));
   }
 
   public function testExecute() {

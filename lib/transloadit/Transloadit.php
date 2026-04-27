@@ -5,6 +5,7 @@ namespace transloadit;
 class Transloadit {
   public $key      = null;
   public $secret   = null;
+  public $signatureAlgorithm = 'sha384';
   public $endpoint = 'https://api2.transloadit.com';
 
   public function __construct($attributes = []) {
@@ -17,6 +18,7 @@ class Transloadit {
     $options = $options + [
       'key'               => $this->key,
       'secret'            => $this->secret,
+      'signatureAlgorithm' => $this->signatureAlgorithm,
       'endpoint'          => $this->endpoint,
       'waitForCompletion' => false,
     ];

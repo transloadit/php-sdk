@@ -21,6 +21,7 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
   public function testAttributes() {
     $this->assertEquals($this->transloadit->key, null);
     $this->assertEquals($this->transloadit->secret, null);
+    $this->assertEquals($this->transloadit->signatureAlgorithm, 'sha384');
   }
 
   public function testCreateAssembly() {
@@ -78,10 +79,12 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
   public function testRequest() {
     $this->transloadit->key = 'my-key';
     $this->transloadit->secret = 'my-secret';
+    $this->transloadit->signatureAlgorithm = 'sha1';
     $request = $this->transloadit->request(['url' => 'foobar'], false);
 
     $this->assertEquals($this->transloadit->key, $request->key);
     $this->assertEquals($this->transloadit->secret, $request->secret);
+    $this->assertEquals($this->transloadit->signatureAlgorithm, $request->signatureAlgorithm);
     $this->assertEquals('foobar', $request->url);
 
     // Unfortunately we can't test the $execute parameter because PHP
