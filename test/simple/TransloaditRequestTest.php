@@ -117,6 +117,13 @@ class TransloaditRequestTest extends \PHPUnit\Framework\TestCase {
     $this->assertEquals('sha1:fec703ccbe36b942c90d17f64b71268ed4f5f512', $this->request->signString($params));
   }
 
+  public function testSignStringWithInvalidAlgorithmThrowsInvalidArgumentException() {
+    $this->request->secret = 'secret';
+    $this->expectException(\InvalidArgumentException::class);
+    $this->expectExceptionMessage('Unsupported signature algorithm: definitely-not-a-real-algorithm');
+    $this->request->signString('payload', 'definitely-not-a-real-algorithm');
+  }
+
   public function testGetParamsString() {
     $this->request->key = 'dskjadjk2j42jkh4';
     $PARAMS = $this->request->params = ['foo' => 'bar'];

@@ -53,7 +53,12 @@ class TransloaditRequest extends CurlRequest {
       $effectiveAlgorithm = 'sha384';
     }
 
-    $signature = hash_hmac($effectiveAlgorithm, $string, $this->secret);
+    try {
+      $signature = hash_hmac($effectiveAlgorithm, $string, $this->secret);
+    } catch (\ValueError $e) {
+      throw new \InvalidArgumentException('Unsupported signature algorithm: ' . $effectiveAlgorithm, 0, $e);
+    }
+
     if ($signature === false) {
       throw new \InvalidArgumentException('Unsupported signature algorithm: ' . $effectiveAlgorithm);
     }
