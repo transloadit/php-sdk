@@ -14,6 +14,7 @@ class TransloaditRequest extends CurlRequest {
 
   public $params   = [];
   public $expires  = '+2 hours';
+  public $signatureAlgorithm = 'sha384';
 
   public $headers  = [
     'Expect:',
@@ -42,12 +43,22 @@ class TransloaditRequest extends CurlRequest {
     return json_encode($params);
   }
 
-  public function signString($string) {
+  public function signString($string, $algorithm = null) {
     if (empty($this->secret)) {
       return null;
     }
 
-    return hash_hmac('sha1', $string, $this->secret);
+    $effectiveAlgorithm = strtolower((string) ($algorithm ?? $this->signatureAlgorithm ?? 'sha384'));
+    if ($effectiveAlgorithm === '') {
+      $effectiveAlgorithm = 'sha384';
+    }
+
+    $signature = hash_hmac($effectiveAlgorithm, $string, $this->secret);
+    if ($signature === false) {
+      throw new \InvalidArgumentException('Unsupported signature algorithm: ' . $effectiveAlgorithm);
+    }
+
+    return $effectiveAlgorithm . ':' . $signature;
   }
 
   public function prepare() {
