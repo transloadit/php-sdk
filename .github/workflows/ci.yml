@@ -37,10 +37,24 @@ jobs:
           php-version: ${{ matrix.php }}
           tools: php-cs-fixer, phpunit
           coverage: ${{ matrix.php == '8.1' && matrix.dependencies == 'locked' && 'xdebug' || 'none' }}
-      - uses: ramsey/composer-install@v3
-        with:
-          dependency-versions: ${{ matrix.dependencies }}
-          composer-options: '--ignore-platform-reqs'
+      - name: Install Composer dependencies
+        run: |
+          set -euo pipefail
+          case "${{ matrix.dependencies }}" in
+            locked)
+              composer install --no-interaction --prefer-dist --ignore-platform-reqs
+              ;;
+            lowest)
+              composer update --no-interaction --prefer-dist --ignore-platform-reqs --prefer-lowest
+              ;;
+            highest)
+              composer update --no-interaction --prefer-dist --ignore-platform-reqs
+              ;;
+            *)
+              echo "Unsupported dependency mode: ${{ matrix.dependencies }}" >&2
+              exit 1
+              ;;
+          esac
       - name: Test with Coverage
         if: matrix.php == '8.1' && matrix.dependencies == 'locked'
         run: |
