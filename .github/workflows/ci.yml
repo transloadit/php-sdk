@@ -24,15 +24,15 @@ jobs:
           - highest
     name: PHP ${{ matrix.php }} - ${{ matrix.dependencies }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 1
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: '20'
       - name: Install tsx
         run: npm install -g tsx
-      - uses: shivammathur/setup-php@v2
+      - uses: shivammathur/setup-php@7c071dfe9dc99bdf297fa79cb49ea005b9fcadbc # v2
         with:
           php-version: ${{ matrix.php }}
           tools: php-cs-fixer, phpunit
@@ -73,7 +73,7 @@ jobs:
           TEST_NODE_PARITY: 1
       - name: Publish Coverage Report
         if: github.event_name == 'pull_request' && matrix.php == '8.1' && matrix.dependencies == 'locked'
-        uses: lucassabreu/comment-coverage-clover@v0.13.0
+        uses: lucassabreu/comment-coverage-clover@03f6635d40eed0594269416270abb9f72dfeae4b # v0.16.0
         with:
           file: ./build/logs/clover.xml
           with-table: true
