@@ -605,6 +605,106 @@ class Transloadit {
   }
 
   /**
+   * Resumes an interrupted TUS upload from the server-reported offset and waits for the Assembly to finish.
+   *
+   * @param string $uploadUrl
+   * @param string $content
+   * @param string $assemblySslUrl
+   * @return TransloaditResponse
+   */
+  public function resumeTusUpload($uploadUrl, $content, $assemblySslUrl) {
+    $storedUploadUrl = $uploadUrl;
+    if (!$storedUploadUrl) {
+      throw new \RuntimeException('TUS resumeUpload needs input.storedUploadUrl');
+    }
+
+    $offsetHeaders = [];
+    $offsetHeaders['Tus-Resumable'] = '1.0.0';
+    $offsetHeaderLines = [];
+    foreach ($offsetHeaders as $name => $value) {
+      $offsetHeaderLines[] = $name . ': ' . $value;
+    }
+    $offsetResponseHeaders = [];
+    $offsetCurl = curl_init();
+    curl_setopt($offsetCurl, CURLOPT_CUSTOMREQUEST, 'HEAD');
+    curl_setopt($offsetCurl, CURLOPT_NOBODY, true);
+    curl_setopt($offsetCurl, CURLOPT_URL, $storedUploadUrl);
+    curl_setopt($offsetCurl, CURLOPT_POSTFIELDS, '');
+    curl_setopt($offsetCurl, CURLOPT_HTTPHEADER, $offsetHeaderLines);
+    curl_setopt($offsetCurl, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($offsetCurl, CURLOPT_HEADERFUNCTION, function ($curl, $headerLine) use (&$offsetResponseHeaders) {
+      $headerParts = explode(':', $headerLine, 2);
+      if (count($headerParts) === 2) {
+        $offsetResponseHeaders[strtolower(trim($headerParts[0]))] = trim($headerParts[1]);
+      }
+      return strlen($headerLine);
+    });
+    curl_exec($offsetCurl);
+    $offsetCurlError = curl_error($offsetCurl);
+    $offsetStatus = (int) curl_getinfo($offsetCurl, CURLINFO_HTTP_CODE);
+    curl_close($offsetCurl);
+    if ($offsetCurlError !== '') {
+      throw new \RuntimeException(sprintf('TUS offset request failed: %s', $offsetCurlError));
+    }
+    if ($offsetStatus !== 200) {
+      throw new \RuntimeException(sprintf('TUS offset returned HTTP %s, expected 200', $offsetStatus));
+    }
+    $resumeOffsetHeader = $offsetResponseHeaders['upload-offset'] ?? '';
+    if ($resumeOffsetHeader === '') {
+      throw new \RuntimeException('TUS offset did not return a Upload-Offset header');
+    }
+    if (!is_numeric($resumeOffsetHeader)) {
+      throw new \RuntimeException('TUS offset returned an invalid Upload-Offset header');
+    }
+    $resumeOffset = (int) $resumeOffsetHeader;
+
+    $uploadHeaders = [];
+    $uploadHeaders['Tus-Resumable'] = '1.0.0';
+    $uploadHeaders['Upload-Offset'] = (string) $resumeOffset;
+    $uploadHeaders['Content-Type'] = 'application/offset+octet-stream';
+    $uploadHeaderLines = [];
+    foreach ($uploadHeaders as $name => $value) {
+      $uploadHeaderLines[] = $name . ': ' . $value;
+    }
+    $uploadResponseHeaders = [];
+    $uploadCurl = curl_init();
+    curl_setopt($uploadCurl, CURLOPT_CUSTOMREQUEST, 'PATCH');
+    curl_setopt($uploadCurl, CURLOPT_URL, $storedUploadUrl);
+    curl_setopt($uploadCurl, CURLOPT_POSTFIELDS, substr($content, $resumeOffset));
+    curl_setopt($uploadCurl, CURLOPT_HTTPHEADER, $uploadHeaderLines);
+    curl_setopt($uploadCurl, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($uploadCurl, CURLOPT_HEADERFUNCTION, function ($curl, $headerLine) use (&$uploadResponseHeaders) {
+      $headerParts = explode(':', $headerLine, 2);
+      if (count($headerParts) === 2) {
+        $uploadResponseHeaders[strtolower(trim($headerParts[0]))] = trim($headerParts[1]);
+      }
+      return strlen($headerLine);
+    });
+    curl_exec($uploadCurl);
+    $uploadCurlError = curl_error($uploadCurl);
+    $uploadStatus = (int) curl_getinfo($uploadCurl, CURLINFO_HTTP_CODE);
+    curl_close($uploadCurl);
+    if ($uploadCurlError !== '') {
+      throw new \RuntimeException(sprintf('TUS upload request failed: %s', $uploadCurlError));
+    }
+    if ($uploadStatus !== 204) {
+      throw new \RuntimeException(sprintf('TUS upload returned HTTP %s, expected 204', $uploadStatus));
+    }
+    $uploadOffsetHeader = $uploadResponseHeaders['upload-offset'] ?? '';
+    if (!is_numeric($uploadOffsetHeader)) {
+      throw new \RuntimeException('TUS upload returned an invalid Upload-Offset header');
+    }
+    $uploadOffset = (int) $uploadOffsetHeader;
+    if ($uploadOffset !== strlen($content)) {
+      throw new \RuntimeException(sprintf('TUS upload offset %s, expected %s', $uploadOffset, strlen($content)));
+    }
+
+    $completedAssembly = $this->waitForAssembly($assemblySslUrl);
+
+    return $completedAssembly;
+  }
+
+  /**
    * Creates a TUS-ready Assembly, uploads one file with the TUS protocol, and waits for the Assembly to finish.
    *
    * @param int $fileCount
