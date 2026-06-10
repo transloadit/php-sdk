@@ -238,6 +238,21 @@ class Transloadit {
   }
 
   /**
+   * Retrieve an Assembly Status.
+   *
+   * Fetches the Assembly Status from an absolute Assembly URL such as assembly_ssl_url.
+   *
+   * @param string $url
+   * @return TransloaditResponse
+   */
+  public function getAssemblyByUrl($url) {
+    return $this->request([
+      'method' => 'GET',
+      'url'    => $url,
+    ]);
+  }
+
+  /**
    * Cancel a running Assembly.
    *
    * @param string $assembly_id
@@ -557,4 +572,198 @@ class Transloadit {
   }
 
   // </api2-generated-endpoints>
+
+  // <api2-generated-features>
+  // This block is generated from Transloadit API2 contracts. If it looks wrong,
+  // please report the issue instead of editing this block by hand; the source fix
+  // belongs in the contract generator so all SDKs stay in sync.
+
+  /**
+   * Creates a TUS-ready Assembly that waits for the requested number of resumable uploads before execution continues.
+   *
+   * @param int $fileCount
+   * @return TransloaditResponse
+   */
+  public function createTusAssembly($fileCount) {
+    $assembly = $this->createAssembly([
+      'params' => [
+        'await' => false,
+        'steps' => [
+          ':original' => [
+            'output_meta' => true,
+            'result' => 'debug',
+            'robot' => '/upload/handle',
+          ],
+        ],
+      ],
+      'fields' => [
+        'num_expected_upload_files' => $fileCount,
+      ],
+    ]);
+
+    return $assembly;
+  }
+
+  /**
+   * Creates a TUS-ready Assembly, uploads one file with the TUS protocol, and waits for the Assembly to finish.
+   *
+   * @param int $fileCount
+   * @param string $content
+   * @param string $fieldname
+   * @param string $filename
+   * @param array $userMeta
+   * @return array{0: TransloaditResponse, 1: string}
+   */
+  public function uploadTusAssembly($fileCount, $content, $fieldname, $filename, $userMeta = []) {
+    $createdAssembly = $this->createTusAssembly($fileCount);
+
+    $endpointUrl = $createdAssembly->data['tus_url'] ?? null;
+    if (!$endpointUrl) {
+      throw new \RuntimeException('TUS singleUploadLifecycle needs input.endpointUrl');
+    }
+
+    $metadataMap = [];
+    if ($userMeta) {
+      foreach ($userMeta as $key => $value) {
+        $metadataMap[(string) $key] = (string) $value;
+      }
+    }
+    $metadataMap['assembly_url'] = (string) ($createdAssembly->data['assembly_ssl_url'] ?? null);
+    $metadataMap['fieldname'] = (string) $fieldname;
+    $metadataMap['filename'] = (string) $filename;
+
+    $createHeaders = [];
+    $createHeaders['Tus-Resumable'] = '1.0.0';
+    $createHeaders['Upload-Length'] = (string) strlen($content);
+    $createMetadataParts = [];
+    foreach ($metadataMap as $key => $value) {
+      $createMetadataParts[] = $key . ' ' . base64_encode((string) $value);
+    }
+    $createHeaders['Upload-Metadata'] = implode(',', $createMetadataParts);
+    $createHeaderLines = [];
+    foreach ($createHeaders as $name => $value) {
+      $createHeaderLines[] = $name . ': ' . $value;
+    }
+    $createResponseHeaders = [];
+    $createCurl = curl_init();
+    curl_setopt($createCurl, CURLOPT_CUSTOMREQUEST, 'POST');
+    curl_setopt($createCurl, CURLOPT_URL, $endpointUrl);
+    curl_setopt($createCurl, CURLOPT_POSTFIELDS, '');
+    curl_setopt($createCurl, CURLOPT_HTTPHEADER, $createHeaderLines);
+    curl_setopt($createCurl, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($createCurl, CURLOPT_HEADERFUNCTION, function ($curl, $headerLine) use (&$createResponseHeaders) {
+      $headerParts = explode(':', $headerLine, 2);
+      if (count($headerParts) === 2) {
+        $createResponseHeaders[strtolower(trim($headerParts[0]))] = trim($headerParts[1]);
+      }
+      return strlen($headerLine);
+    });
+    curl_exec($createCurl);
+    $createCurlError = curl_error($createCurl);
+    $createStatus = (int) curl_getinfo($createCurl, CURLINFO_HTTP_CODE);
+    curl_close($createCurl);
+    if ($createCurlError !== '') {
+      throw new \RuntimeException(sprintf('TUS create request failed: %s', $createCurlError));
+    }
+    if ($createStatus !== 201) {
+      throw new \RuntimeException(sprintf('TUS create returned HTTP %s, expected 201', $createStatus));
+    }
+    $uploadUrlLocation = $createResponseHeaders['location'] ?? '';
+    if (!$uploadUrlLocation) {
+      throw new \RuntimeException('TUS create did not return a Location header');
+    }
+    if (preg_match('#^https?://#i', $uploadUrlLocation)) {
+      $uploadUrlText = $uploadUrlLocation;
+    } else {
+      $endpointUrlParts = parse_url($endpointUrl);
+      $endpointUrlOrigin = $endpointUrlParts['scheme'] . '://' . $endpointUrlParts['host'] . (isset($endpointUrlParts['port']) ? ':' . $endpointUrlParts['port'] : '');
+      if (substr($uploadUrlLocation, 0, 1) === '/') {
+        $uploadUrlText = $endpointUrlOrigin . $uploadUrlLocation;
+      } else {
+        $endpointUrlPath = $endpointUrlParts['path'] ?? '/';
+        $uploadUrlText = $endpointUrlOrigin . substr($endpointUrlPath, 0, strrpos($endpointUrlPath, '/') + 1) . $uploadUrlLocation;
+      }
+    }
+
+    $uploadHeaders = [];
+    $uploadHeaders['Tus-Resumable'] = '1.0.0';
+    $uploadHeaders['Upload-Offset'] = '0';
+    $uploadHeaders['Content-Type'] = 'application/offset+octet-stream';
+    $uploadHeaderLines = [];
+    foreach ($uploadHeaders as $name => $value) {
+      $uploadHeaderLines[] = $name . ': ' . $value;
+    }
+    $uploadResponseHeaders = [];
+    $uploadCurl = curl_init();
+    curl_setopt($uploadCurl, CURLOPT_CUSTOMREQUEST, 'PATCH');
+    curl_setopt($uploadCurl, CURLOPT_URL, $uploadUrlText);
+    curl_setopt($uploadCurl, CURLOPT_POSTFIELDS, $content);
+    curl_setopt($uploadCurl, CURLOPT_HTTPHEADER, $uploadHeaderLines);
+    curl_setopt($uploadCurl, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($uploadCurl, CURLOPT_HEADERFUNCTION, function ($curl, $headerLine) use (&$uploadResponseHeaders) {
+      $headerParts = explode(':', $headerLine, 2);
+      if (count($headerParts) === 2) {
+        $uploadResponseHeaders[strtolower(trim($headerParts[0]))] = trim($headerParts[1]);
+      }
+      return strlen($headerLine);
+    });
+    curl_exec($uploadCurl);
+    $uploadCurlError = curl_error($uploadCurl);
+    $uploadStatus = (int) curl_getinfo($uploadCurl, CURLINFO_HTTP_CODE);
+    curl_close($uploadCurl);
+    if ($uploadCurlError !== '') {
+      throw new \RuntimeException(sprintf('TUS upload request failed: %s', $uploadCurlError));
+    }
+    if ($uploadStatus !== 204) {
+      throw new \RuntimeException(sprintf('TUS upload returned HTTP %s, expected 204', $uploadStatus));
+    }
+    $uploadOffsetHeader = $uploadResponseHeaders['upload-offset'] ?? '';
+    if (!is_numeric($uploadOffsetHeader)) {
+      throw new \RuntimeException('TUS upload returned an invalid Upload-Offset header');
+    }
+    $uploadOffset = (int) $uploadOffsetHeader;
+    if ($uploadOffset !== strlen($content)) {
+      throw new \RuntimeException(sprintf('TUS upload offset %s, expected %s', $uploadOffset, strlen($content)));
+    }
+
+    $createdAssemblyAssemblySslUrl = $createdAssembly->data['assembly_ssl_url'] ?? null;
+    if (!$createdAssemblyAssemblySslUrl) {
+      throw new \RuntimeException('uploadTusAssembly needs createdAssembly.assembly_ssl_url');
+    }
+    $completedAssembly = $this->waitForAssembly($createdAssemblyAssemblySslUrl);
+
+    return [$completedAssembly, $uploadUrlText];
+  }
+
+  /**
+   * Waits for an Assembly to finish uploading and executing.
+   * Use the returned assembly_ssl_url as the assembly URL.
+   *
+   * @param string $assemblyUrl
+   * @return TransloaditResponse
+   */
+  public function waitForAssembly($assemblyUrl) {
+    while (true) {
+      $response = $this->getAssemblyByUrl($assemblyUrl);
+      $data = $response->data;
+
+      if (!is_array($data)) {
+        throw new \RuntimeException(sprintf('Unexpected non-JSON response (%s).', $response->curlInfo['http_code'] ?? ''));
+      }
+
+      // Abort polling if the assembly has entered an error state
+      if (!empty($data['error'])) {
+        return $response;
+      }
+
+      // The polling is done if the assembly is not uploading or executing anymore.
+      if (!in_array($data['ok'] ?? null, ['ASSEMBLY_UPLOADING', 'ASSEMBLY_EXECUTING'], true)) {
+        return $response;
+      }
+
+      sleep(1);
+    }
+  }
+
+  // </api2-generated-features>
 }
