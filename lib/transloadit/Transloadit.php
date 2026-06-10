@@ -89,55 +89,6 @@ class Transloadit {
     return join("\n", $out);
   }
 
-  public function createAssembly($options) {
-    return $this->request($options + [
-      'method' => 'POST',
-      'path'   => '/assemblies',
-    ]);
-  }
-
-  // Leave this in for BC.
-  public function getAssembly($assembly_id) {
-    $response = $this->request([
-      'method' => 'GET',
-      'path'   => '/assemblies/' . $assembly_id,
-    ], true);
-
-    return $response;
-  }
-
-  public function deleteAssembly($assembly_id) {
-    return $this->cancelAssembly($assembly_id);
-  }
-
-  public function cancelAssembly($assembly_id) {
-    // Look up the host for this assembly
-    $response = $this->request([
-      'method' => 'GET',
-      'path'   => '/assemblies/' . $assembly_id,
-    ], true);
-
-    $error = $response->error();
-    if ($error) {
-      return $error;
-    }
-
-    $url = parse_url($response->data['assembly_url']);
-
-    $response = $this->request([
-      'method' => 'DELETE',
-      'path'   => $url['path'],
-      'host'   => $url['host'],
-    ]);
-
-    $error = $response->error();
-    if ($error) {
-      return $error;
-    } else {
-      return $response;
-    }
-  }
-
   /**
    * Generates a signed URL for Transloadit's Smart CDN
    * https://transloadit.com/services/content-delivery/
@@ -154,7 +105,7 @@ class Transloadit {
       string $templateSlug,
       string $inputField = '',
       array $params = [],
-      int $expireAtMs = null
+      ?int $expireAtMs = null
   ): string {
     // Validate required fields
     if (!$workspaceSlug) {
@@ -226,4 +177,384 @@ class Transloadit {
       $finalQueryString
     );
   }
+
+  // <api2-generated-endpoints>
+  // This block is generated from Transloadit API2 contracts. If it looks wrong,
+  // please report the issue instead of editing this block by hand; the source fix
+  // belongs in the contract generator so all SDKs stay in sync.
+
+  /**
+   * Create a new Assembly.
+   *
+   * @param array $options TransloaditRequest options such as 'params', 'fields', or 'files'.
+   * @return TransloaditResponse
+   */
+  public function createAssembly($options = []) {
+    return $this->request($options + [
+      'method' => 'POST',
+      'path'   => '/assemblies',
+    ]);
+  }
+
+  /**
+   * Create Assembly With Id.
+   *
+   * @param string $assembly_id
+   * @param array $options TransloaditRequest options such as 'params', 'fields', or 'files'.
+   * @return TransloaditResponse
+   */
+  public function createAssemblyWithId($assembly_id, $options = []) {
+    return $this->request($options + [
+      'method' => 'POST',
+      'path'   => sprintf('/assemblies/%s', rawurlencode($assembly_id)),
+    ]);
+  }
+
+  /**
+   * Retrieve list of Assemblies.
+   *
+   * @param array $options TransloaditRequest options such as 'params'.
+   * @return TransloaditResponse
+   */
+  public function listAssemblies($options = []) {
+    return $this->request($options + [
+      'method' => 'GET',
+      'path'   => '/assemblies',
+    ]);
+  }
+
+  /**
+   * Retrieve an Assembly Status.
+   *
+   * @param string $assembly_id
+   * @param array $options TransloaditRequest options such as 'params'.
+   * @return TransloaditResponse
+   */
+  public function getAssembly($assembly_id, $options = []) {
+    return $this->request($options + [
+      'method' => 'GET',
+      'path'   => sprintf('/assemblies/%s', rawurlencode($assembly_id)),
+    ]);
+  }
+
+  /**
+   * Cancel a running Assembly.
+   *
+   * @param string $assembly_id
+   * @return TransloaditResponse|string The response, or an error string on failure.
+   */
+  public function cancelAssembly($assembly_id) {
+    // Look up the host for this assembly
+    $response = $this->request([
+      'method' => 'GET',
+      'path'   => sprintf('/assemblies/%s', rawurlencode($assembly_id)),
+    ]);
+
+    $error = $response->error();
+    if ($error) {
+      return $error;
+    }
+
+    $url = parse_url($response->data['assembly_url']);
+
+    $response = $this->request([
+      'method' => 'DELETE',
+      'path'   => $url['path'],
+      'host'   => $url['host'],
+    ]);
+
+    $error = $response->error();
+    if ($error) {
+      return $error;
+    }
+
+    return $response;
+  }
+
+  /**
+   * Cancel a running Assembly.
+   *
+   * Kept for backward compatibility: delegates to cancelAssembly().
+   *
+   * @param string $assembly_id
+   * @return TransloaditResponse|string The response, or an error string on failure.
+   */
+  public function deleteAssembly($assembly_id) {
+    return $this->cancelAssembly($assembly_id);
+  }
+
+  /**
+   * Replay an Assembly.
+   *
+   * @param string $assembly_id
+   * @param array $options TransloaditRequest options such as 'params'.
+   * @return TransloaditResponse
+   */
+  public function replayAssembly($assembly_id, $options = []) {
+    return $this->request($options + [
+      'method' => 'POST',
+      'path'   => sprintf('/assemblies/%s/replay', rawurlencode($assembly_id)),
+    ]);
+  }
+
+  /**
+   * Replay Assembly Notification.
+   *
+   * @param string $assembly_id
+   * @param array $options TransloaditRequest options such as 'params'.
+   * @return TransloaditResponse
+   */
+  public function replayAssemblyNotification($assembly_id, $options = []) {
+    return $this->request($options + [
+      'method' => 'POST',
+      'path'   => sprintf('/assembly_notifications/%s/replay', rawurlencode($assembly_id)),
+    ]);
+  }
+
+  /**
+   * List Assembly Notifications.
+   *
+   * @param string $assembly_id
+   * @return TransloaditResponse
+   */
+  public function listAssemblyNotifications($assembly_id) {
+    return $this->request([
+      'method' => 'GET',
+      'path'   => sprintf('/assembly_notifications/%s', rawurlencode($assembly_id)),
+    ]);
+  }
+
+  /**
+   * Retrieve a month’s bill.
+   *
+   * @param int $month
+   * @param int $year
+   * @param array $options TransloaditRequest options such as 'params'.
+   * @return TransloaditResponse
+   */
+  public function getBill($month, $year, $options = []) {
+    return $this->request($options + [
+      'method' => 'GET',
+      'path'   => sprintf('/bill/%d-%02d', $year, $month),
+    ]);
+  }
+
+  /**
+   * Retrieve list of Templates.
+   *
+   * @param array $options TransloaditRequest options such as 'params'.
+   * @return TransloaditResponse
+   */
+  public function listTemplates($options = []) {
+    return $this->request($options + [
+      'method' => 'GET',
+      'path'   => '/templates',
+    ]);
+  }
+
+  /**
+   * Create a new Template.
+   *
+   * @param array $options TransloaditRequest options such as 'params'.
+   * @return TransloaditResponse
+   */
+  public function createTemplate($options = []) {
+    return $this->request($options + [
+      'method' => 'POST',
+      'path'   => '/templates',
+    ]);
+  }
+
+  /**
+   * Retrieve a Template.
+   *
+   * @param string $template_id
+   * @param array $options TransloaditRequest options such as 'params'.
+   * @return TransloaditResponse
+   */
+  public function getTemplate($template_id, $options = []) {
+    return $this->request($options + [
+      'method' => 'GET',
+      'path'   => sprintf('/templates/%s', rawurlencode($template_id)),
+    ]);
+  }
+
+  /**
+   * Get Builtin Template.
+   *
+   * @param string $builtin_template_slug
+   * @param array $options TransloaditRequest options such as 'params'.
+   * @return TransloaditResponse
+   */
+  public function getBuiltinTemplate($builtin_template_slug, $options = []) {
+    return $this->request($options + [
+      'method' => 'GET',
+      'path'   => sprintf('/templates/builtin/%s', rawurlencode($builtin_template_slug)),
+    ]);
+  }
+
+  /**
+   * Get Template Full.
+   *
+   * @param string $template_id_or_name
+   * @param array $options TransloaditRequest options such as 'params'.
+   * @return TransloaditResponse
+   */
+  public function getTemplateFull($template_id_or_name, $options = []) {
+    return $this->request($options + [
+      'method' => 'GET',
+      'path'   => sprintf('/templates/%s/full', rawurlencode($template_id_or_name)),
+    ]);
+  }
+
+  /**
+   * Get Builtin Template Full.
+   *
+   * @param string $builtin_template_slug
+   * @param array $options TransloaditRequest options such as 'params'.
+   * @return TransloaditResponse
+   */
+  public function getBuiltinTemplateFull($builtin_template_slug, $options = []) {
+    return $this->request($options + [
+      'method' => 'GET',
+      'path'   => sprintf('/templates/builtin/%s/full', rawurlencode($builtin_template_slug)),
+    ]);
+  }
+
+  /**
+   * Edit a Template.
+   *
+   * @param string $template_id
+   * @param array $options TransloaditRequest options such as 'params'.
+   * @return TransloaditResponse
+   */
+  public function updateTemplate($template_id, $options = []) {
+    return $this->request($options + [
+      'method' => 'PUT',
+      'path'   => sprintf('/templates/%s', rawurlencode($template_id)),
+    ]);
+  }
+
+  /**
+   * Delete a Template.
+   *
+   * @param string $template_id
+   * @param array $options TransloaditRequest options such as 'params'.
+   * @return TransloaditResponse
+   */
+  public function deleteTemplate($template_id, $options = []) {
+    return $this->request($options + [
+      'method' => 'DELETE',
+      'path'   => sprintf('/templates/%s', rawurlencode($template_id)),
+    ]);
+  }
+
+  /**
+   * Retrieve currently used priority job slots.
+   *
+   * @param array $options TransloaditRequest options such as 'params'.
+   * @return TransloaditResponse
+   */
+  public function listPriorityJobSlots($options = []) {
+    return $this->request($options + [
+      'method' => 'GET',
+      'path'   => '/queues/job_slots',
+    ]);
+  }
+
+  /**
+   * Retrieve list of Template Credentials.
+   *
+   * @param array $options TransloaditRequest options such as 'params'.
+   * @return TransloaditResponse
+   */
+  public function listTemplateCredentials($options = []) {
+    return $this->request($options + [
+      'method' => 'GET',
+      'path'   => '/template_credentials',
+    ]);
+  }
+
+  /**
+   * List Template Credential Types.
+   *
+   * @param array $options TransloaditRequest options such as 'params'.
+   * @return TransloaditResponse
+   */
+  public function listTemplateCredentialTypes($options = []) {
+    return $this->request($options + [
+      'method' => 'GET',
+      'path'   => '/template_credentials/types',
+    ]);
+  }
+
+  /**
+   * Validate Template Credential OAuth On Create.
+   *
+   * @param array $options TransloaditRequest options such as 'params'.
+   * @return TransloaditResponse
+   */
+  public function validateTemplateCredentialOauthOnCreate($options = []) {
+    return $this->request($options + [
+      'method' => 'POST',
+      'path'   => '/template_credentials/validateOauthOnCreate',
+    ]);
+  }
+
+  /**
+   * Create a new Template Credential.
+   *
+   * @param array $options TransloaditRequest options such as 'params'.
+   * @return TransloaditResponse
+   */
+  public function createTemplateCredentials($options = []) {
+    return $this->request($options + [
+      'method' => 'POST',
+      'path'   => '/template_credentials',
+    ]);
+  }
+
+  /**
+   * Retrieve a Template Credential.
+   *
+   * @param string $identifier
+   * @param array $options TransloaditRequest options such as 'params'.
+   * @return TransloaditResponse
+   */
+  public function getTemplateCredentials($identifier, $options = []) {
+    return $this->request($options + [
+      'method' => 'GET',
+      'path'   => sprintf('/template_credentials/%s', rawurlencode($identifier)),
+    ]);
+  }
+
+  /**
+   * Delete a Template Credential.
+   *
+   * @param string $identifier
+   * @param array $options TransloaditRequest options such as 'params'.
+   * @return TransloaditResponse
+   */
+  public function deleteTemplateCredentials($identifier, $options = []) {
+    return $this->request($options + [
+      'method' => 'DELETE',
+      'path'   => sprintf('/template_credentials/%s', rawurlencode($identifier)),
+    ]);
+  }
+
+  /**
+   * Edit a Template Credential.
+   *
+   * @param string $identifier
+   * @param array $options TransloaditRequest options such as 'params'.
+   * @return TransloaditResponse
+   */
+  public function updateTemplateCredentials($identifier, $options = []) {
+    return $this->request($options + [
+      'method' => 'PUT',
+      'path'   => sprintf('/template_credentials/%s', rawurlencode($identifier)),
+    ]);
+  }
+
+  // </api2-generated-endpoints>
 }
