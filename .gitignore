@@ -9,3 +9,4 @@ env.sh
 .aider*
 .env
 .docker-cache/
+.env*

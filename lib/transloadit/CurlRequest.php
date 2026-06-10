@@ -21,7 +21,9 @@ class CurlRequest {
   public function getCurlOptions() {
     $url = $this->url;
 
-    $hasBody = ($this->method === 'PUT' || $this->method === 'POST');
+    // DELETE carries signed params in the body like PUT/POST; the API does not read
+    // them from the query string on all routes (matches the other Transloadit SDKs).
+    $hasBody = ($this->method === 'PUT' || $this->method === 'POST' || $this->method === 'DELETE');
     if (!$hasBody) {
       $url .= '?' . http_build_query($this->fields);
     }
@@ -76,7 +78,9 @@ class CurlRequest {
         }
         // -- End edit --
       }
-      $options[CURLOPT_POSTFIELDS] = $fields;
+      // Without files, send fields urlencoded (an array would switch curl to
+      // multipart/form-data, which not every API route parses for DELETE).
+      $options[CURLOPT_POSTFIELDS] = empty($this->files) ? http_build_query($fields) : $fields;
     }
 
     return $options;

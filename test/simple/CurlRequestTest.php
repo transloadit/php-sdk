@@ -44,15 +44,15 @@ class CurlRequestTest extends \PHPUnit\Framework\TestCase {
     $options = $this->request->getCurlOptions();
     $this->assertEquals($this->request->headers, $options[CURLOPT_HTTPHEADER]);
 
-    // test put fields
+    // test put fields (file-less bodies are sent urlencoded)
     $this->request->fields = ['hello' => 'world'];
     $options = $this->request->getCurlOptions();
-    $this->assertEquals($this->request->fields, $options[CURLOPT_POSTFIELDS]);
+    $this->assertEquals(http_build_query($this->request->fields), $options[CURLOPT_POSTFIELDS]);
 
     // test post fields
     $this->request->method = 'POST';
     $options = $this->request->getCurlOptions();
-    $this->assertEquals($this->request->fields, $options[CURLOPT_POSTFIELDS]);
+    $this->assertEquals(http_build_query($this->request->fields), $options[CURLOPT_POSTFIELDS]);
     $this->assertEquals($this->request->url, $options[CURLOPT_URL]);
 
     // test get query
