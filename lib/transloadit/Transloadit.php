@@ -381,34 +381,6 @@ class Transloadit {
   }
 
   /**
-   * Retrieve a Template.
-   *
-   * @param string $template_id
-   * @param array $options TransloaditRequest options such as 'params'.
-   * @return TransloaditResponse
-   */
-  public function getTemplate($template_id, $options = []) {
-    return $this->request($options + [
-      'method' => 'GET',
-      'path'   => sprintf('/templates/%s', rawurlencode($template_id)),
-    ]);
-  }
-
-  /**
-   * Retrieve a built-in Template.
-   *
-   * @param string $builtin_template_slug
-   * @param array $options TransloaditRequest options such as 'params'.
-   * @return TransloaditResponse
-   */
-  public function getBuiltinTemplate($builtin_template_slug, $options = []) {
-    return $this->request($options + [
-      'method' => 'GET',
-      'path'   => sprintf('/templates/builtin/%s', rawurlencode($builtin_template_slug)),
-    ]);
-  }
-
-  /**
    * Retrieve full Template details.
    *
    * @param string $template_id_or_name
@@ -433,6 +405,34 @@ class Transloadit {
     return $this->request($options + [
       'method' => 'GET',
       'path'   => sprintf('/templates/builtin/%s/full', rawurlencode($builtin_template_slug)),
+    ]);
+  }
+
+  /**
+   * Retrieve a Template.
+   *
+   * @param string $template_id
+   * @param array $options TransloaditRequest options such as 'params'.
+   * @return TransloaditResponse
+   */
+  public function getTemplate($template_id, $options = []) {
+    return $this->request($options + [
+      'method' => 'GET',
+      'path'   => sprintf('/templates/%s', rawurlencode($template_id)),
+    ]);
+  }
+
+  /**
+   * Retrieve a built-in Template.
+   *
+   * @param string $builtin_template_slug
+   * @param array $options TransloaditRequest options such as 'params'.
+   * @return TransloaditResponse
+   */
+  public function getBuiltinTemplate($builtin_template_slug, $options = []) {
+    return $this->request($options + [
+      'method' => 'GET',
+      'path'   => sprintf('/templates/builtin/%s', rawurlencode($builtin_template_slug)),
     ]);
   }
 
@@ -497,7 +497,9 @@ class Transloadit {
     $endpoint = parse_url($this->endpoint);
     $host = is_array($endpoint) ? ($endpoint['host'] ?? '') : '';
     $scheme = is_array($endpoint) ? ($endpoint['scheme'] ?? '') : '';
-    $loopback = $host === 'localhost' || $host === '::1' || strpos($host, '127.') === 0;
+    $normalizedHost = trim($host, '[]');
+    $ipv4Loopback = filter_var($normalizedHost, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) !== false && strpos($normalizedHost, '127.') === 0;
+    $loopback = $normalizedHost === 'localhost' || $normalizedHost === '::1' || $ipv4Loopback;
     $hasUserInfo = is_array($endpoint) && (isset($endpoint['user']) || isset($endpoint['pass']));
     if (!is_array($endpoint) || $hasUserInfo || !($scheme === 'https' || ($scheme === 'http' && $loopback))) {
       throw new \InvalidArgumentException('Refusing to send credentials to an insecure bearer token endpoint.');

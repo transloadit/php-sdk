@@ -30,4 +30,15 @@ class TransloaditBearerTokenTest extends \PHPUnit\Framework\TestCase {
     $this->assertContains('Authorization: Basic a2V5OnNlY3JldA==', $request->headers);
     $this->assertFalse($request->getCurlOptions()[CURLOPT_FOLLOWLOCATION]);
   }
+
+  public function testRejects127PrefixedDomain() {
+    $client = new TestableBearerTokenClient([
+      'endpoint' => 'http://127.attacker.com',
+      'key' => 'key',
+      'secret' => 'secret',
+    ]);
+
+    $this->expectException(\InvalidArgumentException::class);
+    $client->bearerTokenRequest([]);
+  }
 }
