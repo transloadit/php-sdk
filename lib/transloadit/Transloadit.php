@@ -773,15 +773,14 @@ class Transloadit {
   /**
    * Creates a TUS-ready Assembly, uploads one file with the TUS protocol, and waits for the Assembly to finish.
    *
-   * @param int $fileCount
    * @param string $content
    * @param string $fieldname
    * @param string $filename
    * @param array $userMeta
    * @return array{0: TransloaditResponse, 1: string}
    */
-  public function uploadTusAssembly($fileCount, $content, $fieldname, $filename, $userMeta = []) {
-    $createdAssembly = $this->createTusAssembly($fileCount);
+  public function uploadTusAssembly($content, $fieldname, $filename, $userMeta = []) {
+    $createdAssembly = $this->createTusAssembly(1);
 
     $endpointUrl = $createdAssembly->data['tus_url'] ?? null;
     if (!$endpointUrl) {

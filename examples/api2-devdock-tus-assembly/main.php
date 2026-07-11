@@ -106,7 +106,6 @@ $client = new Transloadit([
 $input = uploadTusAssemblyInput($scenario);
 $upload = uploadConfig($input);
 [$completedAssembly, $uploadUrl] = $client->uploadTusAssembly(
-  $input['file_count'],
   $upload['content'],
   $upload['fieldname'],
   $upload['filename'],
