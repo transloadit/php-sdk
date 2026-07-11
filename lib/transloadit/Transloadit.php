@@ -478,6 +478,55 @@ class Transloadit {
   }
 
   /**
+   * Create a bearer token.
+   *
+   * @param array $options Optional token audience and scope.
+   * @return CurlResponse
+   */
+  public function issueBearerToken($options = []) {
+    $response = $this->createBearerTokenRequest($options)->execute();
+    $response->parseJson();
+    return $response;
+  }
+
+  protected function createBearerTokenRequest($options) {
+    if (empty($this->secret)) {
+      throw new \InvalidArgumentException('Bearer token issuance requires an auth secret.');
+    }
+
+    $endpoint = parse_url($this->endpoint);
+    $host = is_array($endpoint) ? ($endpoint['host'] ?? '') : '';
+    $scheme = is_array($endpoint) ? ($endpoint['scheme'] ?? '') : '';
+    $loopback = $host === 'localhost' || $host === '::1' || strpos($host, '127.') === 0;
+    $hasUserInfo = is_array($endpoint) && (isset($endpoint['user']) || isset($endpoint['pass']));
+    if (!is_array($endpoint) || $hasUserInfo || !($scheme === 'https' || ($scheme === 'http' && $loopback))) {
+      throw new \InvalidArgumentException('Refusing to send credentials to an insecure bearer token endpoint.');
+    }
+
+    $fields = [];
+    if (array_key_exists('aud', $options)) {
+      $fields['aud'] = $options['aud'];
+    }
+    $fields['grant_type'] = 'client_credentials';
+    if (array_key_exists('scope', $options)) {
+      $fields['scope'] = $options['scope'];
+    }
+
+    return new CurlRequest([
+      'method' => 'POST',
+      'url' => rtrim($this->endpoint, '/') . '/token',
+      'fields' => $fields,
+      'curlOptions' => [CURLOPT_FOLLOWLOCATION => false],
+      'headers' => [
+        'Accept: application/json',
+        'Authorization: Basic ' . base64_encode($this->key . ':' . $this->secret),
+        'Content-Type: application/x-www-form-urlencoded',
+        'Transloadit-Client: php-sdk:%s',
+      ],
+    ]);
+  }
+
+  /**
    * Retrieve list of Template Credentials.
    *
    * @param array $options TransloaditRequest options such as 'params'.
