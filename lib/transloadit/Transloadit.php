@@ -246,10 +246,7 @@ class Transloadit {
    * @return TransloaditResponse
    */
   public function getAssemblyByUrl($url) {
-    return $this->request([
-      'method' => 'GET',
-      'url'    => $url,
-    ]);
+    return $this->requestAssemblyUrl($url, 'GET');
   }
 
   /**
@@ -270,13 +267,8 @@ class Transloadit {
       return $error;
     }
 
-    $url = parse_url($response->data['assembly_url']);
-
-    $response = $this->request([
-      'method' => 'DELETE',
-      'path'   => $url['path'],
-      'host'   => $url['host'],
-    ]);
+    $assemblyUrl = $response->data['assembly_url'] ?? '';
+    $response = $this->requestAssemblyUrl($assemblyUrl, 'DELETE');
 
     $error = $response->error();
     if ($error) {
@@ -635,6 +627,50 @@ class Transloadit {
       'method' => 'PUT',
       'path'   => sprintf('/template_credentials/%s', rawurlencode($identifier)),
     ]);
+  }
+
+  protected function requestAssemblyUrl($url, $method, $execute = true) {
+    $candidate = parse_url($url);
+    $configured = parse_url($this->endpoint);
+    $candidateHost = is_array($candidate) ? strtolower($candidate['host'] ?? '') : '';
+    $candidateScheme = is_array($candidate) ? strtolower($candidate['scheme'] ?? '') : '';
+    $configuredHost = is_array($configured) ? strtolower($configured['host'] ?? '') : '';
+    $configuredScheme = is_array($configured) ? strtolower($configured['scheme'] ?? '') : '';
+    $candidatePort = is_array($candidate) && isset($candidate['port'])
+    ? (int) $candidate['port']
+    : ($candidateScheme === 'https' ? 443 : 80);
+    $configuredPort = is_array($configured) && isset($configured['port'])
+    ? (int) $configured['port']
+    : ($configuredScheme === 'https' ? 443 : 80);
+    $configuredOrigin = $candidateHost !== ''
+    && $candidateScheme === $configuredScheme
+    && $candidateHost === $configuredHost
+    && $candidatePort === $configuredPort;
+    $api2Cell = $candidateScheme === 'https'
+    && $candidatePort === 443
+    && strpos($candidateHost, 'api2-') === 0
+    && substr($candidateHost, -strlen('.transloadit.com')) === '.transloadit.com';
+    $hasUserInfo = is_array($candidate)
+    && (isset($candidate['user']) || isset($candidate['pass']));
+    if ($hasUserInfo || !($configuredOrigin || $api2Cell)) {
+      throw new \InvalidArgumentException('Refusing to request an untrusted Assembly URL.');
+    }
+    if ($method !== 'GET' && $method !== 'DELETE') {
+      throw new \InvalidArgumentException('Unsupported Assembly URL method: ' . $method);
+    }
+
+    $request = new CurlRequest([
+      'method' => $method,
+      'url' => $url,
+      'curlOptions' => [CURLOPT_FOLLOWLOCATION => false],
+      'headers' => ['Transloadit-Client: php-sdk:%s'],
+    ]);
+    if (!$execute) {
+      return $request;
+    }
+    $response = $request->execute(new TransloaditResponse());
+    $response->parseJson();
+    return $response;
   }
 
   // </api2-generated-endpoints>

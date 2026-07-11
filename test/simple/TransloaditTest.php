@@ -7,6 +7,12 @@ use transloadit\TransloaditResponse;
 
 date_default_timezone_set('UTC');
 
+class TestableTransloadit extends Transloadit {
+  public function createAssemblyUrlRequestForTest($url, $method) {
+    return $this->requestAssemblyUrl($url, $method, false);
+  }
+}
+
 class TransloaditTest extends \PHPUnit\Framework\TestCase {
   protected $transloadit;
   public function setUp(): void {
@@ -46,7 +52,7 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
 
   public function testCancelAssembly() {
     $transloadit = $this->getMockBuilder(Transloadit::class)
-      ->setMethods(['request'])
+      ->setMethods(['request', 'requestAssemblyUrl'])
       ->getMock();
     $assembly = $this->getMockBuilder(TransloaditResponse::class)
       ->getMock();
@@ -57,23 +63,47 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
     $assembly->data = ['assembly_url' => sprintf('https://api2-phpsdktest.transloadit.com/assemblies/%s', $assemblyId)];
 
     $transloadit
+      ->expects($this->once())
       ->method('request')
-      ->withConsecutive(
-        [$this->equalTo([
-          'method'   => 'GET',
-          'path'     => sprintf('/assemblies/%s', $assemblyId),
-        ])
-        ],
-        [$this->equalTo([
-          'method'   => 'DELETE',
-          'path'     => sprintf('/assemblies/%s', $assemblyId),
-          'host'     => 'api2-phpsdktest.transloadit.com',
-        ])
-        ],
-      )
-      ->willReturnOnConsecutiveCalls($assembly, $response);
+      ->with($this->equalTo([
+        'method'   => 'GET',
+        'path'     => sprintf('/assemblies/%s', $assemblyId),
+      ]))
+      ->willReturn($assembly);
+    $transloadit
+      ->expects($this->once())
+      ->method('requestAssemblyUrl')
+      ->with($assembly->data['assembly_url'], 'DELETE')
+      ->willReturn($response);
 
     $this->assertEquals($response, $transloadit->cancelAssembly($assemblyId));
+  }
+
+  public function testAssemblyUrlRequestsDoNotCarryCredentials() {
+    $transloadit = new TestableTransloadit([
+      'key' => 'my-key',
+      'secret' => 'my-secret',
+    ]);
+    $url = 'https://api2-phpsdktest.transloadit.com/assemblies/test';
+
+    $request = $transloadit->createAssemblyUrlRequestForTest($url, 'GET');
+
+    $this->assertSame($url, $request->url);
+    $this->assertSame('GET', $request->method);
+    $this->assertSame([], $request->fields);
+    $this->assertFalse($request->curlOptions[CURLOPT_FOLLOWLOCATION]);
+    $this->assertStringNotContainsString('my-key', implode("\n", $request->headers));
+    $this->assertStringNotContainsString('my-secret', implode("\n", $request->headers));
+  }
+
+  public function testAssemblyUrlRequestsRejectUntrustedOrigins() {
+    $transloadit = new TestableTransloadit();
+
+    $this->expectException(\InvalidArgumentException::class);
+    $transloadit->createAssemblyUrlRequestForTest(
+      'https://api2-phpsdktest.transloadit.com.attacker.example/assemblies/test',
+      'GET'
+    );
   }
 
   public function testRequest() {
