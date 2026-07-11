@@ -197,7 +197,7 @@ class Transloadit {
   }
 
   /**
-   * Create Assembly With Id.
+   * Create an Assembly with a chosen ID.
    *
    * @param string $assembly_id
    * @param array $options TransloaditRequest options such as 'params', 'fields', or 'files'.
@@ -327,7 +327,7 @@ class Transloadit {
   }
 
   /**
-   * List Assembly Notifications.
+   * Retrieve Assembly Notifications.
    *
    * @param string $assembly_id
    * @return TransloaditResponse
@@ -395,7 +395,7 @@ class Transloadit {
   }
 
   /**
-   * Get Builtin Template.
+   * Retrieve a built-in Template.
    *
    * @param string $builtin_template_slug
    * @param array $options TransloaditRequest options such as 'params'.
@@ -409,7 +409,7 @@ class Transloadit {
   }
 
   /**
-   * Get Template Full.
+   * Retrieve full Template details.
    *
    * @param string $template_id_or_name
    * @param array $options TransloaditRequest options such as 'params'.
@@ -423,7 +423,7 @@ class Transloadit {
   }
 
   /**
-   * Get Builtin Template Full.
+   * Retrieve full built-in Template details.
    *
    * @param string $builtin_template_slug
    * @param array $options TransloaditRequest options such as 'params'.
@@ -491,7 +491,7 @@ class Transloadit {
   }
 
   /**
-   * List Template Credential Types.
+   * Retrieve Template Credential types.
    *
    * @param array $options TransloaditRequest options such as 'params'.
    * @return TransloaditResponse
@@ -504,7 +504,7 @@ class Transloadit {
   }
 
   /**
-   * Validate Template Credential OAuth On Create.
+   * Validate an OAuth Template Credential name.
    *
    * @param array $options TransloaditRequest options such as 'params'.
    * @return TransloaditResponse
