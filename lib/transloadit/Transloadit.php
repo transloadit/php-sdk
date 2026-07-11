@@ -355,6 +355,21 @@ class Transloadit {
   }
 
   /**
+   * Retrieve an invoice’s bill.
+   *
+   * @param string $date
+   * @param string $invoice_id
+   * @param array $options TransloaditRequest options such as 'params'.
+   * @return TransloaditResponse
+   */
+  public function getBillForInvoice($date, $invoice_id, $options = []) {
+    return $this->request($options + [
+      'method' => 'GET',
+      'path'   => sprintf('/bill/%s/%s', rawurlencode($date), rawurlencode($invoice_id)),
+    ]);
+  }
+
+  /**
    * Retrieve list of Templates.
    *
    * @param array $options TransloaditRequest options such as 'params'.
