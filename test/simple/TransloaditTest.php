@@ -117,6 +117,16 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
     $this->assertSame($url, $request->url);
   }
 
+  public function testTemplateRequestsRejectDotPathSegments() {
+    $transloadit = $this->getMockBuilder(Transloadit::class)
+      ->setMethods(['request'])
+      ->getMock();
+    $transloadit->expects($this->never())->method('request');
+
+    $this->expectException(\InvalidArgumentException::class);
+    $transloadit->getTemplate('..');
+  }
+
   public function testRequest() {
     $this->transloadit->key = 'my-key';
     $this->transloadit->secret = 'my-secret';

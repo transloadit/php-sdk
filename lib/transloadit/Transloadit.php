@@ -206,7 +206,7 @@ class Transloadit {
   public function createAssemblyWithId($assembly_id, $options = []) {
     return $this->request($options + [
       'method' => 'POST',
-      'path'   => sprintf('/assemblies/%s', rawurlencode($assembly_id)),
+      'path'   => sprintf('/assemblies/%s', $this->encodePathSegment($assembly_id)),
     ]);
   }
 
@@ -233,7 +233,7 @@ class Transloadit {
   public function getAssembly($assembly_id, $options = []) {
     return $this->request($options + [
       'method' => 'GET',
-      'path'   => sprintf('/assemblies/%s', rawurlencode($assembly_id)),
+      'path'   => sprintf('/assemblies/%s', $this->encodePathSegment($assembly_id)),
     ]);
   }
 
@@ -259,7 +259,7 @@ class Transloadit {
     // Look up the host for this assembly
     $response = $this->request([
       'method' => 'GET',
-      'path'   => sprintf('/assemblies/%s', rawurlencode($assembly_id)),
+      'path'   => sprintf('/assemblies/%s', $this->encodePathSegment($assembly_id)),
     ]);
 
     $error = $response->error();
@@ -300,7 +300,7 @@ class Transloadit {
   public function replayAssembly($assembly_id, $options = []) {
     return $this->request($options + [
       'method' => 'POST',
-      'path'   => sprintf('/assemblies/%s/replay', rawurlencode($assembly_id)),
+      'path'   => sprintf('/assemblies/%s/replay', $this->encodePathSegment($assembly_id)),
     ]);
   }
 
@@ -314,7 +314,7 @@ class Transloadit {
   public function replayAssemblyNotification($assembly_id, $options = []) {
     return $this->request($options + [
       'method' => 'POST',
-      'path'   => sprintf('/assembly_notifications/%s/replay', rawurlencode($assembly_id)),
+      'path'   => sprintf('/assembly_notifications/%s/replay', $this->encodePathSegment($assembly_id)),
     ]);
   }
 
@@ -327,7 +327,7 @@ class Transloadit {
   public function listAssemblyNotifications($assembly_id) {
     return $this->request([
       'method' => 'GET',
-      'path'   => sprintf('/assembly_notifications/%s', rawurlencode($assembly_id)),
+      'path'   => sprintf('/assembly_notifications/%s', $this->encodePathSegment($assembly_id)),
     ]);
   }
 
@@ -357,7 +357,7 @@ class Transloadit {
   public function getBillForInvoice($date, $invoice_id, $options = []) {
     return $this->request($options + [
       'method' => 'GET',
-      'path'   => sprintf('/bill/%s/%s', rawurlencode($date), rawurlencode($invoice_id)),
+      'path'   => sprintf('/bill/%s/%s', $this->encodePathSegment($date), $this->encodePathSegment($invoice_id)),
     ]);
   }
 
@@ -397,7 +397,7 @@ class Transloadit {
   public function getTemplateFull($template_id_or_name, $options = []) {
     return $this->request($options + [
       'method' => 'GET',
-      'path'   => sprintf('/templates/%s/full', rawurlencode($template_id_or_name)),
+      'path'   => sprintf('/templates/%s/full', $this->encodePathSegment($template_id_or_name)),
     ]);
   }
 
@@ -411,7 +411,7 @@ class Transloadit {
   public function getBuiltinTemplateFull($builtin_template_slug, $options = []) {
     return $this->request($options + [
       'method' => 'GET',
-      'path'   => sprintf('/templates/builtin/%s/full', rawurlencode($builtin_template_slug)),
+      'path'   => sprintf('/templates/builtin/%s/full', $this->encodePathSegment($builtin_template_slug)),
     ]);
   }
 
@@ -425,7 +425,7 @@ class Transloadit {
   public function getTemplate($template_id, $options = []) {
     return $this->request($options + [
       'method' => 'GET',
-      'path'   => sprintf('/templates/%s', rawurlencode($template_id)),
+      'path'   => sprintf('/templates/%s', $this->encodePathSegment($template_id)),
     ]);
   }
 
@@ -439,7 +439,7 @@ class Transloadit {
   public function getBuiltinTemplate($builtin_template_slug, $options = []) {
     return $this->request($options + [
       'method' => 'GET',
-      'path'   => sprintf('/templates/builtin/%s', rawurlencode($builtin_template_slug)),
+      'path'   => sprintf('/templates/builtin/%s', $this->encodePathSegment($builtin_template_slug)),
     ]);
   }
 
@@ -453,7 +453,7 @@ class Transloadit {
   public function updateTemplate($template_id, $options = []) {
     return $this->request($options + [
       'method' => 'PUT',
-      'path'   => sprintf('/templates/%s', rawurlencode($template_id)),
+      'path'   => sprintf('/templates/%s', $this->encodePathSegment($template_id)),
     ]);
   }
 
@@ -467,7 +467,7 @@ class Transloadit {
   public function deleteTemplate($template_id, $options = []) {
     return $this->request($options + [
       'method' => 'DELETE',
-      'path'   => sprintf('/templates/%s', rawurlencode($template_id)),
+      'path'   => sprintf('/templates/%s', $this->encodePathSegment($template_id)),
     ]);
   }
 
@@ -597,7 +597,7 @@ class Transloadit {
   public function getTemplateCredentials($identifier, $options = []) {
     return $this->request($options + [
       'method' => 'GET',
-      'path'   => sprintf('/template_credentials/%s', rawurlencode($identifier)),
+      'path'   => sprintf('/template_credentials/%s', $this->encodePathSegment($identifier)),
     ]);
   }
 
@@ -611,7 +611,7 @@ class Transloadit {
   public function deleteTemplateCredentials($identifier, $options = []) {
     return $this->request($options + [
       'method' => 'DELETE',
-      'path'   => sprintf('/template_credentials/%s', rawurlencode($identifier)),
+      'path'   => sprintf('/template_credentials/%s', $this->encodePathSegment($identifier)),
     ]);
   }
 
@@ -625,7 +625,7 @@ class Transloadit {
   public function updateTemplateCredentials($identifier, $options = []) {
     return $this->request($options + [
       'method' => 'PUT',
-      'path'   => sprintf('/template_credentials/%s', rawurlencode($identifier)),
+      'path'   => sprintf('/template_credentials/%s', $this->encodePathSegment($identifier)),
     ]);
   }
 
@@ -675,6 +675,14 @@ class Transloadit {
     $response = $request->execute(new TransloaditResponse());
     $response->parseJson();
     return $response;
+  }
+
+  protected function encodePathSegment($value) {
+    if ($value === '.' || $value === '..') {
+      throw new \InvalidArgumentException('Path parameters cannot be dot segments.');
+    }
+
+    return rawurlencode($value);
   }
 
   // </api2-generated-endpoints>
