@@ -106,6 +106,17 @@ class TransloaditTest extends \PHPUnit\Framework\TestCase {
     );
   }
 
+  public function testAssemblyUrlRequestsAllowHttpsForConfiguredHostname() {
+    $transloadit = new TestableTransloadit([
+      'endpoint' => 'http://api2-devdock.transloadit.dev',
+    ]);
+    $url = 'https://api2-devdock.transloadit.dev/assemblies/test';
+
+    $request = $transloadit->createAssemblyUrlRequestForTest($url, 'GET');
+
+    $this->assertSame($url, $request->url);
+  }
+
   public function testRequest() {
     $this->transloadit->key = 'my-key';
     $this->transloadit->secret = 'my-secret';

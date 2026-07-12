@@ -646,13 +646,17 @@ class Transloadit {
     && $candidateScheme === $configuredScheme
     && $candidateHost === $configuredHost
     && $candidatePort === $configuredPort;
+    $configuredHttpsHost = $candidateScheme === 'https'
+    && $candidatePort === 443
+    && $candidateHost !== ''
+    && $candidateHost === $configuredHost;
     $api2Cell = $candidateScheme === 'https'
     && $candidatePort === 443
     && strpos($candidateHost, 'api2-') === 0
     && substr($candidateHost, -strlen('.transloadit.com')) === '.transloadit.com';
     $hasUserInfo = is_array($candidate)
     && (isset($candidate['user']) || isset($candidate['pass']));
-    if ($hasUserInfo || !($configuredOrigin || $api2Cell)) {
+    if ($hasUserInfo || !($configuredOrigin || $configuredHttpsHost || $api2Cell)) {
       throw new \InvalidArgumentException('Refusing to request an untrusted Assembly URL.');
     }
     if ($method !== 'GET' && $method !== 'DELETE') {
