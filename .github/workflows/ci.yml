@@ -16,8 +16,8 @@ jobs:
       max-parallel: 1
       matrix:
         php:
-          - 8.1
-          - 8.2
+          - '8.1'
+          - '8.2.35'
         dependencies:
           - locked
           - lowest
@@ -29,7 +29,7 @@ jobs:
           fetch-depth: 1
       - uses: actions/setup-node@v6
         with:
-          node-version: '20'
+          node-version: '22.23.4'
       - name: Install tsx
         run: npm install -g tsx
       - uses: shivammathur/setup-php@7c071dfe9dc99bdf297fa79cb49ea005b9fcadbc # v2
