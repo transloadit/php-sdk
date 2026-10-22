@@ -53,6 +53,11 @@ class TransloaditRequest extends CurlRequest {
       $effectiveAlgorithm = 'sha384';
     }
 
+    // PHP 7 emits a warning for unknown algorithms before returning false.
+    if (!in_array($effectiveAlgorithm, hash_hmac_algos(), true)) {
+      throw new \InvalidArgumentException('Unsupported signature algorithm: ' . $effectiveAlgorithm);
+    }
+
     try {
       $signature = hash_hmac($effectiveAlgorithm, $string, $this->secret);
     } catch (\ValueError $e) {
