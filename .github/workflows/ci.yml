@@ -22,6 +22,9 @@ jobs:
           - locked
           - lowest
           - highest
+        include:
+          - php: '7.4.33'
+            dependencies: locked
     name: PHP ${{ matrix.php }} - ${{ matrix.dependencies }}
     steps:
       - uses: actions/checkout@v6
@@ -42,7 +45,7 @@ jobs:
           set -euo pipefail
           case "${{ matrix.dependencies }}" in
             locked)
-              composer install --no-interaction --prefer-dist --ignore-platform-reqs
+              composer install --no-interaction --prefer-dist
               ;;
             lowest)
               composer update --no-interaction --prefer-dist --ignore-platform-reqs --prefer-lowest
@@ -55,6 +58,9 @@ jobs:
               exit 1
               ;;
           esac
+      - name: Check locked dependency platform
+        if: matrix.dependencies == 'locked'
+        run: composer check-platform-reqs
       - name: Test with Coverage
         if: matrix.php == '8.1' && matrix.dependencies == 'locked'
         run: |
