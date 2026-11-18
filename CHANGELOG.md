@@ -2,11 +2,18 @@
 
 ## [main](https://github.com/transloadit/php-sdk/tree/main)
 
-diff: https://github.com/transloadit/php-sdk/compare/3.3.0...main
+diff: https://github.com/transloadit/php-sdk/compare/v3.4.0...main
 
-- Default Assembly signatures to `sha384` and include the algorithm prefix (`sha384:...`)
-- Add request/client-level `signatureAlgorithm` configuration for legacy `sha1` compatibility
-- Extend tests to cover default `sha384` signing, legacy override, and Node CLI parity
+## [3.4.0](https://github.com/transloadit/php-sdk/tree/v3.4.0)
+
+- Default request signatures to `sha384` with an algorithm prefix (`sha384:...`), allowing Auth Keys that require at least SHA-256 to authenticate
+- Add client-level and request-level `signatureAlgorithm` configuration for legacy `sha1` compatibility
+- Reject unsupported signature algorithms with `InvalidArgumentException` consistently across PHP versions
+- Refresh development dependencies and pinned PHP and Node test runtimes while retaining PHP 7.4 support
+- Harden CI for forked contributions and run Packagist notifications through Docker
+- Extend tests to cover default `sha384` signing, legacy overrides, and Node CLI parity
+
+diff: https://github.com/transloadit/php-sdk/compare/v3.3.0...v3.4.0
 
 ## [3.3.0](https://github.com/transloadit/php-sdk/tree/3.3.0)
 
